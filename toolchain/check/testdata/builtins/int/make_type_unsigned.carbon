@@ -145,7 +145,7 @@ var m: UInt(1000000000);
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
 // CHECK:STDOUT: imports {
-// CHECK:STDOUT:   %import_ref.1: %UInt.type = import_ref Main//types, inst+20, loaded [template = constants.%UInt]
+// CHECK:STDOUT:   %import_ref.1: %UInt.type = import_ref Main//types, inst+22, loaded [template = constants.%UInt]
 // CHECK:STDOUT:   %Core: <namespace> = namespace file.%Core.import, [template] {
 // CHECK:STDOUT:     .Int32 = %import_ref.2
 // CHECK:STDOUT:     import Core//prelude
@@ -289,7 +289,7 @@ var m: UInt(1000000000);
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
 // CHECK:STDOUT: imports {
-// CHECK:STDOUT:   %import_ref: %UInt.type = import_ref Main//types, inst+20, loaded [template = constants.%UInt]
+// CHECK:STDOUT:   %import_ref: %UInt.type = import_ref Main//types, inst+22, loaded [template = constants.%UInt]
 // CHECK:STDOUT:   %Core: <namespace> = namespace file.%Core.import, [template] {
 // CHECK:STDOUT:     import Core//prelude
 // CHECK:STDOUT:     import Core//prelude/operators
@@ -337,7 +337,7 @@ var m: UInt(1000000000);
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
 // CHECK:STDOUT: imports {
-// CHECK:STDOUT:   %import_ref.1: %UInt.type = import_ref Main//types, inst+20, loaded [template = constants.%UInt]
+// CHECK:STDOUT:   %import_ref.1: %UInt.type = import_ref Main//types, inst+22, loaded [template = constants.%UInt]
 // CHECK:STDOUT:   %Core: <namespace> = namespace file.%Core.import, [template] {
 // CHECK:STDOUT:     .Int32 = %import_ref.2
 // CHECK:STDOUT:     import Core//prelude
@@ -408,7 +408,7 @@ var m: UInt(1000000000);
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
 // CHECK:STDOUT: imports {
-// CHECK:STDOUT:   %import_ref: %UInt.type = import_ref Main//types, inst+20, loaded [template = constants.%UInt]
+// CHECK:STDOUT:   %import_ref: %UInt.type = import_ref Main//types, inst+22, loaded [template = constants.%UInt]
 // CHECK:STDOUT:   %Core: <namespace> = namespace file.%Core.import, [template] {
 // CHECK:STDOUT:     import Core//prelude
 // CHECK:STDOUT:     import Core//prelude/operators

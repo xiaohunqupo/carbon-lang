@@ -812,11 +812,10 @@ let x: i32 = c[0];
 // CHECK:STDOUT:   %.loc22_25.4: %At.type.3 = interface_witness_access constants.%.8, element0 [template = constants.%At.2]
 // CHECK:STDOUT:   %.loc22_25.5: <bound method> = bound_method %c.ref, %.loc22_25.4
 // CHECK:STDOUT:   %.loc22_25.6: ref %ElementType.1 = temporary_storage
-// CHECK:STDOUT:   %At.call: init %ElementType.1 = call %.loc22_25.5(<invalid>) [template = <error>]
-// CHECK:STDOUT:   %.loc22_25.7: ref %ElementType.1 = temporary_storage
-// CHECK:STDOUT:   %.loc22_25.8: ref %ElementType.1 = temporary %.loc22_25.7, %At.call
-// CHECK:STDOUT:   %.loc22_25.9: %ElementType.1 = bind_value %.loc22_25.8
-// CHECK:STDOUT:   %x: %ElementType.1 = bind_name x, %.loc22_25.9
+// CHECK:STDOUT:   %At.call: init %ElementType.1 = call %.loc22_25.5(%c.ref, <error>) to %.loc22_25.6
+// CHECK:STDOUT:   %.loc22_25.7: ref %ElementType.1 = temporary %.loc22_25.6, %At.call
+// CHECK:STDOUT:   %.loc22_25.8: %ElementType.1 = bind_value %.loc22_25.7
+// CHECK:STDOUT:   %x: %ElementType.1 = bind_name x, %.loc22_25.8
 // CHECK:STDOUT:   return
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
