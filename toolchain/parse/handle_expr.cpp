@@ -73,7 +73,7 @@ auto HandleExprInPostfix(Context& context) -> void {
   // Parses a primary expression, which is either a terminal portion of an
   // expression tree, such as an identifier or literal, or a parenthesized
   // expression.
-  switch (context.PositionKind()) {
+  switch (auto token_kind = context.PositionKind()) {
     case Lex::TokenKind::Identifier: {
       context.AddLeafNode(NodeKind::IdentifierNameExpr, context.Consume());
       context.PushState(state);
@@ -208,11 +208,15 @@ auto HandleExprInPostfix(Context& context) -> void {
       break;
     }
     default: {
+      // If not already diagnosed in the lexer, diagnose it here.
+      if (token_kind != Lex::TokenKind::Error) {
+        CARBON_DIAGNOSTIC(ExpectedExpr, Error, "expected expression");
+        context.emitter().Emit(*context.position(), ExpectedExpr);
+      }
+
       // Add a node to keep the parse tree balanced.
       context.AddLeafNode(NodeKind::InvalidParse, *context.position(),
                           /*has_error=*/true);
-      CARBON_DIAGNOSTIC(ExpectedExpr, Error, "expected expression");
-      context.emitter().Emit(*context.position(), ExpectedExpr);
       context.ReturnErrorOnState();
       break;
     }
