@@ -20,13 +20,14 @@ class File;
 class Inst;
 struct EntityName;
 struct Class;
+struct FacetTypeInfo;
 struct Function;
 struct Generic;
 struct Specific;
 struct ImportIR;
 struct ImportIRInst;
-struct Interface;
 struct Impl;
+struct Interface;
 struct NameScope;
 struct TypeInfo;
 
@@ -359,6 +360,22 @@ struct InterfaceId : public IdBase, public Printable<InterfaceId> {
 };
 
 constexpr InterfaceId InterfaceId::Invalid = InterfaceId(InvalidIndex);
+
+// The ID of an faceet type value.
+struct FacetTypeId : public IdBase, public Printable<FacetTypeId> {
+  using ValueType = FacetTypeInfo;
+
+  // An explicitly invalid ID.
+  static const FacetTypeId Invalid;
+
+  using IdBase::IdBase;
+  auto Print(llvm::raw_ostream& out) const -> void {
+    out << "facet type";
+    IdBase::Print(out);
+  }
+};
+
+constexpr FacetTypeId FacetTypeId::Invalid = FacetTypeId(InvalidIndex);
 
 // The ID of an impl.
 struct ImplId : public IdBase, public Printable<ImplId> {
