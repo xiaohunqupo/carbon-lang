@@ -546,9 +546,8 @@ fn StaticMemberFunctionCall(T:! type) -> Class(T) {
 // CHECK:STDOUT:     %.loc15_18.1: @StaticMemberFunctionCall.%Make.type (%Make.type) = specific_constant @Class.%Make.decl, @Class(constants.%T) [symbolic = %Make (constants.%Make)]
 // CHECK:STDOUT:     %Make.ref: @StaticMemberFunctionCall.%Make.type (%Make.type) = name_ref Make, %.loc15_18.1 [symbolic = %Make (constants.%Make)]
 // CHECK:STDOUT:     %.loc15_18.2: <specific function> = specific_function %Make.ref, @Make(constants.%T) [symbolic = %.loc15_18.3 (constants.%.4)]
-// CHECK:STDOUT:     %.loc15_23.1: ref @StaticMemberFunctionCall.%Class.loc8_47.2 (%Class.2) = temporary_storage
-// CHECK:STDOUT:     %Make.call: init @StaticMemberFunctionCall.%Class.loc8_47.2 (%Class.2) = call %.loc15_18.2() to %.loc15_23.1
-// CHECK:STDOUT:     %.loc15_23.2: ref @StaticMemberFunctionCall.%Class.loc8_47.2 (%Class.2) = temporary %.loc15_23.1, %Make.call
+// CHECK:STDOUT:     %.loc15_23: ref @StaticMemberFunctionCall.%Class.loc8_47.2 (%Class.2) = temporary_storage
+// CHECK:STDOUT:     %Make.call: init @StaticMemberFunctionCall.%Class.loc8_47.2 (%Class.2) = call %.loc15_18.2() to %.loc15_23
 // CHECK:STDOUT:     %.loc15_25: @StaticMemberFunctionCall.%Class.loc8_47.2 (%Class.2) = converted %Make.call, <error> [template = <error>]
 // CHECK:STDOUT:     return <error> to %return
 // CHECK:STDOUT:   }

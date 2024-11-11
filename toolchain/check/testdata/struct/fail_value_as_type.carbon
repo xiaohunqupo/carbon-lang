@@ -39,7 +39,6 @@ var x: {.a = 1};
 // CHECK:STDOUT:   %.5: type = assoc_entity_type %ImplicitAs.type.3, %Convert.type.2 [template]
 // CHECK:STDOUT:   %.6: %.5 = assoc_entity element0, imports.%import_ref.5 [template]
 // CHECK:STDOUT:   %.7: %.3 = assoc_entity element0, imports.%import_ref.6 [symbolic]
-// CHECK:STDOUT:   %struct: %.2 = struct_value (%.1) [template]
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
 // CHECK:STDOUT: imports {
@@ -64,9 +63,7 @@ var x: {.a = 1};
 // CHECK:STDOUT:   %Core.import = import Core
 // CHECK:STDOUT:   %.loc17_14: i32 = int_value 1 [template = constants.%.1]
 // CHECK:STDOUT:   %.loc17_15.1: %.2 = struct_literal (%.loc17_14)
-// CHECK:STDOUT:   %struct: %.2 = struct_value (%.loc17_14) [template = constants.%struct]
-// CHECK:STDOUT:   %.loc17_15.2: %.2 = converted %.loc17_15.1, %struct [template = constants.%struct]
-// CHECK:STDOUT:   %.loc17_15.3: type = converted %.loc17_15.1, <error> [template = <error>]
+// CHECK:STDOUT:   %.loc17_15.2: type = converted %.loc17_15.1, <error> [template = <error>]
 // CHECK:STDOUT:   %x.var: ref <error> = var x
 // CHECK:STDOUT:   %x: ref <error> = bind_name x, %x.var
 // CHECK:STDOUT: }

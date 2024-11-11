@@ -728,9 +728,8 @@ class Class(U:! type) {
 // CHECK:STDOUT:   %v.var: ref %CompleteClass.3 = var v
 // CHECK:STDOUT:   %v: ref %CompleteClass.3 = bind_name v, %v.var
 // CHECK:STDOUT:   %F.ref: %F.type.3 = name_ref F, imports.%import_ref.3 [template = constants.%F.3]
-// CHECK:STDOUT:   %.loc14_33.1: ref %CompleteClass.4 = temporary_storage
-// CHECK:STDOUT:   %F.call: init %CompleteClass.4 = call %F.ref() to %.loc14_33.1
-// CHECK:STDOUT:   %.loc14_33.2: ref %CompleteClass.4 = temporary %.loc14_33.1, %F.call
+// CHECK:STDOUT:   %.loc14_33: ref %CompleteClass.4 = temporary_storage
+// CHECK:STDOUT:   %F.call: init %CompleteClass.4 = call %F.ref() to %.loc14_33
 // CHECK:STDOUT:   %.loc14_35: %CompleteClass.3 = converted %F.call, <error> [template = <error>]
 // CHECK:STDOUT:   assign %v.var, <error>
 // CHECK:STDOUT:   return

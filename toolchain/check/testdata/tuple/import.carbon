@@ -633,9 +633,8 @@ var c_bad: C((3, 4)) = F();
 // CHECK:STDOUT: fn @__global_init() {
 // CHECK:STDOUT: !entry:
 // CHECK:STDOUT:   %F.ref: %F.type = name_ref F, imports.%import_ref.4 [template = constants.%F]
-// CHECK:STDOUT:   %.loc10_25.1: ref %C.4 = temporary_storage
-// CHECK:STDOUT:   %F.call: init %C.4 = call %F.ref() to %.loc10_25.1
-// CHECK:STDOUT:   %.loc10_25.2: ref %C.4 = temporary %.loc10_25.1, %F.call
+// CHECK:STDOUT:   %.loc10_25: ref %C.4 = temporary_storage
+// CHECK:STDOUT:   %F.call: init %C.4 = call %F.ref() to %.loc10_25
 // CHECK:STDOUT:   %.loc10_27: %C.3 = converted %F.call, <error> [template = <error>]
 // CHECK:STDOUT:   assign file.%c_bad.var, <error>
 // CHECK:STDOUT:   return

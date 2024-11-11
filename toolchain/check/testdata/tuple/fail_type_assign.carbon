@@ -108,8 +108,6 @@ var x: (i32, ) = (i32, );
 // CHECK:STDOUT: !entry:
 // CHECK:STDOUT:   %int.make_type_32: init type = call constants.%Int32() [template = i32]
 // CHECK:STDOUT:   %.loc17_24.1: %tuple.type.1 = tuple_literal (%int.make_type_32)
-// CHECK:STDOUT:   %.loc17_19.1: ref type = temporary_storage
-// CHECK:STDOUT:   %.loc17_19.2: ref type = temporary %.loc17_19.1, %int.make_type_32
 // CHECK:STDOUT:   %.loc17_24.2: i32 = converted %int.make_type_32, <error> [template = <error>]
 // CHECK:STDOUT:   assign file.%x.var, <error>
 // CHECK:STDOUT:   return

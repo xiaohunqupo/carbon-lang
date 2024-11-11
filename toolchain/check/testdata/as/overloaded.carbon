@@ -235,9 +235,9 @@ let n: i32 = ((4 as i32) as X) as i32;
 // CHECK:STDOUT:   %int.make_type_32.loc23_35: init type = call constants.%Int32() [template = i32]
 // CHECK:STDOUT:   %.loc23_35.1: type = value_of_initializer %int.make_type_32.loc23_35 [template = i32]
 // CHECK:STDOUT:   %.loc23_35.2: type = converted %int.make_type_32.loc23_35, %.loc23_35.1 [template = i32]
-// CHECK:STDOUT:   %.loc23_26.5: ref %X = temporary %.loc23_26.3, %.loc23_26.4
 // CHECK:STDOUT:   %.loc23_32.1: %Convert.type.5 = interface_witness_access constants.%.12, element0 [template = constants.%Convert.4]
-// CHECK:STDOUT:   %.loc23_32.2: <bound method> = bound_method %.loc23_26.5, %.loc23_32.1
+// CHECK:STDOUT:   %.loc23_32.2: <bound method> = bound_method %.loc23_26.4, %.loc23_32.1
+// CHECK:STDOUT:   %.loc23_26.5: ref %X = temporary %.loc23_26.3, %.loc23_26.4
 // CHECK:STDOUT:   %.loc23_26.6: %X = bind_value %.loc23_26.5
 // CHECK:STDOUT:   %Convert.call.loc23_32: init i32 = call %.loc23_32.2(%.loc23_26.6)
 // CHECK:STDOUT:   %.loc23_32.3: i32 = value_of_initializer %Convert.call.loc23_32

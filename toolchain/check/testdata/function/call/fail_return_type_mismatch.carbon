@@ -129,8 +129,6 @@ fn Run() {
 // CHECK:STDOUT:   %x: ref i32 = bind_name x, %x.var
 // CHECK:STDOUT:   %Foo.ref: %Foo.type = name_ref Foo, file.%Foo.decl [template = constants.%Foo]
 // CHECK:STDOUT:   %Foo.call: init f64 = call %Foo.ref()
-// CHECK:STDOUT:   %.loc20_19.1: ref f64 = temporary_storage
-// CHECK:STDOUT:   %.loc20_19.2: ref f64 = temporary %.loc20_19.1, %Foo.call
 // CHECK:STDOUT:   %.loc20_21: i32 = converted %Foo.call, <error> [template = <error>]
 // CHECK:STDOUT:   assign %x.var, <error>
 // CHECK:STDOUT:   return
