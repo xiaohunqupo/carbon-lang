@@ -13,10 +13,10 @@
 library "[[@TEST_NAME]]";
 
 class Bad {
-  // CHECK:STDERR: fail_not_type.carbon:[[@LINE+7]]:3: error: cannot implicitly convert from `i32` to `type` [ImplicitAsConversionFailure]
+  // CHECK:STDERR: fail_not_type.carbon:[[@LINE+7]]:3: error: cannot implicitly convert from `Core.IntLiteral` to `type` [ImplicitAsConversionFailure]
   // CHECK:STDERR:   adapt 100;
   // CHECK:STDERR:   ^~~~~~~~~~
-  // CHECK:STDERR: fail_not_type.carbon:[[@LINE+4]]:3: note: type `i32` does not implement interface `ImplicitAs(type)` [MissingImplInMemberAccessNote]
+  // CHECK:STDERR: fail_not_type.carbon:[[@LINE+4]]:3: note: type `Core.IntLiteral` does not implement interface `ImplicitAs(type)` [MissingImplInMemberAccessNote]
   // CHECK:STDERR:   adapt 100;
   // CHECK:STDERR:   ^~~~~~~~~~
   // CHECK:STDERR:
@@ -34,10 +34,10 @@ fn Use(b: Bad) { b.F(); }
 library "[[@TEST_NAME]]";
 
 class Bad {
-  // CHECK:STDERR: fail_extend_not_type.carbon:[[@LINE+7]]:3: error: cannot implicitly convert from `i32` to `type` [ImplicitAsConversionFailure]
+  // CHECK:STDERR: fail_extend_not_type.carbon:[[@LINE+7]]:3: error: cannot implicitly convert from `Core.IntLiteral` to `type` [ImplicitAsConversionFailure]
   // CHECK:STDERR:   extend adapt 100;
   // CHECK:STDERR:   ^~~~~~~~~~~~~~~~~
-  // CHECK:STDERR: fail_extend_not_type.carbon:[[@LINE+4]]:3: note: type `i32` does not implement interface `ImplicitAs(type)` [MissingImplInMemberAccessNote]
+  // CHECK:STDERR: fail_extend_not_type.carbon:[[@LINE+4]]:3: note: type `Core.IntLiteral` does not implement interface `ImplicitAs(type)` [MissingImplInMemberAccessNote]
   // CHECK:STDERR:   extend adapt 100;
   // CHECK:STDERR:   ^~~~~~~~~~~~~~~~~
   // CHECK:STDERR:
@@ -106,7 +106,7 @@ class C {
 // CHECK:STDOUT:
 // CHECK:STDOUT: constants {
 // CHECK:STDOUT:   %Bad: type = class_type @Bad [template]
-// CHECK:STDOUT:   %.1: i32 = int_value 100 [template]
+// CHECK:STDOUT:   %.1: Core.IntLiteral = int_value 100 [template]
 // CHECK:STDOUT:   %Use.type: type = fn_type @Use [template]
 // CHECK:STDOUT:   %Use: %Use.type = struct_value () [template]
 // CHECK:STDOUT: }
@@ -138,7 +138,7 @@ class C {
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
 // CHECK:STDOUT: class @Bad {
-// CHECK:STDOUT:   %.loc12_9: i32 = int_value 100 [template = constants.%.1]
+// CHECK:STDOUT:   %.loc12_9: Core.IntLiteral = int_value 100 [template = constants.%.1]
 // CHECK:STDOUT:   %.loc12_12: type = converted %.loc12_9, <error> [template = <error>]
 // CHECK:STDOUT:   adapt_decl <error>
 // CHECK:STDOUT:   %.loc13: <witness> = complete_type_witness <error> [template = <error>]
@@ -158,7 +158,7 @@ class C {
 // CHECK:STDOUT:
 // CHECK:STDOUT: constants {
 // CHECK:STDOUT:   %Bad: type = class_type @Bad [template]
-// CHECK:STDOUT:   %.1: i32 = int_value 100 [template]
+// CHECK:STDOUT:   %.1: Core.IntLiteral = int_value 100 [template]
 // CHECK:STDOUT:   %Use.type: type = fn_type @Use [template]
 // CHECK:STDOUT:   %Use: %Use.type = struct_value () [template]
 // CHECK:STDOUT: }
@@ -190,7 +190,7 @@ class C {
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
 // CHECK:STDOUT: class @Bad {
-// CHECK:STDOUT:   %.loc12_16: i32 = int_value 100 [template = constants.%.1]
+// CHECK:STDOUT:   %.loc12_16: Core.IntLiteral = int_value 100 [template = constants.%.1]
 // CHECK:STDOUT:   %.loc12_19: type = converted %.loc12_16, <error> [template = <error>]
 // CHECK:STDOUT:   adapt_decl <error>
 // CHECK:STDOUT:   %.loc13: <witness> = complete_type_witness <error> [template = <error>]

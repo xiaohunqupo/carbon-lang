@@ -42,21 +42,14 @@ fn CallNegative() {
 // CHECK:STDOUT:   %.1: type = int_type signed, %N [symbolic]
 // CHECK:STDOUT:   %CallNegative.type: type = fn_type @CallNegative [template]
 // CHECK:STDOUT:   %CallNegative: %CallNegative.type = struct_value () [template]
-// CHECK:STDOUT:   %.2: i32 = int_value 0 [template]
-// CHECK:STDOUT:   %Convert.type.2: type = fn_type @Convert.1, @ImplicitAs(Core.IntLiteral) [template]
-// CHECK:STDOUT:   %Convert.type.15: type = fn_type @Convert.11 [template]
-// CHECK:STDOUT:   %Convert.15: %Convert.type.15 = struct_value () [template]
-// CHECK:STDOUT:   %.25: <witness> = interface_witness (%Convert.15) [template]
-// CHECK:STDOUT:   %.26: <bound method> = bound_method %.2, %Convert.15 [template]
-// CHECK:STDOUT:   %.27: Core.IntLiteral = int_value 0 [template]
-// CHECK:STDOUT:   %.28: <specific function> = specific_function %ErrorIfNIsZero, @ErrorIfNIsZero(%.27) [template]
+// CHECK:STDOUT:   %.2: Core.IntLiteral = int_value 0 [template]
+// CHECK:STDOUT:   %.3: <specific function> = specific_function %ErrorIfNIsZero, @ErrorIfNIsZero(%.2) [template]
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
 // CHECK:STDOUT: imports {
 // CHECK:STDOUT:   %Core: <namespace> = namespace file.%Core.import, [template] {
 // CHECK:STDOUT:     .IntLiteral = %import_ref.1
 // CHECK:STDOUT:     .Int = %import_ref.2
-// CHECK:STDOUT:     .ImplicitAs = %import_ref.3
 // CHECK:STDOUT:     import Core//prelude
 // CHECK:STDOUT:     import Core//prelude/...
 // CHECK:STDOUT:   }
@@ -110,13 +103,8 @@ fn CallNegative() {
 // CHECK:STDOUT: fn @CallNegative() {
 // CHECK:STDOUT: !entry:
 // CHECK:STDOUT:   %ErrorIfNIsZero.ref: %ErrorIfNIsZero.type = name_ref ErrorIfNIsZero, file.%ErrorIfNIsZero.decl [template = constants.%ErrorIfNIsZero]
-// CHECK:STDOUT:   %.loc16_18: i32 = int_value 0 [template = constants.%.2]
-// CHECK:STDOUT:   %.loc16_17.1: %Convert.type.2 = interface_witness_access constants.%.25, element0 [template = constants.%Convert.15]
-// CHECK:STDOUT:   %.loc16_17.2: <bound method> = bound_method %.loc16_18, %.loc16_17.1 [template = constants.%.26]
-// CHECK:STDOUT:   %int.convert_checked: init Core.IntLiteral = call %.loc16_17.2(%.loc16_18) [template = constants.%.27]
-// CHECK:STDOUT:   %.loc16_17.3: Core.IntLiteral = value_of_initializer %int.convert_checked [template = constants.%.27]
-// CHECK:STDOUT:   %.loc16_17.4: Core.IntLiteral = converted %.loc16_18, %.loc16_17.3 [template = constants.%.27]
-// CHECK:STDOUT:   %.loc16_3: <specific function> = specific_function %ErrorIfNIsZero.ref, @ErrorIfNIsZero(constants.%.27) [template = constants.%.28]
+// CHECK:STDOUT:   %.loc16_18: Core.IntLiteral = int_value 0 [template = constants.%.2]
+// CHECK:STDOUT:   %.loc16_3: <specific function> = specific_function %ErrorIfNIsZero.ref, @ErrorIfNIsZero(constants.%.2) [template = constants.%.3]
 // CHECK:STDOUT:   %ErrorIfNIsZero.call: init %empty_tuple.type = call %.loc16_3()
 // CHECK:STDOUT:   return
 // CHECK:STDOUT: }
@@ -126,9 +114,9 @@ fn CallNegative() {
 // CHECK:STDOUT:   %N.patt.loc4_19.2 => constants.%N
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
-// CHECK:STDOUT: specific @ErrorIfNIsZero(constants.%.27) {
-// CHECK:STDOUT:   %N.loc4_19.2 => constants.%.27
-// CHECK:STDOUT:   %N.patt.loc4_19.2 => constants.%.27
+// CHECK:STDOUT: specific @ErrorIfNIsZero(constants.%.2) {
+// CHECK:STDOUT:   %N.loc4_19.2 => constants.%.2
+// CHECK:STDOUT:   %N.patt.loc4_19.2 => constants.%.2
 // CHECK:STDOUT:
 // CHECK:STDOUT: !definition:
 // CHECK:STDOUT:   %.loc12_18 => <error>

@@ -23,7 +23,7 @@ interface I {
 // CHECK:STDOUT:
 // CHECK:STDOUT: constants {
 // CHECK:STDOUT:   %I.type: type = facet_type <@I> [template]
-// CHECK:STDOUT:   %Self: %I.type = bind_symbolic_name Self, 0 [symbolic]
+// CHECK:STDOUT:   %Self.1: %I.type = bind_symbolic_name Self, 0 [symbolic]
 // CHECK:STDOUT:   %F.type: type = fn_type @F [template]
 // CHECK:STDOUT:   %F: %F.type = struct_value () [template]
 // CHECK:STDOUT:   %.1: type = assoc_entity_type %I.type, %F.type [template]
@@ -38,14 +38,21 @@ interface I {
 // CHECK:STDOUT:   %tuple.type.2: type = tuple_type (i32, i32) [template]
 // CHECK:STDOUT:   %.5: type = assoc_entity_type %I.type, type [template]
 // CHECK:STDOUT:   %.6: %.5 = assoc_entity element2, @I.%T [template]
-// CHECK:STDOUT:   %.7: i32 = int_value 42 [template]
-// CHECK:STDOUT:   %.8: type = assoc_entity_type %I.type, i32 [template]
-// CHECK:STDOUT:   %.9: %.8 = assoc_entity element3, @I.%N [template]
+// CHECK:STDOUT:   %.7: Core.IntLiteral = int_value 42 [template]
+// CHECK:STDOUT:   %Convert.type.2: type = fn_type @Convert.1, @ImplicitAs(i32) [template]
+// CHECK:STDOUT:   %Convert.type.15: type = fn_type @Convert.11 [template]
+// CHECK:STDOUT:   %Convert.15: %Convert.type.15 = struct_value () [template]
+// CHECK:STDOUT:   %.31: <witness> = interface_witness (%Convert.15) [template]
+// CHECK:STDOUT:   %.32: <bound method> = bound_method %.7, %Convert.15 [template]
+// CHECK:STDOUT:   %.33: i32 = int_value 42 [template]
+// CHECK:STDOUT:   %.34: type = assoc_entity_type %I.type, i32 [template]
+// CHECK:STDOUT:   %.35: %.34 = assoc_entity element3, @I.%N [template]
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
 // CHECK:STDOUT: imports {
 // CHECK:STDOUT:   %Core: <namespace> = namespace file.%Core.import, [template] {
-// CHECK:STDOUT:     .Int32 = %import_ref
+// CHECK:STDOUT:     .Int32 = %import_ref.1
+// CHECK:STDOUT:     .ImplicitAs = %import_ref.2
 // CHECK:STDOUT:     import Core//prelude
 // CHECK:STDOUT:     import Core//prelude/...
 // CHECK:STDOUT:   }
@@ -61,7 +68,7 @@ interface I {
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
 // CHECK:STDOUT: interface @I {
-// CHECK:STDOUT:   %Self: %I.type = bind_symbolic_name Self, 0 [symbolic = constants.%Self]
+// CHECK:STDOUT:   %Self: %I.type = bind_symbolic_name Self, 0 [symbolic = constants.%Self.1]
 // CHECK:STDOUT:   %F.decl: %F.type = fn_decl @F [template = constants.%F] {} {}
 // CHECK:STDOUT:   %.loc13: %.1 = assoc_entity element0, %F.decl [template = constants.%.2]
 // CHECK:STDOUT:   %G.decl: %G.type = fn_decl @G [template = constants.%G] {
@@ -102,16 +109,21 @@ interface I {
 // CHECK:STDOUT:   %int.make_type_32.loc19: init type = call constants.%Int32() [template = i32]
 // CHECK:STDOUT:   %.loc19_11.1: type = value_of_initializer %int.make_type_32.loc19 [template = i32]
 // CHECK:STDOUT:   %.loc19_11.2: type = converted %int.make_type_32.loc19, %.loc19_11.1 [template = i32]
-// CHECK:STDOUT:   %.loc19_17: i32 = int_value 42 [template = constants.%.7]
+// CHECK:STDOUT:   %.loc19_17: Core.IntLiteral = int_value 42 [template = constants.%.7]
+// CHECK:STDOUT:   %.loc19_19.1: %Convert.type.2 = interface_witness_access constants.%.31, element0 [template = constants.%Convert.15]
+// CHECK:STDOUT:   %.loc19_19.2: <bound method> = bound_method %.loc19_17, %.loc19_19.1 [template = constants.%.32]
+// CHECK:STDOUT:   %int.convert_checked: init i32 = call %.loc19_19.2(%.loc19_17) [template = constants.%.33]
+// CHECK:STDOUT:   %.loc19_19.3: i32 = value_of_initializer %int.convert_checked [template = constants.%.33]
+// CHECK:STDOUT:   %.loc19_19.4: i32 = converted %.loc19_17, %.loc19_19.3 [template = constants.%.33]
 // CHECK:STDOUT:   %N: i32 = assoc_const_decl N [template]
-// CHECK:STDOUT:   %.loc19_19: %.8 = assoc_entity element3, %N [template = constants.%.9]
+// CHECK:STDOUT:   %.loc19_19.5: %.34 = assoc_entity element3, %N [template = constants.%.35]
 // CHECK:STDOUT:
 // CHECK:STDOUT: !members:
 // CHECK:STDOUT:   .Self = %Self
 // CHECK:STDOUT:   .F = %.loc13
 // CHECK:STDOUT:   .G = %.loc14
 // CHECK:STDOUT:   .T = %.loc18_28.6
-// CHECK:STDOUT:   .N = %.loc19_19
+// CHECK:STDOUT:   .N = %.loc19_19.5
 // CHECK:STDOUT:   witness = (%F.decl, %G.decl, %T, %N)
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
@@ -130,7 +142,7 @@ interface I {
 // CHECK:STDOUT:   fn(%a.param_patt: i32, %b.param_patt: i32) -> i32 = "int.sadd";
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
-// CHECK:STDOUT: specific @F(constants.%Self) {}
+// CHECK:STDOUT: specific @F(constants.%Self.1) {}
 // CHECK:STDOUT:
-// CHECK:STDOUT: specific @G(constants.%Self) {}
+// CHECK:STDOUT: specific @G(constants.%Self.1) {}
 // CHECK:STDOUT:

@@ -8,10 +8,10 @@
 // TIP: To dump output, run:
 // TIP:   bazel run //toolchain/testing:file_test -- --dump_output --file_tests=toolchain/check/testdata/as/fail_no_conversion.carbon
 
-// CHECK:STDERR: fail_no_conversion.carbon:[[@LINE+6]]:21: error: cannot convert from `i32` to `(i32, i32)` with `as` [ExplicitAsConversionFailure]
+// CHECK:STDERR: fail_no_conversion.carbon:[[@LINE+6]]:21: error: cannot convert from `Core.IntLiteral` to `(i32, i32)` with `as` [ExplicitAsConversionFailure]
 // CHECK:STDERR: let n: (i32, i32) = 1 as (i32, i32);
 // CHECK:STDERR:                     ^~~~~~~~~~~~~~~
-// CHECK:STDERR: fail_no_conversion.carbon:[[@LINE+3]]:21: note: type `i32` does not implement interface `As((i32, i32))` [MissingImplInMemberAccessNote]
+// CHECK:STDERR: fail_no_conversion.carbon:[[@LINE+3]]:21: note: type `Core.IntLiteral` does not implement interface `As((i32, i32))` [MissingImplInMemberAccessNote]
 // CHECK:STDERR: let n: (i32, i32) = 1 as (i32, i32);
 // CHECK:STDERR:                     ^~~~~~~~~~~~~~~
 let n: (i32, i32) = 1 as (i32, i32);
@@ -23,7 +23,7 @@ let n: (i32, i32) = 1 as (i32, i32);
 // CHECK:STDOUT:   %Int32: %Int32.type = struct_value () [template]
 // CHECK:STDOUT:   %tuple.type.1: type = tuple_type (type, type) [template]
 // CHECK:STDOUT:   %tuple.type.2: type = tuple_type (i32, i32) [template]
-// CHECK:STDOUT:   %.2: i32 = int_value 1 [template]
+// CHECK:STDOUT:   %.2: Core.IntLiteral = int_value 1 [template]
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
 // CHECK:STDOUT: imports {
@@ -53,7 +53,7 @@ let n: (i32, i32) = 1 as (i32, i32);
 // CHECK:STDOUT:
 // CHECK:STDOUT: fn @__global_init() {
 // CHECK:STDOUT: !entry:
-// CHECK:STDOUT:   %.loc17_21: i32 = int_value 1 [template = constants.%.2]
+// CHECK:STDOUT:   %.loc17_21: Core.IntLiteral = int_value 1 [template = constants.%.2]
 // CHECK:STDOUT:   %int.make_type_32.loc17_27: init type = call constants.%Int32() [template = i32]
 // CHECK:STDOUT:   %int.make_type_32.loc17_32: init type = call constants.%Int32() [template = i32]
 // CHECK:STDOUT:   %.loc17_35.1: %tuple.type.1 = tuple_literal (%int.make_type_32.loc17_27, %int.make_type_32.loc17_32)

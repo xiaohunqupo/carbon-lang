@@ -40,12 +40,19 @@ fn N.M.B() -> i32 {
 // CHECK:STDOUT:   %B.type: type = fn_type @B [template]
 // CHECK:STDOUT:   %B: %B.type = struct_value () [template]
 // CHECK:STDOUT:   %.1: bool = bool_literal true [template]
-// CHECK:STDOUT:   %.2: i32 = int_value 0 [template]
+// CHECK:STDOUT:   %.2: Core.IntLiteral = int_value 0 [template]
+// CHECK:STDOUT:   %Convert.type.2: type = fn_type @Convert.1, @ImplicitAs(i32) [template]
+// CHECK:STDOUT:   %Convert.type.15: type = fn_type @Convert.11 [template]
+// CHECK:STDOUT:   %Convert.15: %Convert.type.15 = struct_value () [template]
+// CHECK:STDOUT:   %.26: <witness> = interface_witness (%Convert.15) [template]
+// CHECK:STDOUT:   %.27: <bound method> = bound_method %.2, %Convert.15 [template]
+// CHECK:STDOUT:   %.28: i32 = int_value 0 [template]
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
 // CHECK:STDOUT: imports {
 // CHECK:STDOUT:   %Core: <namespace> = namespace file.%Core.import, [template] {
-// CHECK:STDOUT:     .Int32 = %import_ref
+// CHECK:STDOUT:     .Int32 = %import_ref.1
+// CHECK:STDOUT:     .ImplicitAs = %import_ref.2
 // CHECK:STDOUT:     import Core//prelude
 // CHECK:STDOUT:     import Core//prelude/...
 // CHECK:STDOUT:   }
@@ -96,14 +103,23 @@ fn N.M.B() -> i32 {
 // CHECK:STDOUT:   %.loc22_12.2: type = converted %int.make_type_32.loc22, %.loc22_12.1 [template = i32]
 // CHECK:STDOUT:   %A.var: ref i32 = var A
 // CHECK:STDOUT:   %A: ref i32 = bind_name A, %A.var
-// CHECK:STDOUT:   %.loc22_18: i32 = int_value 0 [template = constants.%.2]
-// CHECK:STDOUT:   assign %A.var, %.loc22_18
+// CHECK:STDOUT:   %.loc22_18: Core.IntLiteral = int_value 0 [template = constants.%.2]
+// CHECK:STDOUT:   %.loc22_19.1: %Convert.type.2 = interface_witness_access constants.%.26, element0 [template = constants.%Convert.15]
+// CHECK:STDOUT:   %.loc22_19.2: <bound method> = bound_method %.loc22_18, %.loc22_19.1 [template = constants.%.27]
+// CHECK:STDOUT:   %int.convert_checked.loc22: init i32 = call %.loc22_19.2(%.loc22_18) [template = constants.%.28]
+// CHECK:STDOUT:   %.loc22_19.3: init i32 = converted %.loc22_18, %int.convert_checked.loc22 [template = constants.%.28]
+// CHECK:STDOUT:   assign %A.var, %.loc22_19.3
 // CHECK:STDOUT:   %A.ref.loc25: ref i32 = name_ref A, %A
 // CHECK:STDOUT:   %.loc25: i32 = bind_value %A.ref.loc25
 // CHECK:STDOUT:   return %.loc25
 // CHECK:STDOUT:
 // CHECK:STDOUT: !if.else:
-// CHECK:STDOUT:   %.loc27: i32 = int_value 0 [template = constants.%.2]
-// CHECK:STDOUT:   return %.loc27
+// CHECK:STDOUT:   %.loc27_10: Core.IntLiteral = int_value 0 [template = constants.%.2]
+// CHECK:STDOUT:   %.loc27_11.1: %Convert.type.2 = interface_witness_access constants.%.26, element0 [template = constants.%Convert.15]
+// CHECK:STDOUT:   %.loc27_11.2: <bound method> = bound_method %.loc27_10, %.loc27_11.1 [template = constants.%.27]
+// CHECK:STDOUT:   %int.convert_checked.loc27: init i32 = call %.loc27_11.2(%.loc27_10) [template = constants.%.28]
+// CHECK:STDOUT:   %.loc27_11.3: i32 = value_of_initializer %int.convert_checked.loc27 [template = constants.%.28]
+// CHECK:STDOUT:   %.loc27_11.4: i32 = converted %.loc27_10, %.loc27_11.3 [template = constants.%.28]
+// CHECK:STDOUT:   return %.loc27_11.4
 // CHECK:STDOUT: }
 // CHECK:STDOUT:

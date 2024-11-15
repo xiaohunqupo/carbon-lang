@@ -8,25 +8,18 @@
 // TIP: To dump output, run:
 // TIP:   bazel run //toolchain/testing:file_test -- --dump_output --file_tests=toolchain/check/testdata/array/fail_bound_overflow.carbon
 
-// TODO: Once we preserve the full value of integer literals in SemIR, check
-// that we reject the array bound being too large.
-
-// CHECK:STDERR: fail_bound_overflow.carbon:[[@LINE+4]]:14: error: integer literal with value 39999999999999999993 does not fit in i32 [IntLiteralTooLargeForI32]
+// CHECK:STDERR: fail_bound_overflow.carbon:[[@LINE+4]]:14: error: array bound of 39999999999999999993 is too large [ArrayBoundTooLarge]
 // CHECK:STDERR: var a: [i32; 39999999999999999993];
 // CHECK:STDERR:              ^~~~~~~~~~~~~~~~~~~~
 // CHECK:STDERR:
 var a: [i32; 39999999999999999993];
 
-// CHECK:STDERR: fail_bound_overflow.carbon:[[@LINE+10]]:9: error: cannot implicitly convert from `i32` to `type` [ImplicitAsConversionFailure]
+// CHECK:STDERR: fail_bound_overflow.carbon:[[@LINE+6]]:9: error: cannot implicitly convert from `Core.IntLiteral` to `type` [ImplicitAsConversionFailure]
 // CHECK:STDERR: var b: [1; 39999999999999999993];
 // CHECK:STDERR:         ^
-// CHECK:STDERR: fail_bound_overflow.carbon:[[@LINE+7]]:9: note: type `i32` does not implement interface `ImplicitAs(type)` [MissingImplInMemberAccessNote]
+// CHECK:STDERR: fail_bound_overflow.carbon:[[@LINE+3]]:9: note: type `Core.IntLiteral` does not implement interface `ImplicitAs(type)` [MissingImplInMemberAccessNote]
 // CHECK:STDERR: var b: [1; 39999999999999999993];
 // CHECK:STDERR:         ^
-// CHECK:STDERR:
-// CHECK:STDERR: fail_bound_overflow.carbon:[[@LINE+3]]:12: error: integer literal with value 39999999999999999993 does not fit in i32 [IntLiteralTooLargeForI32]
-// CHECK:STDERR: var b: [1; 39999999999999999993];
-// CHECK:STDERR:            ^~~~~~~~~~~~~~~~~~~~
 var b: [1; 39999999999999999993];
 
 // CHECK:STDOUT: --- fail_bound_overflow.carbon
@@ -34,7 +27,8 @@ var b: [1; 39999999999999999993];
 // CHECK:STDOUT: constants {
 // CHECK:STDOUT:   %Int32.type: type = fn_type @Int32 [template]
 // CHECK:STDOUT:   %Int32: %Int32.type = struct_value () [template]
-// CHECK:STDOUT:   %.1: i32 = int_value 1 [template]
+// CHECK:STDOUT:   %.1: Core.IntLiteral = int_value 39999999999999999993 [template]
+// CHECK:STDOUT:   %.2: Core.IntLiteral = int_value 1 [template]
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
 // CHECK:STDOUT: imports {
@@ -54,14 +48,16 @@ var b: [1; 39999999999999999993];
 // CHECK:STDOUT:   }
 // CHECK:STDOUT:   %Core.import = import Core
 // CHECK:STDOUT:   %int.make_type_32: init type = call constants.%Int32() [template = i32]
-// CHECK:STDOUT:   %.loc18_9.1: type = value_of_initializer %int.make_type_32 [template = i32]
-// CHECK:STDOUT:   %.loc18_9.2: type = converted %int.make_type_32, %.loc18_9.1 [template = i32]
-// CHECK:STDOUT:   %.loc18_34: type = array_type <error>, i32 [template = <error>]
+// CHECK:STDOUT:   %.loc15_14: Core.IntLiteral = int_value 39999999999999999993 [template = constants.%.1]
+// CHECK:STDOUT:   %.loc15_9.1: type = value_of_initializer %int.make_type_32 [template = i32]
+// CHECK:STDOUT:   %.loc15_9.2: type = converted %int.make_type_32, %.loc15_9.1 [template = i32]
+// CHECK:STDOUT:   %.loc15_34: type = array_type %.loc15_14, i32 [template = <error>]
 // CHECK:STDOUT:   %a.var: ref <error> = var a
 // CHECK:STDOUT:   %a: ref <error> = bind_name a, %a.var
-// CHECK:STDOUT:   %.loc30_9.1: i32 = int_value 1 [template = constants.%.1]
-// CHECK:STDOUT:   %.loc30_9.2: type = converted %.loc30_9.1, <error> [template = <error>]
-// CHECK:STDOUT:   %.loc30_32: type = array_type <error>, <error> [template = <error>]
+// CHECK:STDOUT:   %.loc23_9.1: Core.IntLiteral = int_value 1 [template = constants.%.2]
+// CHECK:STDOUT:   %.loc23_12: Core.IntLiteral = int_value 39999999999999999993 [template = constants.%.1]
+// CHECK:STDOUT:   %.loc23_9.2: type = converted %.loc23_9.1, <error> [template = <error>]
+// CHECK:STDOUT:   %.loc23_32: type = array_type %.loc23_12, <error> [template = <error>]
 // CHECK:STDOUT:   %b.var: ref <error> = var b
 // CHECK:STDOUT:   %b: ref <error> = bind_name b, %b.var
 // CHECK:STDOUT: }

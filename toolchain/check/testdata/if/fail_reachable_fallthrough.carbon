@@ -48,10 +48,18 @@ fn If3(b: bool) -> i32 {
 // CHECK:STDOUT:   %Int32: %Int32.type = struct_value () [template]
 // CHECK:STDOUT:   %If1.type: type = fn_type @If1 [template]
 // CHECK:STDOUT:   %If1: %If1.type = struct_value () [template]
-// CHECK:STDOUT:   %.1: i32 = int_value 1 [template]
+// CHECK:STDOUT:   %.1: Core.IntLiteral = int_value 1 [template]
+// CHECK:STDOUT:   %Convert.type.2: type = fn_type @Convert.1, @ImplicitAs(i32) [template]
+// CHECK:STDOUT:   %Convert.type.15: type = fn_type @Convert.11 [template]
+// CHECK:STDOUT:   %Convert.15: %Convert.type.15 = struct_value () [template]
+// CHECK:STDOUT:   %.25: <witness> = interface_witness (%Convert.15) [template]
+// CHECK:STDOUT:   %.26: <bound method> = bound_method %.1, %Convert.15 [template]
+// CHECK:STDOUT:   %.27: i32 = int_value 1 [template]
 // CHECK:STDOUT:   %If2.type: type = fn_type @If2 [template]
 // CHECK:STDOUT:   %If2: %If2.type = struct_value () [template]
-// CHECK:STDOUT:   %.2: i32 = int_value 2 [template]
+// CHECK:STDOUT:   %.28: Core.IntLiteral = int_value 2 [template]
+// CHECK:STDOUT:   %.29: <bound method> = bound_method %.28, %Convert.15 [template]
+// CHECK:STDOUT:   %.30: i32 = int_value 2 [template]
 // CHECK:STDOUT:   %If3.type: type = fn_type @If3 [template]
 // CHECK:STDOUT:   %If3: %If3.type = struct_value () [template]
 // CHECK:STDOUT: }
@@ -60,6 +68,7 @@ fn If3(b: bool) -> i32 {
 // CHECK:STDOUT:   %Core: <namespace> = namespace file.%Core.import, [template] {
 // CHECK:STDOUT:     .Bool = %import_ref.1
 // CHECK:STDOUT:     .Int32 = %import_ref.2
+// CHECK:STDOUT:     .ImplicitAs = %import_ref.3
 // CHECK:STDOUT:     import Core//prelude
 // CHECK:STDOUT:     import Core//prelude/...
 // CHECK:STDOUT:   }
@@ -132,8 +141,13 @@ fn If3(b: bool) -> i32 {
 // CHECK:STDOUT:   if %b.ref br !if.then else br !if.else
 // CHECK:STDOUT:
 // CHECK:STDOUT: !if.then:
-// CHECK:STDOUT:   %.loc13: i32 = int_value 1 [template = constants.%.1]
-// CHECK:STDOUT:   return %.loc13
+// CHECK:STDOUT:   %.loc13_12: Core.IntLiteral = int_value 1 [template = constants.%.1]
+// CHECK:STDOUT:   %.loc13_13.1: %Convert.type.2 = interface_witness_access constants.%.25, element0 [template = constants.%Convert.15]
+// CHECK:STDOUT:   %.loc13_13.2: <bound method> = bound_method %.loc13_12, %.loc13_13.1 [template = constants.%.26]
+// CHECK:STDOUT:   %int.convert_checked: init i32 = call %.loc13_13.2(%.loc13_12) [template = constants.%.27]
+// CHECK:STDOUT:   %.loc13_13.3: i32 = value_of_initializer %int.convert_checked [template = constants.%.27]
+// CHECK:STDOUT:   %.loc13_13.4: i32 = converted %.loc13_12, %.loc13_13.3 [template = constants.%.27]
+// CHECK:STDOUT:   return %.loc13_13.4
 // CHECK:STDOUT:
 // CHECK:STDOUT: !if.else:
 // CHECK:STDOUT:   br !if.done
@@ -150,8 +164,13 @@ fn If3(b: bool) -> i32 {
 // CHECK:STDOUT:   br !if.done
 // CHECK:STDOUT:
 // CHECK:STDOUT: !if.else:
-// CHECK:STDOUT:   %.loc25: i32 = int_value 2 [template = constants.%.2]
-// CHECK:STDOUT:   return %.loc25
+// CHECK:STDOUT:   %.loc25_12: Core.IntLiteral = int_value 2 [template = constants.%.28]
+// CHECK:STDOUT:   %.loc25_13.1: %Convert.type.2 = interface_witness_access constants.%.25, element0 [template = constants.%Convert.15]
+// CHECK:STDOUT:   %.loc25_13.2: <bound method> = bound_method %.loc25_12, %.loc25_13.1 [template = constants.%.29]
+// CHECK:STDOUT:   %int.convert_checked: init i32 = call %.loc25_13.2(%.loc25_12) [template = constants.%.30]
+// CHECK:STDOUT:   %.loc25_13.3: i32 = value_of_initializer %int.convert_checked [template = constants.%.30]
+// CHECK:STDOUT:   %.loc25_13.4: i32 = converted %.loc25_12, %.loc25_13.3 [template = constants.%.30]
+// CHECK:STDOUT:   return %.loc25_13.4
 // CHECK:STDOUT:
 // CHECK:STDOUT: !if.done:
 // CHECK:STDOUT: }
@@ -162,8 +181,13 @@ fn If3(b: bool) -> i32 {
 // CHECK:STDOUT:   if %b.ref br !if.then else br !if.else
 // CHECK:STDOUT:
 // CHECK:STDOUT: !if.then:
-// CHECK:STDOUT:   %.loc35: i32 = int_value 1 [template = constants.%.1]
-// CHECK:STDOUT:   return %.loc35
+// CHECK:STDOUT:   %.loc35_12: Core.IntLiteral = int_value 1 [template = constants.%.1]
+// CHECK:STDOUT:   %.loc35_13.1: %Convert.type.2 = interface_witness_access constants.%.25, element0 [template = constants.%Convert.15]
+// CHECK:STDOUT:   %.loc35_13.2: <bound method> = bound_method %.loc35_12, %.loc35_13.1 [template = constants.%.26]
+// CHECK:STDOUT:   %int.convert_checked: init i32 = call %.loc35_13.2(%.loc35_12) [template = constants.%.27]
+// CHECK:STDOUT:   %.loc35_13.3: i32 = value_of_initializer %int.convert_checked [template = constants.%.27]
+// CHECK:STDOUT:   %.loc35_13.4: i32 = converted %.loc35_12, %.loc35_13.3 [template = constants.%.27]
+// CHECK:STDOUT:   return %.loc35_13.4
 // CHECK:STDOUT:
 // CHECK:STDOUT: !if.else:
 // CHECK:STDOUT: }

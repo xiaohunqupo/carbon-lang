@@ -28,15 +28,25 @@ fn F(cond: bool) {
 // CHECK:STDOUT:   %Bool: %Bool.type = struct_value () [template]
 // CHECK:STDOUT:   %F.type: type = fn_type @F [template]
 // CHECK:STDOUT:   %F: %F.type = struct_value () [template]
-// CHECK:STDOUT:   %.3: i32 = int_value 1 [template]
-// CHECK:STDOUT:   %.4: i32 = int_value 2 [template]
-// CHECK:STDOUT:   %struct: %.1 = struct_value (%.3, %.4) [template]
+// CHECK:STDOUT:   %.3: Core.IntLiteral = int_value 1 [template]
+// CHECK:STDOUT:   %.4: Core.IntLiteral = int_value 2 [template]
+// CHECK:STDOUT:   %.5: type = struct_type {.a: Core.IntLiteral, .b: Core.IntLiteral} [template]
+// CHECK:STDOUT:   %Convert.type.2: type = fn_type @Convert.1, @ImplicitAs(i32) [template]
+// CHECK:STDOUT:   %Convert.type.15: type = fn_type @Convert.11 [template]
+// CHECK:STDOUT:   %Convert.15: %Convert.type.15 = struct_value () [template]
+// CHECK:STDOUT:   %.29: <witness> = interface_witness (%Convert.15) [template]
+// CHECK:STDOUT:   %.30: <bound method> = bound_method %.3, %Convert.15 [template]
+// CHECK:STDOUT:   %.31: i32 = int_value 1 [template]
+// CHECK:STDOUT:   %.32: <bound method> = bound_method %.4, %Convert.15 [template]
+// CHECK:STDOUT:   %.33: i32 = int_value 2 [template]
+// CHECK:STDOUT:   %struct: %.1 = struct_value (%.31, %.33) [template]
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
 // CHECK:STDOUT: imports {
 // CHECK:STDOUT:   %Core: <namespace> = namespace file.%Core.import, [template] {
 // CHECK:STDOUT:     .Int32 = %import_ref.1
 // CHECK:STDOUT:     .Bool = %import_ref.2
+// CHECK:STDOUT:     .ImplicitAs = %import_ref.3
 // CHECK:STDOUT:     import Core//prelude
 // CHECK:STDOUT:     import Core//prelude/...
 // CHECK:STDOUT:   }
@@ -88,15 +98,23 @@ fn F(cond: bool) {
 // CHECK:STDOUT:   %.loc14_27: type = struct_type {.a: i32, .b: i32} [template = constants.%.1]
 // CHECK:STDOUT:   %a.var: ref %.1 = var a
 // CHECK:STDOUT:   %a: ref %.1 = bind_name a, %a.var
-// CHECK:STDOUT:   %.loc14_37: i32 = int_value 1 [template = constants.%.3]
-// CHECK:STDOUT:   %.loc14_45: i32 = int_value 2 [template = constants.%.4]
-// CHECK:STDOUT:   %.loc14_46.1: %.1 = struct_literal (%.loc14_37, %.loc14_45)
-// CHECK:STDOUT:   %.loc14_46.2: ref i32 = struct_access %a.var, element0
-// CHECK:STDOUT:   %.loc14_46.3: init i32 = initialize_from %.loc14_37 to %.loc14_46.2 [template = constants.%.3]
-// CHECK:STDOUT:   %.loc14_46.4: ref i32 = struct_access %a.var, element1
-// CHECK:STDOUT:   %.loc14_46.5: init i32 = initialize_from %.loc14_45 to %.loc14_46.4 [template = constants.%.4]
-// CHECK:STDOUT:   %.loc14_46.6: init %.1 = struct_init (%.loc14_46.3, %.loc14_46.5) to %a.var [template = constants.%struct]
-// CHECK:STDOUT:   %.loc14_47: init %.1 = converted %.loc14_46.1, %.loc14_46.6 [template = constants.%struct]
+// CHECK:STDOUT:   %.loc14_37: Core.IntLiteral = int_value 1 [template = constants.%.3]
+// CHECK:STDOUT:   %.loc14_45: Core.IntLiteral = int_value 2 [template = constants.%.4]
+// CHECK:STDOUT:   %.loc14_46.1: %.5 = struct_literal (%.loc14_37, %.loc14_45)
+// CHECK:STDOUT:   %.loc14_46.2: %Convert.type.2 = interface_witness_access constants.%.29, element0 [template = constants.%Convert.15]
+// CHECK:STDOUT:   %.loc14_46.3: <bound method> = bound_method %.loc14_37, %.loc14_46.2 [template = constants.%.30]
+// CHECK:STDOUT:   %int.convert_checked.loc14_46.1: init i32 = call %.loc14_46.3(%.loc14_37) [template = constants.%.31]
+// CHECK:STDOUT:   %.loc14_46.4: init i32 = converted %.loc14_37, %int.convert_checked.loc14_46.1 [template = constants.%.31]
+// CHECK:STDOUT:   %.loc14_46.5: ref i32 = struct_access %a.var, element0
+// CHECK:STDOUT:   %.loc14_46.6: init i32 = initialize_from %.loc14_46.4 to %.loc14_46.5 [template = constants.%.31]
+// CHECK:STDOUT:   %.loc14_46.7: %Convert.type.2 = interface_witness_access constants.%.29, element0 [template = constants.%Convert.15]
+// CHECK:STDOUT:   %.loc14_46.8: <bound method> = bound_method %.loc14_45, %.loc14_46.7 [template = constants.%.32]
+// CHECK:STDOUT:   %int.convert_checked.loc14_46.2: init i32 = call %.loc14_46.8(%.loc14_45) [template = constants.%.33]
+// CHECK:STDOUT:   %.loc14_46.9: init i32 = converted %.loc14_45, %int.convert_checked.loc14_46.2 [template = constants.%.33]
+// CHECK:STDOUT:   %.loc14_46.10: ref i32 = struct_access %a.var, element1
+// CHECK:STDOUT:   %.loc14_46.11: init i32 = initialize_from %.loc14_46.9 to %.loc14_46.10 [template = constants.%.33]
+// CHECK:STDOUT:   %.loc14_46.12: init %.1 = struct_init (%.loc14_46.6, %.loc14_46.11) to %a.var [template = constants.%struct]
+// CHECK:STDOUT:   %.loc14_47: init %.1 = converted %.loc14_46.1, %.loc14_46.12 [template = constants.%struct]
 // CHECK:STDOUT:   assign %a.var, %.loc14_47
 // CHECK:STDOUT:   %G.ref: %G.type = name_ref G, file.%G.decl [template = constants.%G]
 // CHECK:STDOUT:   %cond.ref: bool = name_ref cond, %cond

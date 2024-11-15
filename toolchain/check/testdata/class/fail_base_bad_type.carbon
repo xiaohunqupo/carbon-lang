@@ -26,10 +26,10 @@ fn AccessMemberWithInvalidBaseError(p: DeriveFromError*) -> i32 { return (*p).n;
 // --- fail_derive_from_non_type.carbon
 
 class DeriveFromNonType {
-  // CHECK:STDERR: fail_derive_from_non_type.carbon:[[@LINE+9]]:16: error: cannot implicitly convert from `i32` to `type` [ImplicitAsConversionFailure]
+  // CHECK:STDERR: fail_derive_from_non_type.carbon:[[@LINE+9]]:16: error: cannot implicitly convert from `Core.IntLiteral` to `type` [ImplicitAsConversionFailure]
   // CHECK:STDERR:   extend base: 32;
   // CHECK:STDERR:                ^~
-  // CHECK:STDERR: fail_derive_from_non_type.carbon:[[@LINE+6]]:16: note: type `i32` does not implement interface `ImplicitAs(type)` [MissingImplInMemberAccessNote]
+  // CHECK:STDERR: fail_derive_from_non_type.carbon:[[@LINE+6]]:16: note: type `Core.IntLiteral` does not implement interface `ImplicitAs(type)` [MissingImplInMemberAccessNote]
   // CHECK:STDERR:   extend base: 32;
   // CHECK:STDERR:                ^~
   // CHECK:STDERR:
@@ -246,7 +246,7 @@ fn AccessMemberWithInvalidBaseFinal_NoMember(p: DeriveFromFinal*) -> i32 {
 // CHECK:STDOUT:
 // CHECK:STDOUT: constants {
 // CHECK:STDOUT:   %DeriveFromNonType: type = class_type @DeriveFromNonType [template]
-// CHECK:STDOUT:   %.1: i32 = int_value 32 [template]
+// CHECK:STDOUT:   %.1: Core.IntLiteral = int_value 32 [template]
 // CHECK:STDOUT:   %.27: type = ptr_type %DeriveFromNonType [template]
 // CHECK:STDOUT:   %Int32.type: type = fn_type @Int32 [template]
 // CHECK:STDOUT:   %Int32: %Int32.type = struct_value () [template]
@@ -290,7 +290,7 @@ fn AccessMemberWithInvalidBaseFinal_NoMember(p: DeriveFromFinal*) -> i32 {
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
 // CHECK:STDOUT: class @DeriveFromNonType {
-// CHECK:STDOUT:   %.loc12_16.1: i32 = int_value 32 [template = constants.%.1]
+// CHECK:STDOUT:   %.loc12_16.1: Core.IntLiteral = int_value 32 [template = constants.%.1]
 // CHECK:STDOUT:   %.loc12_16.2: type = converted %.loc12_16.1, <error> [template = <error>]
 // CHECK:STDOUT:   %.loc12_18: <error> = base_decl <error>, element0 [template]
 // CHECK:STDOUT:   %.loc13: <witness> = complete_type_witness <error> [template = <error>]

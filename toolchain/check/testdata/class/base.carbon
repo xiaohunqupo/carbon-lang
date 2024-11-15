@@ -42,11 +42,20 @@ fn Access(d: Derived) -> (i32, i32) {
 // CHECK:STDOUT:   %.8: <witness> = complete_type_witness %.7 [template]
 // CHECK:STDOUT:   %Make.type: type = fn_type @Make [template]
 // CHECK:STDOUT:   %Make: %Make.type = struct_value () [template]
-// CHECK:STDOUT:   %.12: i32 = int_value 4 [template]
-// CHECK:STDOUT:   %.13: i32 = int_value 7 [template]
-// CHECK:STDOUT:   %.14: type = struct_type {.base: %.2, .d: i32} [template]
-// CHECK:STDOUT:   %struct.1: %Base = struct_value (%.12) [template]
-// CHECK:STDOUT:   %struct.2: %Derived = struct_value (%struct.1, %.13) [template]
+// CHECK:STDOUT:   %.12: Core.IntLiteral = int_value 4 [template]
+// CHECK:STDOUT:   %.13: type = struct_type {.b: Core.IntLiteral} [template]
+// CHECK:STDOUT:   %.14: Core.IntLiteral = int_value 7 [template]
+// CHECK:STDOUT:   %.15: type = struct_type {.base: %.13, .d: Core.IntLiteral} [template]
+// CHECK:STDOUT:   %Convert.type.2: type = fn_type @Convert.1, @ImplicitAs(i32) [template]
+// CHECK:STDOUT:   %Convert.type.15: type = fn_type @Convert.11 [template]
+// CHECK:STDOUT:   %Convert.15: %Convert.type.15 = struct_value () [template]
+// CHECK:STDOUT:   %.39: <witness> = interface_witness (%Convert.15) [template]
+// CHECK:STDOUT:   %.40: <bound method> = bound_method %.12, %Convert.15 [template]
+// CHECK:STDOUT:   %.41: i32 = int_value 4 [template]
+// CHECK:STDOUT:   %struct.1: %Base = struct_value (%.41) [template]
+// CHECK:STDOUT:   %.42: <bound method> = bound_method %.14, %Convert.15 [template]
+// CHECK:STDOUT:   %.43: i32 = int_value 7 [template]
+// CHECK:STDOUT:   %struct.2: %Derived = struct_value (%struct.1, %.43) [template]
 // CHECK:STDOUT:   %tuple.type.1: type = tuple_type (type, type) [template]
 // CHECK:STDOUT:   %tuple.type.2: type = tuple_type (i32, i32) [template]
 // CHECK:STDOUT:   %Access.type: type = fn_type @Access [template]
@@ -55,7 +64,8 @@ fn Access(d: Derived) -> (i32, i32) {
 // CHECK:STDOUT:
 // CHECK:STDOUT: imports {
 // CHECK:STDOUT:   %Core: <namespace> = namespace file.%Core.import, [template] {
-// CHECK:STDOUT:     .Int32 = %import_ref
+// CHECK:STDOUT:     .Int32 = %import_ref.1
+// CHECK:STDOUT:     .ImplicitAs = %import_ref.2
 // CHECK:STDOUT:     import Core//prelude
 // CHECK:STDOUT:     import Core//prelude/...
 // CHECK:STDOUT:   }
@@ -132,19 +142,27 @@ fn Access(d: Derived) -> (i32, i32) {
 // CHECK:STDOUT:
 // CHECK:STDOUT: fn @Make() -> %return: %Derived {
 // CHECK:STDOUT: !entry:
-// CHECK:STDOUT:   %.loc22_25: i32 = int_value 4 [template = constants.%.12]
-// CHECK:STDOUT:   %.loc22_26.1: %.2 = struct_literal (%.loc22_25)
-// CHECK:STDOUT:   %.loc22_34: i32 = int_value 7 [template = constants.%.13]
-// CHECK:STDOUT:   %.loc22_35.1: %.14 = struct_literal (%.loc22_26.1, %.loc22_34)
+// CHECK:STDOUT:   %.loc22_25: Core.IntLiteral = int_value 4 [template = constants.%.12]
+// CHECK:STDOUT:   %.loc22_26.1: %.13 = struct_literal (%.loc22_25)
+// CHECK:STDOUT:   %.loc22_34: Core.IntLiteral = int_value 7 [template = constants.%.14]
+// CHECK:STDOUT:   %.loc22_35.1: %.15 = struct_literal (%.loc22_26.1, %.loc22_34)
+// CHECK:STDOUT:   %.loc22_26.2: %Convert.type.2 = interface_witness_access constants.%.39, element0 [template = constants.%Convert.15]
+// CHECK:STDOUT:   %.loc22_26.3: <bound method> = bound_method %.loc22_25, %.loc22_26.2 [template = constants.%.40]
+// CHECK:STDOUT:   %int.convert_checked.loc22_26: init i32 = call %.loc22_26.3(%.loc22_25) [template = constants.%.41]
+// CHECK:STDOUT:   %.loc22_26.4: init i32 = converted %.loc22_25, %int.convert_checked.loc22_26 [template = constants.%.41]
 // CHECK:STDOUT:   %.loc22_35.2: ref %Base = class_element_access %return, element0
-// CHECK:STDOUT:   %.loc22_26.2: ref i32 = class_element_access %.loc22_35.2, element0
-// CHECK:STDOUT:   %.loc22_26.3: init i32 = initialize_from %.loc22_25 to %.loc22_26.2 [template = constants.%.12]
-// CHECK:STDOUT:   %.loc22_26.4: init %Base = class_init (%.loc22_26.3), %.loc22_35.2 [template = constants.%struct.1]
-// CHECK:STDOUT:   %.loc22_35.3: init %Base = converted %.loc22_26.1, %.loc22_26.4 [template = constants.%struct.1]
-// CHECK:STDOUT:   %.loc22_35.4: ref i32 = class_element_access %return, element1
-// CHECK:STDOUT:   %.loc22_35.5: init i32 = initialize_from %.loc22_34 to %.loc22_35.4 [template = constants.%.13]
-// CHECK:STDOUT:   %.loc22_35.6: init %Derived = class_init (%.loc22_35.3, %.loc22_35.5), %return [template = constants.%struct.2]
-// CHECK:STDOUT:   %.loc22_36: init %Derived = converted %.loc22_35.1, %.loc22_35.6 [template = constants.%struct.2]
+// CHECK:STDOUT:   %.loc22_26.5: ref i32 = class_element_access %.loc22_35.2, element0
+// CHECK:STDOUT:   %.loc22_26.6: init i32 = initialize_from %.loc22_26.4 to %.loc22_26.5 [template = constants.%.41]
+// CHECK:STDOUT:   %.loc22_26.7: init %Base = class_init (%.loc22_26.6), %.loc22_35.2 [template = constants.%struct.1]
+// CHECK:STDOUT:   %.loc22_35.3: init %Base = converted %.loc22_26.1, %.loc22_26.7 [template = constants.%struct.1]
+// CHECK:STDOUT:   %.loc22_35.4: %Convert.type.2 = interface_witness_access constants.%.39, element0 [template = constants.%Convert.15]
+// CHECK:STDOUT:   %.loc22_35.5: <bound method> = bound_method %.loc22_34, %.loc22_35.4 [template = constants.%.42]
+// CHECK:STDOUT:   %int.convert_checked.loc22_35: init i32 = call %.loc22_35.5(%.loc22_34) [template = constants.%.43]
+// CHECK:STDOUT:   %.loc22_35.6: init i32 = converted %.loc22_34, %int.convert_checked.loc22_35 [template = constants.%.43]
+// CHECK:STDOUT:   %.loc22_35.7: ref i32 = class_element_access %return, element1
+// CHECK:STDOUT:   %.loc22_35.8: init i32 = initialize_from %.loc22_35.6 to %.loc22_35.7 [template = constants.%.43]
+// CHECK:STDOUT:   %.loc22_35.9: init %Derived = class_init (%.loc22_35.3, %.loc22_35.8), %return [template = constants.%struct.2]
+// CHECK:STDOUT:   %.loc22_36: init %Derived = converted %.loc22_35.1, %.loc22_35.9 [template = constants.%struct.2]
 // CHECK:STDOUT:   return %.loc22_36 to %return
 // CHECK:STDOUT: }
 // CHECK:STDOUT:

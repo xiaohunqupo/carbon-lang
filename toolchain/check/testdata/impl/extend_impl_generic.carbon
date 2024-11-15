@@ -55,7 +55,7 @@ class X(U:! type) {
 // CHECK:STDOUT:   %HasF.type.1: type = generic_interface_type @HasF [template]
 // CHECK:STDOUT:   %HasF: %HasF.type.1 = struct_value () [template]
 // CHECK:STDOUT:   %HasF.type.2: type = facet_type <@HasF, @HasF(%T)> [symbolic]
-// CHECK:STDOUT:   %Self: %HasF.type.2 = bind_symbolic_name Self, 1 [symbolic]
+// CHECK:STDOUT:   %Self.1: %HasF.type.2 = bind_symbolic_name Self, 1 [symbolic]
 // CHECK:STDOUT:   %F.type.1: type = fn_type @F.1, @HasF(%T) [symbolic]
 // CHECK:STDOUT:   %F.1: %F.type.1 = struct_value () [symbolic]
 // CHECK:STDOUT:   %.1: type = assoc_entity_type %HasF.type.2, %F.type.1 [symbolic]
@@ -77,15 +77,23 @@ class X(U:! type) {
 // CHECK:STDOUT:   %.8: <witness> = interface_witness (%F.3) [template]
 // CHECK:STDOUT:   %.9: type = struct_type {} [template]
 // CHECK:STDOUT:   %.10: <witness> = complete_type_witness %.9 [template]
-// CHECK:STDOUT:   %.12: i32 = int_value 2 [template]
-// CHECK:STDOUT:   %struct: %Param = struct_value (%.12) [template]
+// CHECK:STDOUT:   %.12: Core.IntLiteral = int_value 2 [template]
+// CHECK:STDOUT:   %.13: type = struct_type {.x: Core.IntLiteral} [template]
+// CHECK:STDOUT:   %Convert.type.2: type = fn_type @Convert.1, @ImplicitAs(i32) [template]
+// CHECK:STDOUT:   %Convert.type.15: type = fn_type @Convert.11 [template]
+// CHECK:STDOUT:   %Convert.15: %Convert.type.15 = struct_value () [template]
+// CHECK:STDOUT:   %.37: <witness> = interface_witness (%Convert.15) [template]
+// CHECK:STDOUT:   %.38: <bound method> = bound_method %.12, %Convert.15 [template]
+// CHECK:STDOUT:   %.39: i32 = int_value 2 [template]
+// CHECK:STDOUT:   %struct: %Param = struct_value (%.39) [template]
 // CHECK:STDOUT:   %G.type: type = fn_type @G [template]
 // CHECK:STDOUT:   %G: %G.type = struct_value () [template]
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
 // CHECK:STDOUT: imports {
 // CHECK:STDOUT:   %Core: <namespace> = namespace file.%Core.import, [template] {
-// CHECK:STDOUT:     .Int32 = %import_ref
+// CHECK:STDOUT:     .Int32 = %import_ref.1
+// CHECK:STDOUT:     .ImplicitAs = %import_ref.2
 // CHECK:STDOUT:     import Core//prelude
 // CHECK:STDOUT:     import Core//prelude/...
 // CHECK:STDOUT:   }
@@ -125,14 +133,14 @@ class X(U:! type) {
 // CHECK:STDOUT:
 // CHECK:STDOUT: !definition:
 // CHECK:STDOUT:   %HasF.type: type = facet_type <@HasF, @HasF(%T.loc4_16.2)> [symbolic = %HasF.type (constants.%HasF.type.2)]
-// CHECK:STDOUT:   %Self.2: %HasF.type.2 = bind_symbolic_name Self, 1 [symbolic = %Self.2 (constants.%Self)]
+// CHECK:STDOUT:   %Self.2: %HasF.type.2 = bind_symbolic_name Self, 1 [symbolic = %Self.2 (constants.%Self.1)]
 // CHECK:STDOUT:   %F.type: type = fn_type @F.1, @HasF(%T.loc4_16.2) [symbolic = %F.type (constants.%F.type.1)]
 // CHECK:STDOUT:   %F: @HasF.%F.type (%F.type.1) = struct_value () [symbolic = %F (constants.%F.1)]
 // CHECK:STDOUT:   %.loc5_14.2: type = assoc_entity_type @HasF.%HasF.type (%HasF.type.2), @HasF.%F.type (%F.type.1) [symbolic = %.loc5_14.2 (constants.%.1)]
 // CHECK:STDOUT:   %.loc5_14.3: @HasF.%.loc5_14.2 (%.1) = assoc_entity element0, %F.decl [symbolic = %.loc5_14.3 (constants.%.2)]
 // CHECK:STDOUT:
 // CHECK:STDOUT:   interface {
-// CHECK:STDOUT:     %Self.1: @HasF.%HasF.type (%HasF.type.2) = bind_symbolic_name Self, 1 [symbolic = %Self.2 (constants.%Self)]
+// CHECK:STDOUT:     %Self.1: @HasF.%HasF.type (%HasF.type.2) = bind_symbolic_name Self, 1 [symbolic = %Self.2 (constants.%Self.1)]
 // CHECK:STDOUT:     %F.decl: @HasF.%F.type (%F.type.1) = fn_decl @F.1 [symbolic = @HasF.%F (constants.%F.1)] {
 // CHECK:STDOUT:       %return.patt: @F.1.%T (%T) = return_slot_pattern
 // CHECK:STDOUT:       %return.param_patt: @F.1.%T (%T) = out_param_pattern %return.patt, runtime_param0
@@ -150,7 +158,7 @@ class X(U:! type) {
 // CHECK:STDOUT:   }
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
-// CHECK:STDOUT: impl @impl: %Self.ref as %HasF.type {
+// CHECK:STDOUT: impl @impl.1: %Self.ref as %HasF.type {
 // CHECK:STDOUT:   %F.decl: %F.type.3 = fn_decl @F.2 [template = constants.%F.3] {
 // CHECK:STDOUT:     %return.patt: %Param = return_slot_pattern
 // CHECK:STDOUT:     %return.param_patt: %Param = out_param_pattern %return.patt, runtime_param0
@@ -179,7 +187,7 @@ class X(U:! type) {
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
 // CHECK:STDOUT: class @C {
-// CHECK:STDOUT:   impl_decl @impl [template] {} {
+// CHECK:STDOUT:   impl_decl @impl.1 [template] {} {
 // CHECK:STDOUT:     %Self.ref: type = name_ref Self, constants.%C [template = constants.%C]
 // CHECK:STDOUT:     %HasF.ref: %HasF.type.1 = name_ref HasF, file.%HasF.decl [template = constants.%HasF]
 // CHECK:STDOUT:     %Param.ref: type = name_ref Param, file.%Param.decl [template = constants.%Param]
@@ -189,7 +197,7 @@ class X(U:! type) {
 // CHECK:STDOUT:
 // CHECK:STDOUT: !members:
 // CHECK:STDOUT:   .Self = constants.%C
-// CHECK:STDOUT:   extend @impl.%HasF.type
+// CHECK:STDOUT:   extend @impl.1.%HasF.type
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
 // CHECK:STDOUT: generic fn @F.1(@HasF.%T.loc4_16.1: type, @HasF.%Self.1: @HasF.%HasF.type (%HasF.type.2)) {
@@ -200,12 +208,16 @@ class X(U:! type) {
 // CHECK:STDOUT:
 // CHECK:STDOUT: fn @F.2() -> %return: %Param {
 // CHECK:STDOUT: !entry:
-// CHECK:STDOUT:   %.loc15_20: i32 = int_value 2 [template = constants.%.12]
-// CHECK:STDOUT:   %.loc15_21.1: %.4 = struct_literal (%.loc15_20)
-// CHECK:STDOUT:   %.loc15_21.2: ref i32 = class_element_access %return, element0
-// CHECK:STDOUT:   %.loc15_21.3: init i32 = initialize_from %.loc15_20 to %.loc15_21.2 [template = constants.%.12]
-// CHECK:STDOUT:   %.loc15_21.4: init %Param = class_init (%.loc15_21.3), %return [template = constants.%struct]
-// CHECK:STDOUT:   %.loc15_22: init %Param = converted %.loc15_21.1, %.loc15_21.4 [template = constants.%struct]
+// CHECK:STDOUT:   %.loc15_20: Core.IntLiteral = int_value 2 [template = constants.%.12]
+// CHECK:STDOUT:   %.loc15_21.1: %.13 = struct_literal (%.loc15_20)
+// CHECK:STDOUT:   %.loc15_21.2: %Convert.type.2 = interface_witness_access constants.%.37, element0 [template = constants.%Convert.15]
+// CHECK:STDOUT:   %.loc15_21.3: <bound method> = bound_method %.loc15_20, %.loc15_21.2 [template = constants.%.38]
+// CHECK:STDOUT:   %int.convert_checked: init i32 = call %.loc15_21.3(%.loc15_20) [template = constants.%.39]
+// CHECK:STDOUT:   %.loc15_21.4: init i32 = converted %.loc15_20, %int.convert_checked [template = constants.%.39]
+// CHECK:STDOUT:   %.loc15_21.5: ref i32 = class_element_access %return, element0
+// CHECK:STDOUT:   %.loc15_21.6: init i32 = initialize_from %.loc15_21.4 to %.loc15_21.5 [template = constants.%.39]
+// CHECK:STDOUT:   %.loc15_21.7: init %Param = class_init (%.loc15_21.6), %return [template = constants.%struct]
+// CHECK:STDOUT:   %.loc15_22: init %Param = converted %.loc15_21.1, %.loc15_21.7 [template = constants.%struct]
 // CHECK:STDOUT:   return %.loc15_22 to %return
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
@@ -249,7 +261,7 @@ class X(U:! type) {
 // CHECK:STDOUT:   %T.patt.loc4_16.2 => constants.%T
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
-// CHECK:STDOUT: specific @F.1(constants.%T, constants.%Self) {
+// CHECK:STDOUT: specific @F.1(constants.%T, constants.%Self.1) {
 // CHECK:STDOUT:   %T => constants.%T
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
@@ -264,7 +276,7 @@ class X(U:! type) {
 // CHECK:STDOUT:
 // CHECK:STDOUT: !definition:
 // CHECK:STDOUT:   %HasF.type => constants.%HasF.type.3
-// CHECK:STDOUT:   %Self.2 => constants.%Self
+// CHECK:STDOUT:   %Self.2 => constants.%Self.1
 // CHECK:STDOUT:   %F.type => constants.%F.type.2
 // CHECK:STDOUT:   %F => constants.%F.2
 // CHECK:STDOUT:   %.loc5_14.2 => constants.%.6

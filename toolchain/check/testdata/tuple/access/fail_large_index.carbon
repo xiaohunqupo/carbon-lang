@@ -27,15 +27,23 @@ var d: i32 = b.(0x7FFF_FFFF);
 // CHECK:STDOUT:   %Int32: %Int32.type = struct_value () [template]
 // CHECK:STDOUT:   %tuple.type.1: type = tuple_type (type) [template]
 // CHECK:STDOUT:   %tuple.type.2: type = tuple_type (i32) [template]
-// CHECK:STDOUT:   %.1: i32 = int_value 12 [template]
-// CHECK:STDOUT:   %tuple: %tuple.type.2 = tuple_value (%.1) [template]
-// CHECK:STDOUT:   %.2: i32 = int_value 1 [template]
-// CHECK:STDOUT:   %.3: i32 = int_value 2147483647 [template]
+// CHECK:STDOUT:   %.1: Core.IntLiteral = int_value 12 [template]
+// CHECK:STDOUT:   %tuple.type.3: type = tuple_type (Core.IntLiteral) [template]
+// CHECK:STDOUT:   %Convert.type.2: type = fn_type @Convert.1, @ImplicitAs(i32) [template]
+// CHECK:STDOUT:   %Convert.type.15: type = fn_type @Convert.11 [template]
+// CHECK:STDOUT:   %Convert.15: %Convert.type.15 = struct_value () [template]
+// CHECK:STDOUT:   %.25: <witness> = interface_witness (%Convert.15) [template]
+// CHECK:STDOUT:   %.26: <bound method> = bound_method %.1, %Convert.15 [template]
+// CHECK:STDOUT:   %.27: i32 = int_value 12 [template]
+// CHECK:STDOUT:   %tuple: %tuple.type.2 = tuple_value (%.27) [template]
+// CHECK:STDOUT:   %.28: Core.IntLiteral = int_value 1 [template]
+// CHECK:STDOUT:   %.29: Core.IntLiteral = int_value 2147483647 [template]
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
 // CHECK:STDOUT: imports {
 // CHECK:STDOUT:   %Core: <namespace> = namespace file.%Core.import, [template] {
-// CHECK:STDOUT:     .Int32 = %import_ref
+// CHECK:STDOUT:     .Int32 = %import_ref.1
+// CHECK:STDOUT:     .ImplicitAs = %import_ref.2
 // CHECK:STDOUT:     import Core//prelude
 // CHECK:STDOUT:     import Core//prelude/...
 // CHECK:STDOUT:   }
@@ -78,10 +86,14 @@ var d: i32 = b.(0x7FFF_FFFF);
 // CHECK:STDOUT:
 // CHECK:STDOUT: fn @__global_init() {
 // CHECK:STDOUT: !entry:
-// CHECK:STDOUT:   %.loc11_18: i32 = int_value 12 [template = constants.%.1]
-// CHECK:STDOUT:   %.loc11_21.1: %tuple.type.2 = tuple_literal (%.loc11_18)
-// CHECK:STDOUT:   %.loc11_21.2: init %tuple.type.2 = tuple_init (%.loc11_18) to file.%a.var [template = constants.%tuple]
-// CHECK:STDOUT:   %.loc11_22: init %tuple.type.2 = converted %.loc11_21.1, %.loc11_21.2 [template = constants.%tuple]
+// CHECK:STDOUT:   %.loc11_18: Core.IntLiteral = int_value 12 [template = constants.%.1]
+// CHECK:STDOUT:   %.loc11_21.1: %tuple.type.3 = tuple_literal (%.loc11_18)
+// CHECK:STDOUT:   %.loc11_21.2: %Convert.type.2 = interface_witness_access constants.%.25, element0 [template = constants.%Convert.15]
+// CHECK:STDOUT:   %.loc11_21.3: <bound method> = bound_method %.loc11_18, %.loc11_21.2 [template = constants.%.26]
+// CHECK:STDOUT:   %int.convert_checked: init i32 = call %.loc11_21.3(%.loc11_18) [template = constants.%.27]
+// CHECK:STDOUT:   %.loc11_21.4: init i32 = converted %.loc11_18, %int.convert_checked [template = constants.%.27]
+// CHECK:STDOUT:   %.loc11_21.5: init %tuple.type.2 = tuple_init (%.loc11_21.4) to file.%a.var [template = constants.%tuple]
+// CHECK:STDOUT:   %.loc11_22: init %tuple.type.2 = converted %.loc11_21.1, %.loc11_21.5 [template = constants.%tuple]
 // CHECK:STDOUT:   assign file.%a.var, %.loc11_22
 // CHECK:STDOUT:   %a.ref: ref %tuple.type.2 = name_ref a, file.%a
 // CHECK:STDOUT:   %.loc12_17.1: ref i32 = tuple_access %a.ref, element0
@@ -90,10 +102,10 @@ var d: i32 = b.(0x7FFF_FFFF);
 // CHECK:STDOUT:   %.loc12_18: init %tuple.type.2 = converted %a.ref, %.loc12_17.3
 // CHECK:STDOUT:   assign file.%b.var, %.loc12_18
 // CHECK:STDOUT:   %b.ref.loc17: ref %tuple.type.2 = name_ref b, file.%b
-// CHECK:STDOUT:   %.loc17: i32 = int_value 1 [template = constants.%.2]
+// CHECK:STDOUT:   %.loc17: Core.IntLiteral = int_value 1 [template = constants.%.28]
 // CHECK:STDOUT:   assign file.%c.var, <error>
 // CHECK:STDOUT:   %b.ref.loc21: ref %tuple.type.2 = name_ref b, file.%b
-// CHECK:STDOUT:   %.loc21: i32 = int_value 2147483647 [template = constants.%.3]
+// CHECK:STDOUT:   %.loc21: Core.IntLiteral = int_value 2147483647 [template = constants.%.29]
 // CHECK:STDOUT:   assign file.%d.var, <error>
 // CHECK:STDOUT:   return
 // CHECK:STDOUT: }

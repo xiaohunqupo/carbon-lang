@@ -30,12 +30,19 @@ class Class {
 // CHECK:STDOUT:   %F: %F.type = struct_value () [template]
 // CHECK:STDOUT:   %.1: type = struct_type {} [template]
 // CHECK:STDOUT:   %.2: <witness> = complete_type_witness %.1 [template]
-// CHECK:STDOUT:   %.4: i32 = int_value 1 [template]
+// CHECK:STDOUT:   %.4: Core.IntLiteral = int_value 1 [template]
+// CHECK:STDOUT:   %Convert.type.2: type = fn_type @Convert.1, @ImplicitAs(i32) [template]
+// CHECK:STDOUT:   %Convert.type.15: type = fn_type @Convert.11 [template]
+// CHECK:STDOUT:   %Convert.15: %Convert.type.15 = struct_value () [template]
+// CHECK:STDOUT:   %.28: <witness> = interface_witness (%Convert.15) [template]
+// CHECK:STDOUT:   %.29: <bound method> = bound_method %.4, %Convert.15 [template]
+// CHECK:STDOUT:   %.30: i32 = int_value 1 [template]
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
 // CHECK:STDOUT: imports {
 // CHECK:STDOUT:   %Core: <namespace> = namespace file.%Core.import, [template] {
-// CHECK:STDOUT:     .Int32 = %import_ref
+// CHECK:STDOUT:     .Int32 = %import_ref.1
+// CHECK:STDOUT:     .ImplicitAs = %import_ref.2
 // CHECK:STDOUT:     import Core//prelude
 // CHECK:STDOUT:     import Core//prelude/...
 // CHECK:STDOUT:   }
@@ -91,7 +98,12 @@ class Class {
 // CHECK:STDOUT:
 // CHECK:STDOUT: fn @F() -> i32 {
 // CHECK:STDOUT: !entry:
-// CHECK:STDOUT:   %.loc17: i32 = int_value 1 [template = constants.%.4]
-// CHECK:STDOUT:   return %.loc17
+// CHECK:STDOUT:   %.loc17_12: Core.IntLiteral = int_value 1 [template = constants.%.4]
+// CHECK:STDOUT:   %.loc17_13.1: %Convert.type.2 = interface_witness_access constants.%.28, element0 [template = constants.%Convert.15]
+// CHECK:STDOUT:   %.loc17_13.2: <bound method> = bound_method %.loc17_12, %.loc17_13.1 [template = constants.%.29]
+// CHECK:STDOUT:   %int.convert_checked: init i32 = call %.loc17_13.2(%.loc17_12) [template = constants.%.30]
+// CHECK:STDOUT:   %.loc17_13.3: i32 = value_of_initializer %int.convert_checked [template = constants.%.30]
+// CHECK:STDOUT:   %.loc17_13.4: i32 = converted %.loc17_12, %.loc17_13.3 [template = constants.%.30]
+// CHECK:STDOUT:   return %.loc17_13.4
 // CHECK:STDOUT: }
 // CHECK:STDOUT:

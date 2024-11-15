@@ -20,8 +20,8 @@ var x: (i32, i32) = (2, );
 // CHECK:STDOUT:   %Int32: %Int32.type = struct_value () [template]
 // CHECK:STDOUT:   %tuple.type.1: type = tuple_type (type, type) [template]
 // CHECK:STDOUT:   %tuple.type.2: type = tuple_type (i32, i32) [template]
-// CHECK:STDOUT:   %.2: i32 = int_value 2 [template]
-// CHECK:STDOUT:   %tuple.type.3: type = tuple_type (i32) [template]
+// CHECK:STDOUT:   %.2: Core.IntLiteral = int_value 2 [template]
+// CHECK:STDOUT:   %tuple.type.3: type = tuple_type (Core.IntLiteral) [template]
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
 // CHECK:STDOUT: imports {
@@ -52,7 +52,7 @@ var x: (i32, i32) = (2, );
 // CHECK:STDOUT:
 // CHECK:STDOUT: fn @__global_init() {
 // CHECK:STDOUT: !entry:
-// CHECK:STDOUT:   %.loc14_22: i32 = int_value 2 [template = constants.%.2]
+// CHECK:STDOUT:   %.loc14_22: Core.IntLiteral = int_value 2 [template = constants.%.2]
 // CHECK:STDOUT:   %.loc14_25: %tuple.type.3 = tuple_literal (%.loc14_22)
 // CHECK:STDOUT:   assign file.%x.var, <error>
 // CHECK:STDOUT:   return
