@@ -44,7 +44,7 @@ let n: i32 = ((4 as i32) as X) as i32;
 // CHECK:STDOUT:   %Convert.type.5: type = fn_type @Convert.1, @As(i32) [template]
 // CHECK:STDOUT:   %.12: <witness> = interface_witness (%Convert.4) [template]
 // CHECK:STDOUT:   %.13: i32 = int_value 4 [template]
-// CHECK:STDOUT:   %.15: <bound method> = bound_method %.13, %Convert.2 [template]
+// CHECK:STDOUT:   %.33: <bound method> = bound_method %.13, %Convert.2 [template]
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
 // CHECK:STDOUT: imports {
@@ -54,7 +54,7 @@ let n: i32 = ((4 as i32) as X) as i32;
 // CHECK:STDOUT:     import Core//prelude
 // CHECK:STDOUT:     import Core//prelude/...
 // CHECK:STDOUT:   }
-// CHECK:STDOUT:   %import_ref.2: %As.type.1 = import_ref Core//prelude/operators/as, inst+7, loaded [template = constants.%As]
+// CHECK:STDOUT:   %import_ref.2: %As.type.1 = import_ref Core//prelude/operators/as, inst+14, loaded [template = constants.%As]
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
 // CHECK:STDOUT: file {
@@ -174,7 +174,7 @@ let n: i32 = ((4 as i32) as X) as i32;
 // CHECK:STDOUT:   %.loc23_21.2: type = converted %int.make_type_32.loc23_21, %.loc23_21.1 [template = i32]
 // CHECK:STDOUT:   %X.ref: type = name_ref X, file.%X.decl [template = constants.%X]
 // CHECK:STDOUT:   %.loc23_26.1: %Convert.type.3 = interface_witness_access constants.%.8, element0 [template = constants.%Convert.2]
-// CHECK:STDOUT:   %.loc23_26.2: <bound method> = bound_method %.loc23_16, %.loc23_26.1 [template = constants.%.15]
+// CHECK:STDOUT:   %.loc23_26.2: <bound method> = bound_method %.loc23_16, %.loc23_26.1 [template = constants.%.33]
 // CHECK:STDOUT:   %.loc23_26.3: ref %X = temporary_storage
 // CHECK:STDOUT:   %Convert.call.loc23_26: init %X = call %.loc23_26.2(%.loc23_16) to %.loc23_26.3
 // CHECK:STDOUT:   %.loc23_26.4: init %X = converted %.loc23_16, %Convert.call.loc23_26

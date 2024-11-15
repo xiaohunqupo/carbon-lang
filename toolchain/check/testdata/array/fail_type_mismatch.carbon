@@ -52,7 +52,7 @@ var d: [i32; 3] = t2;
 // CHECK:STDOUT:   %tuple.type.1: type = tuple_type (i32, String, String) [template]
 // CHECK:STDOUT:   %.8: i32 = int_value 0 [template]
 // CHECK:STDOUT:   %tuple.type.2: type = tuple_type (type, type, type) [template]
-// CHECK:STDOUT:   %.15: i32 = int_value 2 [template]
+// CHECK:STDOUT:   %.33: i32 = int_value 2 [template]
 // CHECK:STDOUT:   %tuple.type.4: type = tuple_type (i32, i32) [template]
 // CHECK:STDOUT:   %tuple.type.5: type = tuple_type (type, type) [template]
 // CHECK:STDOUT: }
@@ -145,7 +145,7 @@ var d: [i32; 3] = t2;
 // CHECK:STDOUT:   %.loc28_19.7: i32 = converted %.loc28_19.6, <error> [template = <error>]
 // CHECK:STDOUT:   assign file.%b.var, <error>
 // CHECK:STDOUT:   %.loc34_20: i32 = int_value 1 [template = constants.%.4]
-// CHECK:STDOUT:   %.loc34_23: i32 = int_value 2 [template = constants.%.15]
+// CHECK:STDOUT:   %.loc34_23: i32 = int_value 2 [template = constants.%.33]
 // CHECK:STDOUT:   %.loc34_24: %tuple.type.4 = tuple_literal (%.loc34_20, %.loc34_23)
 // CHECK:STDOUT:   assign file.%c.var, <error>
 // CHECK:STDOUT:   %t2.ref: ref %tuple.type.4 = name_ref t2, file.%t2

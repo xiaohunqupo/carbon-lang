@@ -65,7 +65,7 @@ fn Test() {
 // CHECK:STDOUT:   %Test.type: type = fn_type @Test [template]
 // CHECK:STDOUT:   %Test: %Test.type = struct_value () [template]
 // CHECK:STDOUT:   %.14: <specific function> = specific_function %Source, @Source(%X) [template]
-// CHECK:STDOUT:   %.16: <specific function> = specific_function %Source, @Source(i32) [template]
+// CHECK:STDOUT:   %.34: <specific function> = specific_function %Source, @Source(i32) [template]
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
 // CHECK:STDOUT: imports {
@@ -75,7 +75,7 @@ fn Test() {
 // CHECK:STDOUT:     import Core//prelude
 // CHECK:STDOUT:     import Core//prelude/...
 // CHECK:STDOUT:   }
-// CHECK:STDOUT:   %import_ref.2: %ImplicitAs.type.1 = import_ref Core//prelude/operators/as, inst+48, loaded [template = constants.%ImplicitAs]
+// CHECK:STDOUT:   %import_ref.2: %ImplicitAs.type.1 = import_ref Core//prelude/operators/as, inst+55, loaded [template = constants.%ImplicitAs]
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
 // CHECK:STDOUT: file {
@@ -262,7 +262,7 @@ fn Test() {
 // CHECK:STDOUT:   %int.make_type_32: init type = call constants.%Int32() [template = i32]
 // CHECK:STDOUT:   %.loc31_16.1: type = value_of_initializer %int.make_type_32 [template = i32]
 // CHECK:STDOUT:   %.loc31_16.2: type = converted %int.make_type_32, %.loc31_16.1 [template = i32]
-// CHECK:STDOUT:   %.loc31_10: <specific function> = specific_function %Source.ref.loc31, @Source(i32) [template = constants.%.16]
+// CHECK:STDOUT:   %.loc31_10: <specific function> = specific_function %Source.ref.loc31, @Source(i32) [template = constants.%.34]
 // CHECK:STDOUT:   %Source.call.loc31: init i32 = call %.loc31_10()
 // CHECK:STDOUT:   %.loc31_16.3: %Convert.type.3 = interface_witness_access constants.%.8, element0 [template = constants.%Convert.2]
 // CHECK:STDOUT:   %.loc31_16.4: <bound method> = bound_method %Source.call.loc31, %.loc31_16.3
@@ -303,6 +303,6 @@ fn Test() {
 // CHECK:STDOUT:   %T.patt.loc27_11.2 => i32
 // CHECK:STDOUT:
 // CHECK:STDOUT: !definition:
-// CHECK:STDOUT:   %.loc27_35.2 => constants.%.16
+// CHECK:STDOUT:   %.loc27_35.2 => constants.%.34
 // CHECK:STDOUT: }
 // CHECK:STDOUT:

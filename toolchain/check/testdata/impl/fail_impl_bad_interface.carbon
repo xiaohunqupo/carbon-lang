@@ -65,8 +65,8 @@ impl f64 as type where .Self impls type {}
 // CHECK:STDOUT:     .Core = imports.%Core
 // CHECK:STDOUT:   }
 // CHECK:STDOUT:   %Core.import = import Core
-// CHECK:STDOUT:   %.loc11: type = converted @impl.%.loc11_13, <error> [template = <error>]
-// CHECK:STDOUT:   impl_decl @impl [template] {} {
+// CHECK:STDOUT:   %.loc11: type = converted @impl.13.%.loc11_13, <error> [template = <error>]
+// CHECK:STDOUT:   impl_decl @impl.13 [template] {} {
 // CHECK:STDOUT:     %int.make_type_32: init type = call constants.%Int32() [template = i32]
 // CHECK:STDOUT:     %.loc11_6.1: type = value_of_initializer %int.make_type_32 [template = i32]
 // CHECK:STDOUT:     %.loc11_6.2: type = converted %int.make_type_32, %.loc11_6.1 [template = i32]
@@ -74,7 +74,7 @@ impl f64 as type where .Self impls type {}
 // CHECK:STDOUT:   }
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
-// CHECK:STDOUT: impl @impl: %.loc11_6.2 as <error> {
+// CHECK:STDOUT: impl @impl.13: %.loc11_6.2 as <error> {
 // CHECK:STDOUT: !members:
 // CHECK:STDOUT:   witness = <error>
 // CHECK:STDOUT: }

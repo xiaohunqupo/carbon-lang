@@ -639,8 +639,8 @@ impl i32 as Empty {
 // CHECK:STDOUT:   %.2: %.1 = assoc_entity element0, @I.%T [template]
 // CHECK:STDOUT:   %F.type: type = fn_type @F [template]
 // CHECK:STDOUT:   %F: %F.type = struct_value () [template]
-// CHECK:STDOUT:   %.8: type = assoc_entity_type %I.type, %F.type [template]
-// CHECK:STDOUT:   %.9: %.8 = assoc_entity element1, @I.%F.decl [template]
+// CHECK:STDOUT:   %.28: type = assoc_entity_type %I.type, %F.type [template]
+// CHECK:STDOUT:   %.29: %.28 = assoc_entity element1, @I.%F.decl [template]
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
 // CHECK:STDOUT: imports {
@@ -677,7 +677,7 @@ impl i32 as Empty {
 // CHECK:STDOUT:     %return.param: ref <error> = out_param runtime_param0
 // CHECK:STDOUT:     %return: ref <error> = return_slot %return.param
 // CHECK:STDOUT:   }
-// CHECK:STDOUT:   %.loc13: %.8 = assoc_entity element1, %F.decl [template = constants.%.9]
+// CHECK:STDOUT:   %.loc13: %.28 = assoc_entity element1, %F.decl [template = constants.%.29]
 // CHECK:STDOUT:
 // CHECK:STDOUT: !members:
 // CHECK:STDOUT:   .Self = %Self

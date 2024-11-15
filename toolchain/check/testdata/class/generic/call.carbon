@@ -363,11 +363,11 @@ class Outer(T:! type) {
 // CHECK:STDOUT:   %T.patt: type = symbolic_binding_pattern T, 0 [symbolic]
 // CHECK:STDOUT:   %Int32.type: type = fn_type @Int32 [template]
 // CHECK:STDOUT:   %Int32: %Int32.type = struct_value () [template]
-// CHECK:STDOUT:   %N: i32 = bind_symbolic_name N, 1 [symbolic]
-// CHECK:STDOUT:   %N.patt: i32 = symbolic_binding_pattern N, 1 [symbolic]
+// CHECK:STDOUT:   %N.1: i32 = bind_symbolic_name N, 1 [symbolic]
+// CHECK:STDOUT:   %N.patt.1: i32 = symbolic_binding_pattern N, 1 [symbolic]
 // CHECK:STDOUT:   %Class.type: type = generic_class_type @Class [template]
 // CHECK:STDOUT:   %Class.1: %Class.type = struct_value () [template]
-// CHECK:STDOUT:   %Class.2: type = class_type @Class, @Class(%T, %N) [symbolic]
+// CHECK:STDOUT:   %Class.2: type = class_type @Class, @Class(%T, %N.1) [symbolic]
 // CHECK:STDOUT:   %.1: type = struct_type {} [template]
 // CHECK:STDOUT:   %.2: <witness> = complete_type_witness %.1 [template]
 // CHECK:STDOUT:   %.3: i32 = int_value 5 [template]
@@ -393,8 +393,8 @@ class Outer(T:! type) {
 // CHECK:STDOUT:   %Class.decl: %Class.type = class_decl @Class [template = constants.%Class.1] {
 // CHECK:STDOUT:     %T.patt.loc4_13.1: type = symbolic_binding_pattern T, 0 [symbolic = %T.patt.loc4_13.2 (constants.%T.patt)]
 // CHECK:STDOUT:     %T.param_patt: type = value_param_pattern %T.patt.loc4_13.1, runtime_param<invalid> [symbolic = %T.patt.loc4_13.2 (constants.%T.patt)]
-// CHECK:STDOUT:     %N.patt.loc4_23.1: i32 = symbolic_binding_pattern N, 1 [symbolic = %N.patt.loc4_23.2 (constants.%N.patt)]
-// CHECK:STDOUT:     %N.param_patt: i32 = value_param_pattern %N.patt.loc4_23.1, runtime_param<invalid> [symbolic = %N.patt.loc4_23.2 (constants.%N.patt)]
+// CHECK:STDOUT:     %N.patt.loc4_23.1: i32 = symbolic_binding_pattern N, 1 [symbolic = %N.patt.loc4_23.2 (constants.%N.patt.1)]
+// CHECK:STDOUT:     %N.param_patt: i32 = value_param_pattern %N.patt.loc4_23.1, runtime_param<invalid> [symbolic = %N.patt.loc4_23.2 (constants.%N.patt.1)]
 // CHECK:STDOUT:   } {
 // CHECK:STDOUT:     %int.make_type_32: init type = call constants.%Int32() [template = i32]
 // CHECK:STDOUT:     %.loc4_27.1: type = value_of_initializer %int.make_type_32 [template = i32]
@@ -402,7 +402,7 @@ class Outer(T:! type) {
 // CHECK:STDOUT:     %T.param: type = value_param runtime_param<invalid>
 // CHECK:STDOUT:     %T.loc4_13.1: type = bind_symbolic_name T, 0, %T.param [symbolic = %T.loc4_13.2 (constants.%T)]
 // CHECK:STDOUT:     %N.param: i32 = value_param runtime_param<invalid>
-// CHECK:STDOUT:     %N.loc4_23.1: i32 = bind_symbolic_name N, 1, %N.param [symbolic = %N.loc4_23.2 (constants.%N)]
+// CHECK:STDOUT:     %N.loc4_23.1: i32 = bind_symbolic_name N, 1, %N.param [symbolic = %N.loc4_23.2 (constants.%N.1)]
 // CHECK:STDOUT:   }
 // CHECK:STDOUT:   %Class.ref: %Class.type = name_ref Class, %Class.decl [template = constants.%Class.1]
 // CHECK:STDOUT:   %.loc15_14: i32 = int_value 5 [template = constants.%.3]
@@ -418,8 +418,8 @@ class Outer(T:! type) {
 // CHECK:STDOUT: generic class @Class(%T.loc4_13.1: type, %N.loc4_23.1: i32) {
 // CHECK:STDOUT:   %T.loc4_13.2: type = bind_symbolic_name T, 0 [symbolic = %T.loc4_13.2 (constants.%T)]
 // CHECK:STDOUT:   %T.patt.loc4_13.2: type = symbolic_binding_pattern T, 0 [symbolic = %T.patt.loc4_13.2 (constants.%T.patt)]
-// CHECK:STDOUT:   %N.loc4_23.2: i32 = bind_symbolic_name N, 1 [symbolic = %N.loc4_23.2 (constants.%N)]
-// CHECK:STDOUT:   %N.patt.loc4_23.2: i32 = symbolic_binding_pattern N, 1 [symbolic = %N.patt.loc4_23.2 (constants.%N.patt)]
+// CHECK:STDOUT:   %N.loc4_23.2: i32 = bind_symbolic_name N, 1 [symbolic = %N.loc4_23.2 (constants.%N.1)]
+// CHECK:STDOUT:   %N.patt.loc4_23.2: i32 = symbolic_binding_pattern N, 1 [symbolic = %N.patt.loc4_23.2 (constants.%N.patt.1)]
 // CHECK:STDOUT:
 // CHECK:STDOUT: !definition:
 // CHECK:STDOUT:
@@ -431,11 +431,11 @@ class Outer(T:! type) {
 // CHECK:STDOUT:   }
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
-// CHECK:STDOUT: specific @Class(constants.%T, constants.%N) {
+// CHECK:STDOUT: specific @Class(constants.%T, constants.%N.1) {
 // CHECK:STDOUT:   %T.loc4_13.2 => constants.%T
 // CHECK:STDOUT:   %T.patt.loc4_13.2 => constants.%T
-// CHECK:STDOUT:   %N.loc4_23.2 => constants.%N
-// CHECK:STDOUT:   %N.patt.loc4_23.2 => constants.%N
+// CHECK:STDOUT:   %N.loc4_23.2 => constants.%N.1
+// CHECK:STDOUT:   %N.patt.loc4_23.2 => constants.%N.1
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
 // CHECK:STDOUT: --- call_in_nested_return_type.carbon
