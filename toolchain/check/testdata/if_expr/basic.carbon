@@ -23,16 +23,23 @@ fn F(b: bool, n: i32, m: i32) -> i32 {
 // CHECK:STDOUT:   %F.type: type = fn_type @F [template]
 // CHECK:STDOUT:   %F: %F.type = struct_value () [template]
 // CHECK:STDOUT:   %.1: i32 = int_value 1 [template]
-// CHECK:STDOUT:   %.2: type = array_type %.1, i32 [template]
-// CHECK:STDOUT:   %.4: i32 = int_value 0 [template]
+// CHECK:STDOUT:   %Convert.type.2: type = fn_type @Convert.1, @ImplicitAs(Core.IntLiteral) [template]
+// CHECK:STDOUT:   %Convert.type.15: type = fn_type @Convert.11 [template]
+// CHECK:STDOUT:   %Convert.15: %Convert.type.15 = struct_value () [template]
+// CHECK:STDOUT:   %.25: <witness> = interface_witness (%Convert.15) [template]
+// CHECK:STDOUT:   %.26: <bound method> = bound_method %.1, %Convert.15 [template]
+// CHECK:STDOUT:   %.27: Core.IntLiteral = int_value 1 [template]
+// CHECK:STDOUT:   %.28: type = array_type %.27, i32 [template]
+// CHECK:STDOUT:   %.30: i32 = int_value 0 [template]
 // CHECK:STDOUT:   %tuple.type: type = tuple_type (i32) [template]
-// CHECK:STDOUT:   %array: %.2 = tuple_value (%.4) [template]
+// CHECK:STDOUT:   %array: %.28 = tuple_value (%.30) [template]
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
 // CHECK:STDOUT: imports {
 // CHECK:STDOUT:   %Core: <namespace> = namespace file.%Core.import, [template] {
 // CHECK:STDOUT:     .Bool = %import_ref.1
 // CHECK:STDOUT:     .Int32 = %import_ref.2
+// CHECK:STDOUT:     .ImplicitAs = %import_ref.3
 // CHECK:STDOUT:     import Core//prelude
 // CHECK:STDOUT:     import Core//prelude/...
 // CHECK:STDOUT:   }
@@ -80,32 +87,37 @@ fn F(b: bool, n: i32, m: i32) -> i32 {
 // CHECK:STDOUT: fn @F(%b.param_patt: bool, %n.param_patt: i32, %m.param_patt: i32) -> i32 {
 // CHECK:STDOUT: !entry:
 // CHECK:STDOUT:   %int.make_type_32.loc12: init type = call constants.%Int32() [template = i32]
-// CHECK:STDOUT:   %.loc12_16: i32 = int_value 1 [template = constants.%.1]
+// CHECK:STDOUT:   %.loc12_16.1: i32 = int_value 1 [template = constants.%.1]
 // CHECK:STDOUT:   %.loc12_11.1: type = value_of_initializer %int.make_type_32.loc12 [template = i32]
 // CHECK:STDOUT:   %.loc12_11.2: type = converted %int.make_type_32.loc12, %.loc12_11.1 [template = i32]
-// CHECK:STDOUT:   %.loc12_17: type = array_type %.loc12_16, i32 [template = constants.%.2]
-// CHECK:STDOUT:   %x.var: ref %.2 = var x
-// CHECK:STDOUT:   %x: ref %.2 = bind_name x, %x.var
-// CHECK:STDOUT:   %.loc12_22: i32 = int_value 0 [template = constants.%.4]
+// CHECK:STDOUT:   %.loc12_16.2: %Convert.type.2 = interface_witness_access constants.%.25, element0 [template = constants.%Convert.15]
+// CHECK:STDOUT:   %.loc12_16.3: <bound method> = bound_method %.loc12_16.1, %.loc12_16.2 [template = constants.%.26]
+// CHECK:STDOUT:   %int.convert_checked: init Core.IntLiteral = call %.loc12_16.3(%.loc12_16.1) [template = constants.%.27]
+// CHECK:STDOUT:   %.loc12_16.4: Core.IntLiteral = value_of_initializer %int.convert_checked [template = constants.%.27]
+// CHECK:STDOUT:   %.loc12_16.5: Core.IntLiteral = converted %.loc12_16.1, %.loc12_16.4 [template = constants.%.27]
+// CHECK:STDOUT:   %.loc12_17: type = array_type %.loc12_16.5, i32 [template = constants.%.28]
+// CHECK:STDOUT:   %x.var: ref %.28 = var x
+// CHECK:STDOUT:   %x: ref %.28 = bind_name x, %x.var
+// CHECK:STDOUT:   %.loc12_22: i32 = int_value 0 [template = constants.%.30]
 // CHECK:STDOUT:   %.loc12_24.1: %tuple.type = tuple_literal (%.loc12_22)
-// CHECK:STDOUT:   %.loc12_24.2: i32 = int_value 0 [template = constants.%.4]
+// CHECK:STDOUT:   %.loc12_24.2: i32 = int_value 0 [template = constants.%.30]
 // CHECK:STDOUT:   %.loc12_24.3: ref i32 = array_index %x.var, %.loc12_24.2
-// CHECK:STDOUT:   %.loc12_24.4: init i32 = initialize_from %.loc12_22 to %.loc12_24.3 [template = constants.%.4]
-// CHECK:STDOUT:   %.loc12_24.5: init %.2 = array_init (%.loc12_24.4) to %x.var [template = constants.%array]
-// CHECK:STDOUT:   %.loc12_25: init %.2 = converted %.loc12_24.1, %.loc12_24.5 [template = constants.%array]
+// CHECK:STDOUT:   %.loc12_24.4: init i32 = initialize_from %.loc12_22 to %.loc12_24.3 [template = constants.%.30]
+// CHECK:STDOUT:   %.loc12_24.5: init %.28 = array_init (%.loc12_24.4) to %x.var [template = constants.%array]
+// CHECK:STDOUT:   %.loc12_25: init %.28 = converted %.loc12_24.1, %.loc12_24.5 [template = constants.%array]
 // CHECK:STDOUT:   assign %x.var, %.loc12_25
 // CHECK:STDOUT:   %b.ref: bool = name_ref b, %b
 // CHECK:STDOUT:   if %b.ref br !if.expr.then else br !if.expr.else
 // CHECK:STDOUT:
 // CHECK:STDOUT: !if.expr.then:
-// CHECK:STDOUT:   %x.ref.loc13_20: ref %.2 = name_ref x, %x
+// CHECK:STDOUT:   %x.ref.loc13_20: ref %.28 = name_ref x, %x
 // CHECK:STDOUT:   %m.ref: i32 = name_ref m, %m
 // CHECK:STDOUT:   %.loc13_23.1: ref i32 = array_index %x.ref.loc13_20, %m.ref
 // CHECK:STDOUT:   %.loc13_23.2: i32 = bind_value %.loc13_23.1
 // CHECK:STDOUT:   br !if.expr.result(%.loc13_23.2)
 // CHECK:STDOUT:
 // CHECK:STDOUT: !if.expr.else:
-// CHECK:STDOUT:   %x.ref.loc13_30: ref %.2 = name_ref x, %x
+// CHECK:STDOUT:   %x.ref.loc13_30: ref %.28 = name_ref x, %x
 // CHECK:STDOUT:   %n.ref: i32 = name_ref n, %n
 // CHECK:STDOUT:   %.loc13_33.1: ref i32 = array_index %x.ref.loc13_30, %n.ref
 // CHECK:STDOUT:   %.loc13_33.2: i32 = bind_value %.loc13_33.1
