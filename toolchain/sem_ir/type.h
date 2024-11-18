@@ -99,14 +99,9 @@ class TypeStore : public Yaml::Printable<TypeStore> {
   }
 
   // Determines whether the given type is a signed integer type.
-  //
-  // TODO: When we don't have a builtin int type mixed with actual `IntType`
-  // instructions, clients should directly query the `IntType` instruction to
-  // compute this information.
   auto IsSignedInt(TypeId int_type_id) const -> bool {
     auto inst_id = GetInstId(int_type_id);
-    if (inst_id == InstId::BuiltinIntType ||
-        inst_id == InstId::BuiltinIntLiteralType) {
+    if (inst_id == InstId::BuiltinIntLiteralType) {
       return true;
     }
     auto int_type = insts_->TryGetAs<IntType>(inst_id);
