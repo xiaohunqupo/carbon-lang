@@ -1055,9 +1055,19 @@ class FormatterImpl {
       }
     }
 
-    if (info.requirement_block_id.is_valid()) {
+    if (info.other_requirements || !info.rewrite_constraints.empty()) {
       // TODO: Include specifics.
-      out_ << " where TODO";
+      out_ << " where ";
+      llvm::ListSeparator and_sep(" and ");
+      for (auto rewrite : info.rewrite_constraints) {
+        out_ << and_sep;
+        FormatConstant(rewrite.lhs_const_id);
+        out_ << " = ";
+        FormatConstant(rewrite.rhs_const_id);
+      }
+      if (info.other_requirements) {
+        out_ << and_sep << "TODO";
+      }
     }
     out_ << ">";
   }
