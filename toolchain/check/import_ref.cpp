@@ -1221,7 +1221,7 @@ static auto AddAssociatedEntities(ImportContext& context,
   llvm::SmallVector<SemIR::InstId> new_associated_entities;
   new_associated_entities.reserve(associated_entities.size());
   for (auto inst_id : associated_entities) {
-    // Determine the name of the associated entity, by switching on its type.
+    // Determine the name of the associated entity, by switching on its kind.
     SemIR::NameId import_name_id = SemIR::NameId::Invalid;
     if (auto associated_const =
             context.import_insts().TryGetAs<SemIR::AssociatedConstantDecl>(
@@ -1233,8 +1233,14 @@ static auto AddAssociatedEntities(ImportContext& context,
       auto function =
           context.import_functions().Get(function_decl->function_id);
       import_name_id = function.name_id;
+    } else if (auto import_ref =
+                   context.import_insts().TryGetAs<SemIR::AnyImportRef>(
+                       inst_id)) {
+      import_name_id =
+          context.import_entity_names().Get(import_ref->entity_name_id).name_id;
     } else {
-      CARBON_CHECK("Unhandled associated entity type");
+      CARBON_FATAL("Unhandled associated entity kind: {0}",
+                   context.import_insts().Get(inst_id).kind());
     }
     auto name_id = GetLocalNameId(context, import_name_id);
     auto entity_name_id = context.local_entity_names().Add(
