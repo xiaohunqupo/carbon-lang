@@ -849,7 +849,7 @@ fn MakeC(a: A) -> C {
 // CHECK:STDOUT:   fn() -> @Make.1.%T (%T);
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
-// CHECK:STDOUT: fn @MakeB(%a.param_patt: %A) -> %return: %B {
+// CHECK:STDOUT: fn @MakeB(%a.param_patt: %A) -> %return.param_patt: %B {
 // CHECK:STDOUT: !entry:
 // CHECK:STDOUT:   %a.ref: %A = name_ref a, %a
 // CHECK:STDOUT:   %Factory.ref: %Factory.type.1 = name_ref Factory, imports.%import_ref.1 [template = constants.%Factory.generic]
@@ -858,8 +858,8 @@ fn MakeC(a: A) -> C {
 // CHECK:STDOUT:   %.loc5: %Make.assoc_type.2 = specific_constant imports.%import_ref.7, @Factory(constants.%B) [template = constants.%assoc0.2]
 // CHECK:STDOUT:   %Make.ref: %Make.assoc_type.2 = name_ref Make, %.loc5 [template = constants.%assoc0.2]
 // CHECK:STDOUT:   %impl.elem0: %Make.type.2 = interface_witness_access constants.%interface, element0 [template = constants.%Make.3]
-// CHECK:STDOUT:   %.loc4_16.2: ref %B = splice_block %return {}
-// CHECK:STDOUT:   %Make.call: init %B = call %impl.elem0() to %.loc4_16.2
+// CHECK:STDOUT:   %.loc4: ref %B = splice_block %return {}
+// CHECK:STDOUT:   %Make.call: init %B = call %impl.elem0() to %.loc4
 // CHECK:STDOUT:   return %Make.call to %return
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
@@ -1021,7 +1021,7 @@ fn MakeC(a: A) -> C {
 // CHECK:STDOUT:   fn() -> @Make.%T (%T);
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
-// CHECK:STDOUT: fn @MakeC(%a.param_patt: %A) -> %return: %C {
+// CHECK:STDOUT: fn @MakeC(%a.param_patt: %A) -> %return.param_patt: %C {
 // CHECK:STDOUT: !entry:
 // CHECK:STDOUT:   %a.ref: %A = name_ref a, %a
 // CHECK:STDOUT:   %Factory.ref: %Factory.type.1 = name_ref Factory, imports.%import_ref.1 [template = constants.%Factory.generic]

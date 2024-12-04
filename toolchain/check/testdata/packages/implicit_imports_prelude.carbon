@@ -142,44 +142,44 @@ var b: i32 = a;
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
 // CHECK:STDOUT: imports {
-// CHECK:STDOUT:   %import_ref.1: ref %i32 = import_ref Main//lib, inst+20, loaded
+// CHECK:STDOUT:   %import_ref.1: ref %i32 = import_ref Main//lib, inst+19, loaded
 // CHECK:STDOUT:   %Core: <namespace> = namespace file.%Core.import, [template] {
 // CHECK:STDOUT:     .Int = %import_ref.36
 // CHECK:STDOUT:     import Core//prelude
 // CHECK:STDOUT:     import Core//prelude/...
 // CHECK:STDOUT:   }
-// CHECK:STDOUT:   %import_ref.2 = import_ref Main//lib, inst+33, unloaded
-// CHECK:STDOUT:   %import_ref.3 = import_ref Main//lib, inst+34, unloaded
-// CHECK:STDOUT:   %import_ref.4 = import_ref Main//lib, inst+35, unloaded
-// CHECK:STDOUT:   %import_ref.5: type = import_ref Main//lib, inst+74, loaded [template = Core.IntLiteral]
-// CHECK:STDOUT:   %import_ref.6: type = import_ref Main//lib, inst+75, loaded [symbolic = @impl.1.%ImplicitAs.type (constants.%ImplicitAs.type.3)]
-// CHECK:STDOUT:   %import_ref.7 = import_ref Main//lib, inst+76, unloaded
-// CHECK:STDOUT:   %import_ref.8 = import_ref Main//lib, inst+48, unloaded
-// CHECK:STDOUT:   %import_ref.9: type = import_ref Main//lib, inst+100, loaded [template = Core.IntLiteral]
-// CHECK:STDOUT:   %import_ref.10: type = import_ref Main//lib, inst+101, loaded [symbolic = @impl.2.%ImplicitAs.type (constants.%ImplicitAs.type.4)]
-// CHECK:STDOUT:   %import_ref.11 = import_ref Main//lib, inst+102, unloaded
-// CHECK:STDOUT:   %import_ref.12: type = import_ref Main//lib, inst+125, loaded [symbolic = @impl.3.%iN (constants.%iN)]
-// CHECK:STDOUT:   %import_ref.13: type = import_ref Main//lib, inst+126, loaded [template = constants.%ImplicitAs.type.5]
-// CHECK:STDOUT:   %import_ref.14 = import_ref Main//lib, inst+127, unloaded
-// CHECK:STDOUT:   %import_ref.16: type = import_ref Main//lib, inst+153, loaded [symbolic = @impl.4.%uN (constants.%uN)]
-// CHECK:STDOUT:   %import_ref.17: type = import_ref Main//lib, inst+154, loaded [template = constants.%ImplicitAs.type.5]
-// CHECK:STDOUT:   %import_ref.18 = import_ref Main//lib, inst+155, unloaded
-// CHECK:STDOUT:   %import_ref.19 = import_ref Main//lib, inst+181, unloaded
-// CHECK:STDOUT:   %import_ref.20 = import_ref Main//lib, inst+182, unloaded
-// CHECK:STDOUT:   %import_ref.21 = import_ref Main//lib, inst+183, unloaded
-// CHECK:STDOUT:   %import_ref.22: type = import_ref Main//lib, inst+187, loaded [template = Core.IntLiteral]
-// CHECK:STDOUT:   %import_ref.23: type = import_ref Main//lib, inst+188, loaded [symbolic = @impl.5.%As.type (constants.%As.type.3)]
-// CHECK:STDOUT:   %import_ref.24 = import_ref Main//lib, inst+189, unloaded
-// CHECK:STDOUT:   %import_ref.25 = import_ref Main//lib, inst+202, unloaded
-// CHECK:STDOUT:   %import_ref.26: type = import_ref Main//lib, inst+236, loaded [template = Core.IntLiteral]
-// CHECK:STDOUT:   %import_ref.27: type = import_ref Main//lib, inst+237, loaded [symbolic = @impl.6.%As.type (constants.%As.type.4)]
-// CHECK:STDOUT:   %import_ref.28 = import_ref Main//lib, inst+238, unloaded
-// CHECK:STDOUT:   %import_ref.29: type = import_ref Main//lib, inst+261, loaded [symbolic = @impl.7.%iN (constants.%iN)]
-// CHECK:STDOUT:   %import_ref.30: type = import_ref Main//lib, inst+262, loaded [template = constants.%As.type.5]
-// CHECK:STDOUT:   %import_ref.31 = import_ref Main//lib, inst+263, unloaded
-// CHECK:STDOUT:   %import_ref.33: type = import_ref Main//lib, inst+289, loaded [symbolic = @impl.8.%uN (constants.%uN)]
-// CHECK:STDOUT:   %import_ref.34: type = import_ref Main//lib, inst+290, loaded [template = constants.%As.type.5]
-// CHECK:STDOUT:   %import_ref.35 = import_ref Main//lib, inst+291, unloaded
+// CHECK:STDOUT:   %import_ref.2 = import_ref Main//lib, inst+32, unloaded
+// CHECK:STDOUT:   %import_ref.3 = import_ref Main//lib, inst+33, unloaded
+// CHECK:STDOUT:   %import_ref.4 = import_ref Main//lib, inst+34, unloaded
+// CHECK:STDOUT:   %import_ref.5: type = import_ref Main//lib, inst+72, loaded [template = Core.IntLiteral]
+// CHECK:STDOUT:   %import_ref.6: type = import_ref Main//lib, inst+73, loaded [symbolic = @impl.1.%ImplicitAs.type (constants.%ImplicitAs.type.3)]
+// CHECK:STDOUT:   %import_ref.7 = import_ref Main//lib, inst+74, unloaded
+// CHECK:STDOUT:   %import_ref.8 = import_ref Main//lib, inst+46, unloaded
+// CHECK:STDOUT:   %import_ref.9: type = import_ref Main//lib, inst+97, loaded [template = Core.IntLiteral]
+// CHECK:STDOUT:   %import_ref.10: type = import_ref Main//lib, inst+98, loaded [symbolic = @impl.2.%ImplicitAs.type (constants.%ImplicitAs.type.4)]
+// CHECK:STDOUT:   %import_ref.11 = import_ref Main//lib, inst+99, unloaded
+// CHECK:STDOUT:   %import_ref.12: type = import_ref Main//lib, inst+121, loaded [symbolic = @impl.3.%iN (constants.%iN)]
+// CHECK:STDOUT:   %import_ref.13: type = import_ref Main//lib, inst+122, loaded [template = constants.%ImplicitAs.type.5]
+// CHECK:STDOUT:   %import_ref.14 = import_ref Main//lib, inst+123, unloaded
+// CHECK:STDOUT:   %import_ref.16: type = import_ref Main//lib, inst+148, loaded [symbolic = @impl.4.%uN (constants.%uN)]
+// CHECK:STDOUT:   %import_ref.17: type = import_ref Main//lib, inst+149, loaded [template = constants.%ImplicitAs.type.5]
+// CHECK:STDOUT:   %import_ref.18 = import_ref Main//lib, inst+150, unloaded
+// CHECK:STDOUT:   %import_ref.19 = import_ref Main//lib, inst+175, unloaded
+// CHECK:STDOUT:   %import_ref.20 = import_ref Main//lib, inst+176, unloaded
+// CHECK:STDOUT:   %import_ref.21 = import_ref Main//lib, inst+177, unloaded
+// CHECK:STDOUT:   %import_ref.22: type = import_ref Main//lib, inst+181, loaded [template = Core.IntLiteral]
+// CHECK:STDOUT:   %import_ref.23: type = import_ref Main//lib, inst+182, loaded [symbolic = @impl.5.%As.type (constants.%As.type.3)]
+// CHECK:STDOUT:   %import_ref.24 = import_ref Main//lib, inst+183, unloaded
+// CHECK:STDOUT:   %import_ref.25 = import_ref Main//lib, inst+195, unloaded
+// CHECK:STDOUT:   %import_ref.26: type = import_ref Main//lib, inst+228, loaded [template = Core.IntLiteral]
+// CHECK:STDOUT:   %import_ref.27: type = import_ref Main//lib, inst+229, loaded [symbolic = @impl.6.%As.type (constants.%As.type.4)]
+// CHECK:STDOUT:   %import_ref.28 = import_ref Main//lib, inst+230, unloaded
+// CHECK:STDOUT:   %import_ref.29: type = import_ref Main//lib, inst+252, loaded [symbolic = @impl.7.%iN (constants.%iN)]
+// CHECK:STDOUT:   %import_ref.30: type = import_ref Main//lib, inst+253, loaded [template = constants.%As.type.5]
+// CHECK:STDOUT:   %import_ref.31 = import_ref Main//lib, inst+254, unloaded
+// CHECK:STDOUT:   %import_ref.33: type = import_ref Main//lib, inst+279, loaded [symbolic = @impl.8.%uN (constants.%uN)]
+// CHECK:STDOUT:   %import_ref.34: type = import_ref Main//lib, inst+280, loaded [template = constants.%As.type.5]
+// CHECK:STDOUT:   %import_ref.35 = import_ref Main//lib, inst+281, unloaded
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
 // CHECK:STDOUT: file {

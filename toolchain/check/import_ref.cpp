@@ -1668,7 +1668,6 @@ static auto MakeFunctionDecl(ImportContext& context,
   function_decl.function_id = context.local_functions().Add(
       {GetIncompleteLocalEntityBase(context, function_decl_id, import_function),
        {.return_slot_pattern_id = SemIR::InstId::Invalid,
-        .return_slot_id = SemIR::InstId::Invalid,
         .builtin_function_kind = import_function.builtin_function_kind}});
 
   function_decl.type_id = context.local_context().GetFunctionType(
@@ -1716,10 +1715,11 @@ static auto TryResolveTypedInst(ImportRefResolver& resolver,
   }
 
   auto return_type_const_id = SemIR::ConstantId::Invalid;
-  if (import_function.return_slot_id.is_valid()) {
+  if (import_function.return_slot_pattern_id.is_valid()) {
     return_type_const_id = GetLocalConstantId(
-        resolver,
-        resolver.import_insts().Get(import_function.return_slot_id).type_id());
+        resolver, resolver.import_insts()
+                      .Get(import_function.return_slot_pattern_id)
+                      .type_id());
   }
   auto parent_scope_id =
       GetLocalNameScopeId(resolver, import_function.parent_scope_id);
@@ -1743,18 +1743,6 @@ static auto TryResolveTypedInst(ImportRefResolver& resolver,
       resolver, import_function.return_slot_pattern_id);
   SetGenericData(resolver, import_function.generic_id, new_function.generic_id,
                  generic_data);
-
-  if (import_function.return_slot_id.is_valid()) {
-    // Recreate the return slot from scratch.
-    // TODO: Once we import function definitions, we'll need to make sure we
-    // use the same return storage variable in the declaration and definition.
-    new_function.return_slot_id =
-        resolver.local_context().AddInstInNoBlock<SemIR::VarStorage>(
-            AddImportIRInst(resolver, import_function.return_slot_id),
-            {.type_id = resolver.local_context().GetTypeIdForTypeConstant(
-                 return_type_const_id),
-             .name_id = SemIR::NameId::ReturnSlot});
-  }
 
   if (import_function.definition_id.is_valid()) {
     new_function.definition_id = new_function.first_owning_decl_id;

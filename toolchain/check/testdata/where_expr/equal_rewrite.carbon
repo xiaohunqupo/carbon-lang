@@ -1087,7 +1087,7 @@ let K: (E where .F = .Self.G) = bool;
 // CHECK:STDOUT:   %import_ref.1 = import_ref Main//equal_constraint, inst+3, unloaded
 // CHECK:STDOUT:   %import_ref.2: %Equal.type = import_ref Main//equal_constraint, inst+33, loaded [template = constants.%Equal]
 // CHECK:STDOUT:   %import_ref.3 = import_ref Main//nested_rewrites, inst+3, unloaded
-// CHECK:STDOUT:   %import_ref.4: %NestedRewrite.type = import_ref Main//nested_rewrites, inst+56, loaded [template = constants.%NestedRewrite]
+// CHECK:STDOUT:   %import_ref.4: %NestedRewrite.type = import_ref Main//nested_rewrites, inst+55, loaded [template = constants.%NestedRewrite]
 // CHECK:STDOUT:   %Core: <namespace> = namespace file.%Core.import, [template] {
 // CHECK:STDOUT:     .Bool = %import_ref.8
 // CHECK:STDOUT:     .ImplicitAs = %import_ref.9

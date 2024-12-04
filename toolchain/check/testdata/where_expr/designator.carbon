@@ -416,7 +416,7 @@ class D {
 // CHECK:STDOUT:   complete_type_witness = %complete_type
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
-// CHECK:STDOUT: fn @F() -> %return: %C {
+// CHECK:STDOUT: fn @F() -> %return.param_patt: %C {
 // CHECK:STDOUT: !entry:
 // CHECK:STDOUT:   %.Self.ref: <error> = name_ref .Self, <error> [template = <error>]
 // CHECK:STDOUT:   return <error> to %return

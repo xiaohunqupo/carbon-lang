@@ -154,45 +154,45 @@ var a: i32* = a_ref;
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
 // CHECK:STDOUT: imports {
-// CHECK:STDOUT:   %import_ref.1 = import_ref Implicit//default, inst+20, unloaded
-// CHECK:STDOUT:   %import_ref.2: ref %ptr = import_ref Implicit//default, inst+328, loaded
+// CHECK:STDOUT:   %import_ref.1 = import_ref Implicit//default, inst+19, unloaded
+// CHECK:STDOUT:   %import_ref.2: ref %ptr = import_ref Implicit//default, inst+317, loaded
 // CHECK:STDOUT:   %Core: <namespace> = namespace file.%Core.import, [template] {
 // CHECK:STDOUT:     .Int = %import_ref.37
 // CHECK:STDOUT:     import Core//prelude
 // CHECK:STDOUT:     import Core//prelude/...
 // CHECK:STDOUT:   }
-// CHECK:STDOUT:   %import_ref.3 = import_ref Implicit//default, inst+33, unloaded
-// CHECK:STDOUT:   %import_ref.4 = import_ref Implicit//default, inst+34, unloaded
-// CHECK:STDOUT:   %import_ref.5 = import_ref Implicit//default, inst+35, unloaded
-// CHECK:STDOUT:   %import_ref.6: type = import_ref Implicit//default, inst+74, loaded [template = Core.IntLiteral]
-// CHECK:STDOUT:   %import_ref.7: type = import_ref Implicit//default, inst+75, loaded [symbolic = @impl.1.%ImplicitAs.type (constants.%ImplicitAs.type.3)]
-// CHECK:STDOUT:   %import_ref.8 = import_ref Implicit//default, inst+76, unloaded
-// CHECK:STDOUT:   %import_ref.9 = import_ref Implicit//default, inst+48, unloaded
-// CHECK:STDOUT:   %import_ref.10: type = import_ref Implicit//default, inst+100, loaded [template = Core.IntLiteral]
-// CHECK:STDOUT:   %import_ref.11: type = import_ref Implicit//default, inst+101, loaded [symbolic = @impl.2.%ImplicitAs.type (constants.%ImplicitAs.type.4)]
-// CHECK:STDOUT:   %import_ref.12 = import_ref Implicit//default, inst+102, unloaded
-// CHECK:STDOUT:   %import_ref.13: type = import_ref Implicit//default, inst+125, loaded [symbolic = @impl.3.%iN (constants.%iN)]
-// CHECK:STDOUT:   %import_ref.14: type = import_ref Implicit//default, inst+126, loaded [template = constants.%ImplicitAs.type.5]
-// CHECK:STDOUT:   %import_ref.15 = import_ref Implicit//default, inst+127, unloaded
-// CHECK:STDOUT:   %import_ref.17: type = import_ref Implicit//default, inst+153, loaded [symbolic = @impl.4.%uN (constants.%uN)]
-// CHECK:STDOUT:   %import_ref.18: type = import_ref Implicit//default, inst+154, loaded [template = constants.%ImplicitAs.type.5]
-// CHECK:STDOUT:   %import_ref.19 = import_ref Implicit//default, inst+155, unloaded
-// CHECK:STDOUT:   %import_ref.20 = import_ref Implicit//default, inst+181, unloaded
-// CHECK:STDOUT:   %import_ref.21 = import_ref Implicit//default, inst+182, unloaded
-// CHECK:STDOUT:   %import_ref.22 = import_ref Implicit//default, inst+183, unloaded
-// CHECK:STDOUT:   %import_ref.23: type = import_ref Implicit//default, inst+187, loaded [template = Core.IntLiteral]
-// CHECK:STDOUT:   %import_ref.24: type = import_ref Implicit//default, inst+188, loaded [symbolic = @impl.5.%As.type (constants.%As.type.3)]
-// CHECK:STDOUT:   %import_ref.25 = import_ref Implicit//default, inst+189, unloaded
-// CHECK:STDOUT:   %import_ref.26 = import_ref Implicit//default, inst+202, unloaded
-// CHECK:STDOUT:   %import_ref.27: type = import_ref Implicit//default, inst+236, loaded [template = Core.IntLiteral]
-// CHECK:STDOUT:   %import_ref.28: type = import_ref Implicit//default, inst+237, loaded [symbolic = @impl.6.%As.type (constants.%As.type.4)]
-// CHECK:STDOUT:   %import_ref.29 = import_ref Implicit//default, inst+238, unloaded
-// CHECK:STDOUT:   %import_ref.30: type = import_ref Implicit//default, inst+261, loaded [symbolic = @impl.7.%iN (constants.%iN)]
-// CHECK:STDOUT:   %import_ref.31: type = import_ref Implicit//default, inst+262, loaded [template = constants.%As.type.5]
-// CHECK:STDOUT:   %import_ref.32 = import_ref Implicit//default, inst+263, unloaded
-// CHECK:STDOUT:   %import_ref.34: type = import_ref Implicit//default, inst+289, loaded [symbolic = @impl.8.%uN (constants.%uN)]
-// CHECK:STDOUT:   %import_ref.35: type = import_ref Implicit//default, inst+290, loaded [template = constants.%As.type.5]
-// CHECK:STDOUT:   %import_ref.36 = import_ref Implicit//default, inst+291, unloaded
+// CHECK:STDOUT:   %import_ref.3 = import_ref Implicit//default, inst+32, unloaded
+// CHECK:STDOUT:   %import_ref.4 = import_ref Implicit//default, inst+33, unloaded
+// CHECK:STDOUT:   %import_ref.5 = import_ref Implicit//default, inst+34, unloaded
+// CHECK:STDOUT:   %import_ref.6: type = import_ref Implicit//default, inst+72, loaded [template = Core.IntLiteral]
+// CHECK:STDOUT:   %import_ref.7: type = import_ref Implicit//default, inst+73, loaded [symbolic = @impl.1.%ImplicitAs.type (constants.%ImplicitAs.type.3)]
+// CHECK:STDOUT:   %import_ref.8 = import_ref Implicit//default, inst+74, unloaded
+// CHECK:STDOUT:   %import_ref.9 = import_ref Implicit//default, inst+46, unloaded
+// CHECK:STDOUT:   %import_ref.10: type = import_ref Implicit//default, inst+97, loaded [template = Core.IntLiteral]
+// CHECK:STDOUT:   %import_ref.11: type = import_ref Implicit//default, inst+98, loaded [symbolic = @impl.2.%ImplicitAs.type (constants.%ImplicitAs.type.4)]
+// CHECK:STDOUT:   %import_ref.12 = import_ref Implicit//default, inst+99, unloaded
+// CHECK:STDOUT:   %import_ref.13: type = import_ref Implicit//default, inst+121, loaded [symbolic = @impl.3.%iN (constants.%iN)]
+// CHECK:STDOUT:   %import_ref.14: type = import_ref Implicit//default, inst+122, loaded [template = constants.%ImplicitAs.type.5]
+// CHECK:STDOUT:   %import_ref.15 = import_ref Implicit//default, inst+123, unloaded
+// CHECK:STDOUT:   %import_ref.17: type = import_ref Implicit//default, inst+148, loaded [symbolic = @impl.4.%uN (constants.%uN)]
+// CHECK:STDOUT:   %import_ref.18: type = import_ref Implicit//default, inst+149, loaded [template = constants.%ImplicitAs.type.5]
+// CHECK:STDOUT:   %import_ref.19 = import_ref Implicit//default, inst+150, unloaded
+// CHECK:STDOUT:   %import_ref.20 = import_ref Implicit//default, inst+175, unloaded
+// CHECK:STDOUT:   %import_ref.21 = import_ref Implicit//default, inst+176, unloaded
+// CHECK:STDOUT:   %import_ref.22 = import_ref Implicit//default, inst+177, unloaded
+// CHECK:STDOUT:   %import_ref.23: type = import_ref Implicit//default, inst+181, loaded [template = Core.IntLiteral]
+// CHECK:STDOUT:   %import_ref.24: type = import_ref Implicit//default, inst+182, loaded [symbolic = @impl.5.%As.type (constants.%As.type.3)]
+// CHECK:STDOUT:   %import_ref.25 = import_ref Implicit//default, inst+183, unloaded
+// CHECK:STDOUT:   %import_ref.26 = import_ref Implicit//default, inst+195, unloaded
+// CHECK:STDOUT:   %import_ref.27: type = import_ref Implicit//default, inst+228, loaded [template = Core.IntLiteral]
+// CHECK:STDOUT:   %import_ref.28: type = import_ref Implicit//default, inst+229, loaded [symbolic = @impl.6.%As.type (constants.%As.type.4)]
+// CHECK:STDOUT:   %import_ref.29 = import_ref Implicit//default, inst+230, unloaded
+// CHECK:STDOUT:   %import_ref.30: type = import_ref Implicit//default, inst+252, loaded [symbolic = @impl.7.%iN (constants.%iN)]
+// CHECK:STDOUT:   %import_ref.31: type = import_ref Implicit//default, inst+253, loaded [template = constants.%As.type.5]
+// CHECK:STDOUT:   %import_ref.32 = import_ref Implicit//default, inst+254, unloaded
+// CHECK:STDOUT:   %import_ref.34: type = import_ref Implicit//default, inst+279, loaded [symbolic = @impl.8.%uN (constants.%uN)]
+// CHECK:STDOUT:   %import_ref.35: type = import_ref Implicit//default, inst+280, loaded [template = constants.%As.type.5]
+// CHECK:STDOUT:   %import_ref.36 = import_ref Implicit//default, inst+281, unloaded
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
 // CHECK:STDOUT: file {
