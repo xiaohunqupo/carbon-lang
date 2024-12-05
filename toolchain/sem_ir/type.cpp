@@ -43,7 +43,7 @@ static auto TryGetIntTypeInfo(const File& file, TypeId type_id)
     return std::nullopt;
   }
   auto inst_id = file.types().GetInstId(object_repr_id);
-  if (inst_id == InstId::BuiltinIntLiteralType) {
+  if (inst_id == IntLiteralType::SingletonInstId) {
     // `Core.IntLiteral` has an unknown bit-width.
     return TypeStore::IntTypeInfo{.is_signed = true,
                                   .bit_width = IntId::Invalid};
