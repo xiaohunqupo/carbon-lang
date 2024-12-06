@@ -253,4 +253,13 @@ auto HandleInst(FunctionContext& context, SemIR::InstId inst_id,
                                                   /*ArraySize=*/nullptr));
 }
 
+auto HandleInst(FunctionContext& context, SemIR::InstId inst_id,
+                SemIR::VtablePtr /*inst*/) -> void {
+  // TODO: Initialize the virtual pointer to actually point to a virtual
+  // function table.
+  context.SetLocal(inst_id,
+                   llvm::ConstantPointerNull::get(
+                       llvm::PointerType::get(context.llvm_context(), 0)));
+}
+
 }  // namespace Carbon::Lower

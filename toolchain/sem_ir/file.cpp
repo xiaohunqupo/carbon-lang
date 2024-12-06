@@ -311,6 +311,9 @@ auto GetExprCategory(const File& file, InstId inst_id) -> ExprCategory {
         continue;
       }
 
+      case VtablePtr::Kind:
+        return ExprCategory::EphemeralRef;
+
       case CARBON_KIND(ClassElementAccess inst): {
         inst_id = inst.base_id;
         // A value of class type is a pointer to an object representation.
