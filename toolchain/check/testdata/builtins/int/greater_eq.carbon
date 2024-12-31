@@ -12,6 +12,8 @@
 
 // --- int_greater_eq.carbon
 
+library "[[@TEST_NAME]]";
+
 fn GreaterEq(a: i32, b: i32) -> bool = "int.greater_eq";
 fn Negate(a: i32) -> i32 = "int.snegate";
 
@@ -28,4 +30,40 @@ fn F(true_: True, false_: False) {
 
 fn RuntimeCallIsValid(a: i32, b: i32) -> bool {
   return GreaterEq(a, b);
+}
+
+// --- literal.carbon
+
+library "[[@TEST_NAME]]";
+
+fn GreaterEq(a: Core.IntLiteral(), b: Core.IntLiteral()) -> bool = "int.greater_eq";
+
+class Expect(B:! bool) {}
+fn Test(B:! bool) -> Expect(B) { return {}; }
+
+fn F() {
+  Test(GreaterEq(5, 5)) as Expect(true);
+  Test(GreaterEq(5, 6)) as Expect(false);
+  Test(GreaterEq(6, 5)) as Expect(true);
+  Test(GreaterEq(-1, -1)) as Expect(true);
+  Test(GreaterEq(-1, 1)) as Expect(false);
+  Test(GreaterEq(1, -1)) as Expect(true);
+}
+
+// --- mixed.carbon
+
+library "[[@TEST_NAME]]";
+
+fn GreaterEq(a: Core.IntLiteral(), b: i32) -> bool = "int.greater_eq";
+
+class Expect(B:! bool) {}
+fn Test(B:! bool) -> Expect(B) { return {}; }
+
+fn F() {
+  Test(GreaterEq(5, 5)) as Expect(true);
+  Test(GreaterEq(5, 6)) as Expect(false);
+  Test(GreaterEq(6, 5)) as Expect(true);
+  Test(GreaterEq(-1, -1)) as Expect(true);
+  Test(GreaterEq(-1, 1)) as Expect(false);
+  Test(GreaterEq(1, -1)) as Expect(true);
 }

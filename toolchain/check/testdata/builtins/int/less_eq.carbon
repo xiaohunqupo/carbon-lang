@@ -12,6 +12,8 @@
 
 // --- int_less_eq.carbon
 
+library "[[@TEST_NAME]]";
+
 fn LessEq(a: i32, b: i32) -> bool = "int.less_eq";
 fn Negate(a: i32) -> i32 = "int.snegate";
 
@@ -28,4 +30,74 @@ fn F(true_: True, false_: False) {
 
 fn RuntimeCallIsValid(a: i32, b: i32) -> bool {
   return LessEq(a, b);
+}
+
+// --- literal.carbon
+
+library "[[@TEST_NAME]]";
+
+fn LessEq(a: Core.IntLiteral(), b: Core.IntLiteral()) -> bool = "int.less_eq";
+
+class Expect(B:! bool) {}
+fn Test(B:! bool) -> Expect(B) { return {}; }
+
+fn F() {
+  Test(LessEq(5, 5)) as Expect(true);
+  Test(LessEq(5, 6)) as Expect(true);
+  Test(LessEq(6, 5)) as Expect(false);
+  Test(LessEq(-1, -1)) as Expect(true);
+  Test(LessEq(-1, 1)) as Expect(true);
+  Test(LessEq(1, -1)) as Expect(false);
+}
+
+// --- mixed.carbon
+
+library "[[@TEST_NAME]]";
+
+fn LessEq(a: Core.IntLiteral(), b: i32) -> bool = "int.less_eq";
+
+class Expect(B:! bool) {}
+fn Test(B:! bool) -> Expect(B) { return {}; }
+
+fn F() {
+  Test(LessEq(5, 5)) as Expect(true);
+  Test(LessEq(5, 6)) as Expect(true);
+  Test(LessEq(6, 5)) as Expect(false);
+  Test(LessEq(-1, -1)) as Expect(true);
+  Test(LessEq(-1, 1)) as Expect(true);
+  Test(LessEq(1, -1)) as Expect(false);
+}
+
+// --- fail_runtime_literal.carbon
+
+library "[[@TEST_NAME]]";
+
+fn LessEq(a: Core.IntLiteral(), b: Core.IntLiteral()) -> bool = "int.less_eq";
+
+fn Test(n: Core.IntLiteral()) {
+  // OK
+  LessEq(1, 1);
+  // CHECK:STDERR: fail_runtime_literal.carbon:[[@LINE+7]]:3: error: non-constant call to compile-time-only function [NonConstantCallToCompTimeOnlyFunction]
+  // CHECK:STDERR:   LessEq(n, 1);
+  // CHECK:STDERR:   ^~~~~~~~~~~~
+  // CHECK:STDERR: fail_runtime_literal.carbon:[[@LINE-8]]:1: note: compile-time-only function declared here [CompTimeOnlyFunctionHere]
+  // CHECK:STDERR: fn LessEq(a: Core.IntLiteral(), b: Core.IntLiteral()) -> bool = "int.less_eq";
+  // CHECK:STDERR: ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  // CHECK:STDERR:
+  LessEq(n, 1);
+  // CHECK:STDERR: fail_runtime_literal.carbon:[[@LINE+7]]:3: error: non-constant call to compile-time-only function [NonConstantCallToCompTimeOnlyFunction]
+  // CHECK:STDERR:   LessEq(1, n);
+  // CHECK:STDERR:   ^~~~~~~~~~~~
+  // CHECK:STDERR: fail_runtime_literal.carbon:[[@LINE-16]]:1: note: compile-time-only function declared here [CompTimeOnlyFunctionHere]
+  // CHECK:STDERR: fn LessEq(a: Core.IntLiteral(), b: Core.IntLiteral()) -> bool = "int.less_eq";
+  // CHECK:STDERR: ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  // CHECK:STDERR:
+  LessEq(1, n);
+  // CHECK:STDERR: fail_runtime_literal.carbon:[[@LINE+6]]:3: error: non-constant call to compile-time-only function [NonConstantCallToCompTimeOnlyFunction]
+  // CHECK:STDERR:   LessEq(n, n);
+  // CHECK:STDERR:   ^~~~~~~~~~~~
+  // CHECK:STDERR: fail_runtime_literal.carbon:[[@LINE-24]]:1: note: compile-time-only function declared here [CompTimeOnlyFunctionHere]
+  // CHECK:STDERR: fn LessEq(a: Core.IntLiteral(), b: Core.IntLiteral()) -> bool = "int.less_eq";
+  // CHECK:STDERR: ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  LessEq(n, n);
 }

@@ -23,6 +23,21 @@ fn RuntimeCallIsValid(a: i32, b: i32) -> i32 {
   return Negate(a);
 }
 
+// --- literal.carbon
+
+library "[[@TEST_NAME]]";
+
+fn Negate(a: Core.IntLiteral()) -> Core.IntLiteral() = "int.snegate";
+
+class Expect(N:! Core.IntLiteral()) {}
+fn Test(N:! Core.IntLiteral()) -> Expect(N) { return {}; }
+
+fn F() {
+  Test(Negate(0)) as Expect(0);
+  Test(Negate(1)) as Expect(0 - 1);
+  Test(Negate(0 - 0x8000_0000_0000_0000)) as Expect(0x8000_0000_0000_0000);
+}
+
 // --- fail_bad_decl.carbon
 
 package FailBadDecl;
@@ -110,10 +125,10 @@ fn Negate(a: i32) -> i32 = "int.snegate";
 fn Sub(a: i32, b: i32) -> i32 = "int.ssub";
 
 // -(-INT_MAX) is INT_MAX.
-let a: i32 = Negate(Negate(0x7FFFFFFF));
+let a: i32 = Negate(Negate(0x7FFF_FFFF));
 
-// -(-INT_MAX - 1) is too large for i32.
+// -INT_MIN is too large for i32.
 // CHECK:STDERR: fail_overflow.carbon:[[@LINE+3]]:14: error: integer overflow in negation of -2147483648 [CompileTimeIntegerNegateOverflow]
-// CHECK:STDERR: let b: i32 = Negate(Sub(Negate(0x7FFFFFFF), 1));
-// CHECK:STDERR:              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-let b: i32 = Negate(Sub(Negate(0x7FFFFFFF), 1));
+// CHECK:STDERR: let b: i32 = Negate(-0x8000_0000);
+// CHECK:STDERR:              ^~~~~~~~~~~~~~~~~~~~
+let b: i32 = Negate(-0x8000_0000);
