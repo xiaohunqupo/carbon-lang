@@ -187,6 +187,8 @@ class ImportRefResolver;
 struct ResolveResult {
   // The new constant value, if known.
   SemIR::ConstantId const_id;
+  // Newly created declaration whose value is being resolved, if any.
+  SemIR::InstId decl_id = SemIR::InstId::Invalid;
   // Whether resolution has been attempted once and needs to be retried.
   bool retry = false;
 
@@ -194,15 +196,18 @@ struct ResolveResult {
   // `const_id` is specified, then this is the end of the second phase, and the
   // constant value will be passed to the next resolution attempt. Otherwise,
   // this is the end of the first phase.
-  static auto Retry(SemIR::ConstantId const_id = SemIR::ConstantId::Invalid)
+  static auto Retry(SemIR::ConstantId const_id = SemIR::ConstantId::Invalid,
+                    SemIR::InstId decl_id = SemIR::InstId::Invalid)
       -> ResolveResult {
-    return {.const_id = const_id, .retry = true};
+    return {.const_id = const_id, .decl_id = decl_id, .retry = true};
   }
 
   // Produces a resolve result that provides the given constant value. Requires
   // that there is no new work.
-  static auto Done(SemIR::ConstantId const_id) -> ResolveResult {
-    return {.const_id = const_id};
+  static auto Done(SemIR::ConstantId const_id,
+                   SemIR::InstId decl_id = SemIR::InstId::Invalid)
+      -> ResolveResult {
+    return {.const_id = const_id, .decl_id = decl_id};
   }
 };
 }  // namespace
@@ -455,7 +460,7 @@ class ImportRefResolver : public ImportContext {
 
       // Step 2: resolve the instruction.
       initial_work_ = work_stack_.size();
-      auto [new_const_id, retry] =
+      auto [new_const_id, _, retry] =
           TryResolveInst(*this, work.inst_id, existing.const_id);
       CARBON_CHECK(!HasNewWork() || retry);
 
@@ -1309,7 +1314,8 @@ static auto TryResolveTypedInst(ImportRefResolver& resolver,
       resolver.local_context().MakeImportedLocAndInst<SemIR::AdaptDecl>(
           AddImportIRInst(resolver, import_inst_id),
           {.adapted_type_inst_id = adapted_type_inst_id}));
-  return ResolveResult::Done(resolver.local_constant_values().Get(inst_id));
+  return ResolveResult::Done(resolver.local_constant_values().Get(inst_id),
+                             inst_id);
 }
 
 static auto TryResolveTypedInst(ImportRefResolver& resolver,
@@ -1389,7 +1395,8 @@ static auto TryResolveTypedInst(ImportRefResolver& resolver,
                resolver.local_context().GetTypeIdForTypeConstant(type_const_id),
            .base_type_inst_id = base_type_inst_id,
            .index = inst.index}));
-  return ResolveResult::Done(resolver.local_constant_values().Get(inst_id));
+  return ResolveResult::Done(resolver.local_constant_values().Get(inst_id),
+                             inst_id);
 }
 
 static auto TryResolveTypedInst(ImportRefResolver& resolver,
@@ -1602,12 +1609,12 @@ static auto TryResolveTypedInst(ImportRefResolver& resolver,
   auto adapt_id = import_class.adapt_id.is_valid()
                       ? GetLocalConstantInstId(resolver, import_class.adapt_id)
                       : SemIR::InstId::Invalid;
+  auto& new_class = resolver.local_classes().Get(class_id);
 
   if (resolver.HasNewWork()) {
-    return ResolveResult::Retry(class_const_id);
+    return ResolveResult::Retry(class_const_id, new_class.first_decl_id());
   }
 
-  auto& new_class = resolver.local_classes().Get(class_id);
   new_class.parent_scope_id = parent_scope_id;
   new_class.implicit_param_patterns_id = GetLocalParamPatternsId(
       resolver, import_class.implicit_param_patterns_id);
@@ -1628,7 +1635,7 @@ static auto TryResolveTypedInst(ImportRefResolver& resolver,
                        complete_type_witness_id, base_id, adapt_id);
   }
 
-  return ResolveResult::Done(class_const_id);
+  return ResolveResult::Done(class_const_id, new_class.first_decl_id());
 }
 
 static auto TryResolveTypedInst(ImportRefResolver& resolver,
@@ -1713,7 +1720,8 @@ static auto TryResolveTypedInst(ImportRefResolver& resolver,
                resolver.local_context().GetTypeIdForTypeConstant(const_id),
            .name_id = GetLocalNameId(resolver, inst.name_id),
            .index = inst.index}));
-  return {.const_id = resolver.local_constant_values().Get(inst_id)};
+  return ResolveResult::Done(resolver.local_constant_values().Get(inst_id),
+                             inst_id);
 }
 
 // Make a declaration of a function. This is done as a separate step from
@@ -1794,13 +1802,14 @@ static auto TryResolveTypedInst(ImportRefResolver& resolver,
                               import_function.implicit_param_patterns_id);
   LoadLocalPatternConstantIds(resolver, import_function.param_patterns_id);
   auto generic_data = GetLocalGenericData(resolver, import_function.generic_id);
+  auto& new_function = resolver.local_functions().Get(function_id);
 
   if (resolver.HasNewWork()) {
-    return ResolveResult::Retry(function_const_id);
+    return ResolveResult::Retry(function_const_id,
+                                new_function.first_decl_id());
   }
 
   // Add the function declaration.
-  auto& new_function = resolver.local_functions().Get(function_id);
   new_function.parent_scope_id = parent_scope_id;
   new_function.implicit_param_patterns_id = GetLocalParamPatternsId(
       resolver, import_function.implicit_param_patterns_id);
@@ -1815,7 +1824,7 @@ static auto TryResolveTypedInst(ImportRefResolver& resolver,
     new_function.definition_id = new_function.first_owning_decl_id;
   }
 
-  return ResolveResult::Done(function_const_id);
+  return ResolveResult::Done(function_const_id, new_function.first_decl_id());
 }
 
 static auto TryResolveTypedInst(ImportRefResolver& resolver,
@@ -1963,12 +1972,12 @@ static auto TryResolveTypedInst(ImportRefResolver& resolver,
   auto constraint_const_id = GetLocalConstantId(
       resolver,
       resolver.import_constant_values().Get(import_impl.constraint_id));
+  auto& new_impl = resolver.local_impls().Get(impl_id);
 
   if (resolver.HasNewWork()) {
-    return ResolveResult::Retry(impl_const_id);
+    return ResolveResult::Retry(impl_const_id, new_impl.first_decl_id());
   }
 
-  auto& new_impl = resolver.local_impls().Get(impl_id);
   new_impl.parent_scope_id = parent_scope_id;
   new_impl.implicit_param_patterns_id =
       GetLocalParamPatternsId(resolver, import_impl.implicit_param_patterns_id);
@@ -1995,7 +2004,7 @@ static auto TryResolveTypedInst(ImportRefResolver& resolver,
     resolver.local_impls().GetOrAddLookupBucket(new_impl).push_back(impl_id);
   }
 
-  return ResolveResult::Done(impl_const_id);
+  return ResolveResult::Done(impl_const_id, new_impl.first_decl_id());
 }
 
 static auto TryResolveTypedInst(ImportRefResolver& resolver,
@@ -2135,12 +2144,13 @@ static auto TryResolveTypedInst(ImportRefResolver& resolver,
     self_param_id =
         GetLocalConstantInstId(resolver, import_interface.self_param_id);
   }
+  auto& new_interface = resolver.local_interfaces().Get(interface_id);
 
   if (resolver.HasNewWork()) {
-    return ResolveResult::Retry(interface_const_id);
+    return ResolveResult::Retry(interface_const_id,
+                                new_interface.first_decl_id());
   }
 
-  auto& new_interface = resolver.local_interfaces().Get(interface_id);
   new_interface.parent_scope_id = parent_scope_id;
   new_interface.implicit_param_patterns_id = GetLocalParamPatternsId(
       resolver, import_interface.implicit_param_patterns_id);
@@ -2154,7 +2164,7 @@ static auto TryResolveTypedInst(ImportRefResolver& resolver,
     AddInterfaceDefinition(resolver, import_interface, new_interface,
                            *self_param_id);
   }
-  return ResolveResult::Done(interface_const_id);
+  return ResolveResult::Done(interface_const_id, new_interface.first_decl_id());
 }
 
 static auto TryResolveTypedInst(ImportRefResolver& resolver,
@@ -2747,6 +2757,11 @@ static auto TryResolveInst(ImportRefResolver& resolver, SemIR::InstId inst_id,
                resolver.local_constant_values().GetInstId(result.const_id),
            .generic_id = GetLocalGenericId(resolver, generic_const_id),
            .index = symbolic_const.index});
+      if (result.decl_id.is_valid()) {
+        // Overwrite the abstract symbolic constant given initially to the
+        // declaration with its final concrete symbolic value.
+        resolver.local_constant_values().Set(result.decl_id, result.const_id);
+      }
     }
   } else {
     // Third phase: perform a consistency check and produce the constant we
