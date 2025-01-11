@@ -23,7 +23,7 @@ fn F() -> i32 {
   // CHECK:STDERR:   return C.F();
   // CHECK:STDERR:          ^~~
   // CHECK:STDERR:
-  // CHECK:STDERR: fail_todo_undefined_impl.carbon:[[@LINE-8]]:3: error: impl declared but not defined [MissingImplDefinition]
+  // CHECK:STDERR: fail_todo_undefined_impl.carbon:[[@LINE-8]]:3: error: impl declared but not defined [ImplMissingDefinition]
   // CHECK:STDERR:   extend impl as I;
   // CHECK:STDERR:   ^~~~~~~~~~~~~~~~~
   return C.F();

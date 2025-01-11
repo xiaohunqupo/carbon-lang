@@ -37,7 +37,7 @@ class E {
   // CHECK:STDERR:   extend impl Self as I {}
   // CHECK:STDERR:               ^~~~
   // CHECK:STDERR:
-  // CHECK:STDERR: fail_extend_impl_type_as.carbon:[[@LINE-11]]:3: error: impl declared but not defined [MissingImplDefinition]
+  // CHECK:STDERR: fail_extend_impl_type_as.carbon:[[@LINE-11]]:3: error: impl declared but not defined [ImplMissingDefinition]
   // CHECK:STDERR:   extend impl D as I;
   // CHECK:STDERR:   ^~~~~~~~~~~~~~~~~~~
   extend impl Self as I {}

@@ -43,7 +43,7 @@ fn F(c: C) {
   // CHECK:STDERR:   extend impl as I;
   // CHECK:STDERR:                  ^
   // CHECK:STDERR:
-  // CHECK:STDERR: fail_extend_undefined_interface.carbon:[[@LINE-25]]:3: error: impl declared but not defined [MissingImplDefinition]
+  // CHECK:STDERR: fail_extend_undefined_interface.carbon:[[@LINE-25]]:3: error: impl declared but not defined [ImplMissingDefinition]
   // CHECK:STDERR:   extend impl as I;
   // CHECK:STDERR:   ^~~~~~~~~~~~~~~~~
   c.F();
