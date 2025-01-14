@@ -110,16 +110,17 @@ static auto AddNamespace(Context& context, SemIR::TypeId namespace_type_id,
       SemIR::InstId::Invalid, SemIR::AccessKind::Public);
   if (!inserted) {
     const auto& prev_entry = parent_scope->GetEntry(entry_id);
-    CARBON_CHECK(!prev_entry.is_poisoned);
-    auto prev_inst_id = prev_entry.inst_id;
-    if (auto namespace_inst =
-            context.insts().TryGetAs<SemIR::Namespace>(prev_inst_id)) {
-      if (diagnose_duplicate_namespace) {
-        auto import_id = make_import_id();
-        CARBON_CHECK(import_id.is_valid());
-        context.DiagnoseDuplicateName(import_id, prev_inst_id);
+    if (!prev_entry.is_poisoned) {
+      auto prev_inst_id = prev_entry.inst_id;
+      if (auto namespace_inst =
+              context.insts().TryGetAs<SemIR::Namespace>(prev_inst_id)) {
+        if (diagnose_duplicate_namespace) {
+          auto import_id = make_import_id();
+          CARBON_CHECK(import_id.is_valid());
+          context.DiagnoseDuplicateName(import_id, prev_inst_id);
+        }
+        return {namespace_inst->name_scope_id, prev_inst_id, true};
       }
-      return {namespace_inst->name_scope_id, prev_inst_id, true};
     }
   }
 
@@ -148,9 +149,11 @@ static auto AddNamespace(Context& context, SemIR::TypeId namespace_type_id,
   parent_scope = &context.name_scopes().Get(parent_scope_id);
 
   // Diagnose if there's a name conflict, but still produce the namespace to
-  // supersede the name conflict in order to avoid repeat diagnostics.
+  // supersede the name conflict in order to avoid repeat diagnostics. Names are
+  // poisoned optimistically by name lookup before checking for imports, so we
+  // may be overwriting a poisoned entry here.
   auto& entry = parent_scope->GetEntry(entry_id);
-  if (!inserted) {
+  if (!inserted && !entry.is_poisoned) {
     context.DiagnoseDuplicateName(namespace_id, entry.inst_id);
     entry.access_kind = SemIR::AccessKind::Public;
   }

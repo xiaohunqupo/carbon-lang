@@ -293,20 +293,48 @@ class X {
   }
 }
 
-// --- fail_no_poison_when_lookup_fails.carbon
+// --- fail_poison_when_lookup_fails.carbon
 
 library "[[@TEST_NAME]]";
 
 namespace N;
-// Here we fail to find C so we don't poison anything.
-// CHECK:STDERR: fail_no_poison_when_lookup_fails.carbon:[[@LINE+3]]:11: error: name `C` not found [NameNotFound]
+// CHECK:STDERR: fail_poison_when_lookup_fails.carbon:[[@LINE+5]]:11: error: name `C` not found [NameNotFound]
 // CHECK:STDERR: fn N.F(x: C);
 // CHECK:STDERR:           ^
+// CHECK:STDERR:
+// CHECK:STDERR: fail_poison_when_lookup_fails.carbon: error: name used before it was declared [NameUseBeforeDecl]
 fn N.F(x: C);
 
-// No failures below because nothing was poisoned.
+// TODO: We should ideally only produce one diagnostic here.
+// CHECK:STDERR: fail_poison_when_lookup_fails.carbon:[[@LINE+5]]:1: note: declared here [NameUseBeforeDeclNote]
+// CHECK:STDERR: class C {}
+// CHECK:STDERR: ^~~~~~~~~
+// CHECK:STDERR:
+// CHECK:STDERR: fail_poison_when_lookup_fails.carbon: error: name used before it was declared [NameUseBeforeDecl]
 class C {}
+// CHECK:STDERR: fail_poison_when_lookup_fails.carbon:[[@LINE+4]]:1: note: declared here [NameUseBeforeDeclNote]
+// CHECK:STDERR: class N.C {}
+// CHECK:STDERR: ^~~~~~~~~~~
+// CHECK:STDERR:
 class N.C {}
+
+// --- fail_poison_with_lexical_result.carbon
+// CHECK:STDERR: fail_poison_with_lexical_result.carbon: error: name used before it was declared [NameUseBeforeDecl]
+
+library "[[@TEST_NAME]]";
+
+fn F() {
+  class A {}
+
+  class B {
+    var v: A;
+
+    // CHECK:STDERR: fail_poison_with_lexical_result.carbon:[[@LINE+3]]:5: note: declared here [NameUseBeforeDeclNote]
+    // CHECK:STDERR:     class A {}
+    // CHECK:STDERR:     ^~~~~~~~~
+    class A {}
+  }
+}
 
 // CHECK:STDOUT: --- no_poison.carbon
 // CHECK:STDOUT:
@@ -1158,25 +1186,23 @@ class N.C {}
 // CHECK:STDOUT:
 // CHECK:STDOUT: specific @B(constants.%Self) {}
 // CHECK:STDOUT:
-// CHECK:STDOUT: --- fail_no_poison_when_lookup_fails.carbon
+// CHECK:STDOUT: --- fail_poison_when_lookup_fails.carbon
 // CHECK:STDOUT:
 // CHECK:STDOUT: constants {
 // CHECK:STDOUT:   %F.type: type = fn_type @F [template]
 // CHECK:STDOUT:   %F: %F.type = struct_value () [template]
-// CHECK:STDOUT:   %C.f79: type = class_type @C.1 [template]
+// CHECK:STDOUT:   %.a95: type = class_type @.1 [template]
 // CHECK:STDOUT:   %empty_struct_type: type = struct_type {} [template]
 // CHECK:STDOUT:   %complete_type: <witness> = complete_type_witness %empty_struct_type [template]
-// CHECK:STDOUT:   %C.9f4: type = class_type @C.2 [template]
+// CHECK:STDOUT:   %.fb7: type = class_type @.2 [template]
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
 // CHECK:STDOUT: file {
 // CHECK:STDOUT:   package: <namespace> = namespace [template] {
 // CHECK:STDOUT:     .N = %N
-// CHECK:STDOUT:     .C = %C.decl.loc12
 // CHECK:STDOUT:   }
 // CHECK:STDOUT:   %N: <namespace> = namespace [template] {
 // CHECK:STDOUT:     .F = %F.decl
-// CHECK:STDOUT:     .C = %C.decl.loc13
 // CHECK:STDOUT:   }
 // CHECK:STDOUT:   %F.decl: %F.type = fn_decl @F [template = constants.%F] {
 // CHECK:STDOUT:     %x.patt: <error> = binding_pattern x
@@ -1186,25 +1212,81 @@ class N.C {}
 // CHECK:STDOUT:     %C.ref: <error> = name_ref C, <error> [template = <error>]
 // CHECK:STDOUT:     %x: <error> = bind_name x, %x.param
 // CHECK:STDOUT:   }
-// CHECK:STDOUT:   %C.decl.loc12: type = class_decl @C.1 [template = constants.%C.f79] {} {}
-// CHECK:STDOUT:   %C.decl.loc13: type = class_decl @C.2 [template = constants.%C.9f4] {} {}
+// CHECK:STDOUT:   %.decl.loc18: type = class_decl @.1 [template = constants.%.a95] {} {}
+// CHECK:STDOUT:   %.decl.loc23: type = class_decl @.2 [template = constants.%.fb7] {} {}
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
-// CHECK:STDOUT: class @C.1 {
+// CHECK:STDOUT: class @.1 {
 // CHECK:STDOUT:   %complete_type: <witness> = complete_type_witness %empty_struct_type [template = constants.%complete_type]
 // CHECK:STDOUT:
 // CHECK:STDOUT: !members:
-// CHECK:STDOUT:   .Self = constants.%C.f79
+// CHECK:STDOUT:   .Self = constants.%.a95
 // CHECK:STDOUT:   complete_type_witness = %complete_type
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
-// CHECK:STDOUT: class @C.2 {
+// CHECK:STDOUT: class @.2 {
 // CHECK:STDOUT:   %complete_type: <witness> = complete_type_witness %empty_struct_type [template = constants.%complete_type]
 // CHECK:STDOUT:
 // CHECK:STDOUT: !members:
-// CHECK:STDOUT:   .Self = constants.%C.9f4
+// CHECK:STDOUT:   .Self = constants.%.fb7
 // CHECK:STDOUT:   complete_type_witness = %complete_type
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
 // CHECK:STDOUT: fn @F(%x.param_patt: <error>);
+// CHECK:STDOUT:
+// CHECK:STDOUT: --- fail_poison_with_lexical_result.carbon
+// CHECK:STDOUT:
+// CHECK:STDOUT: constants {
+// CHECK:STDOUT:   %F.type: type = fn_type @F [template]
+// CHECK:STDOUT:   %F: %F.type = struct_value () [template]
+// CHECK:STDOUT:   %A: type = class_type @A [template]
+// CHECK:STDOUT:   %empty_struct_type: type = struct_type {} [template]
+// CHECK:STDOUT:   %complete_type.357: <witness> = complete_type_witness %empty_struct_type [template]
+// CHECK:STDOUT:   %B: type = class_type @B [template]
+// CHECK:STDOUT:   %B.elem: type = unbound_element_type %B, %A [template]
+// CHECK:STDOUT:   %.96d: type = class_type @.1 [template]
+// CHECK:STDOUT:   %struct_type.v: type = struct_type {.v: %A} [template]
+// CHECK:STDOUT:   %complete_type.57e: <witness> = complete_type_witness %struct_type.v [template]
+// CHECK:STDOUT: }
+// CHECK:STDOUT:
+// CHECK:STDOUT: file {
+// CHECK:STDOUT:   package: <namespace> = namespace [template] {
+// CHECK:STDOUT:     .F = %F.decl
+// CHECK:STDOUT:   }
+// CHECK:STDOUT:   %F.decl: %F.type = fn_decl @F [template = constants.%F] {} {}
+// CHECK:STDOUT: }
+// CHECK:STDOUT:
+// CHECK:STDOUT: class @A {
+// CHECK:STDOUT:   %complete_type: <witness> = complete_type_witness %empty_struct_type [template = constants.%complete_type.357]
+// CHECK:STDOUT:
+// CHECK:STDOUT: !members:
+// CHECK:STDOUT:   .Self = constants.%A
+// CHECK:STDOUT:   complete_type_witness = %complete_type
+// CHECK:STDOUT: }
+// CHECK:STDOUT:
+// CHECK:STDOUT: class @B {
+// CHECK:STDOUT:   %.loc9: %B.elem = field_decl v, element0 [template]
+// CHECK:STDOUT:   %.decl: type = class_decl @.1 [template = constants.%.96d] {} {}
+// CHECK:STDOUT:   %complete_type: <witness> = complete_type_witness %struct_type.v [template = constants.%complete_type.57e]
+// CHECK:STDOUT:
+// CHECK:STDOUT: !members:
+// CHECK:STDOUT:   .Self = constants.%B
+// CHECK:STDOUT:   .v = %.loc9
+// CHECK:STDOUT:   complete_type_witness = %complete_type
+// CHECK:STDOUT: }
+// CHECK:STDOUT:
+// CHECK:STDOUT: class @.1 {
+// CHECK:STDOUT:   %complete_type: <witness> = complete_type_witness %empty_struct_type [template = constants.%complete_type.357]
+// CHECK:STDOUT:
+// CHECK:STDOUT: !members:
+// CHECK:STDOUT:   .Self = constants.%.96d
+// CHECK:STDOUT:   complete_type_witness = %complete_type
+// CHECK:STDOUT: }
+// CHECK:STDOUT:
+// CHECK:STDOUT: fn @F() {
+// CHECK:STDOUT: !entry:
+// CHECK:STDOUT:   %A.decl: type = class_decl @A [template = constants.%A] {} {}
+// CHECK:STDOUT:   %B.decl: type = class_decl @B [template = constants.%B] {} {}
+// CHECK:STDOUT:   return
+// CHECK:STDOUT: }
 // CHECK:STDOUT:

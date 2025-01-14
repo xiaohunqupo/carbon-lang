@@ -365,7 +365,8 @@ auto Context::LookupNameInDecl(SemIR::LocId loc_id, SemIR::NameId name_id,
     //    // Error, no `F` in `B`.
     //    fn B.F() {}
     auto result = LookupNameInExactScope(loc_id, name_id, scope_id,
-                                         name_scopes().Get(scope_id));
+                                         name_scopes().Get(scope_id),
+                                         /*is_being_declared=*/true);
     return {result.inst_id, result.is_poisoned};
   }
 }
@@ -381,8 +382,6 @@ auto Context::LookupUnqualifiedName(Parse::NodeId node_id,
       scope_stack().LookupInLexicalScopes(name_id);
 
   // Walk the non-lexical scopes and perform lookups into each of them.
-  // Collect scopes to poison this name when it's found.
-  llvm::SmallVector<LookupScope> scopes_to_poison;
   for (auto [index, lookup_scope_id, specific_id] :
        llvm::reverse(non_lexical_scopes)) {
     if (auto non_lexical_result =
@@ -390,17 +389,8 @@ auto Context::LookupUnqualifiedName(Parse::NodeId node_id,
                                 LookupScope{.name_scope_id = lookup_scope_id,
                                             .specific_id = specific_id},
                                 /*required=*/false);
-        !non_lexical_result.is_poisoned) {
-      if (non_lexical_result.inst_id.is_valid()) {
-        // Poison the scopes for this name.
-        for (const auto [scope_id, specific_id] : scopes_to_poison) {
-          name_scopes().Get(scope_id).AddPoison(name_id);
-        }
-
-        return non_lexical_result;
-      }
-      scopes_to_poison.push_back(
-          {.name_scope_id = lookup_scope_id, .specific_id = specific_id});
+        non_lexical_result.inst_id.is_valid()) {
+      return non_lexical_result;
     }
   }
 
@@ -423,12 +413,16 @@ auto Context::LookupUnqualifiedName(Parse::NodeId node_id,
 
 auto Context::LookupNameInExactScope(SemIRLoc loc, SemIR::NameId name_id,
                                      SemIR::NameScopeId scope_id,
-                                     const SemIR::NameScope& scope)
+                                     SemIR::NameScope& scope,
+                                     bool is_being_declared)
     -> LookupNameInExactScopeResult {
-  if (auto entry_id = scope.Lookup(name_id)) {
+  if (auto entry_id = is_being_declared ? scope.Lookup(name_id)
+                                        : scope.LookupOrPoison(name_id)) {
     auto entry = scope.GetEntry(*entry_id);
     if (!entry.is_poisoned) {
       LoadImportRef(*this, entry.inst_id);
+    } else if (is_being_declared) {
+      entry.inst_id = SemIR::InstId::Invalid;
     }
     return {entry.inst_id, entry.access_kind, entry.is_poisoned};
   }
@@ -593,7 +587,7 @@ auto Context::LookupQualifiedName(SemIR::LocId loc_id, SemIR::NameId name_id,
       has_error = true;
       continue;
     }
-    const auto& name_scope = name_scopes().Get(scope_id);
+    auto& name_scope = name_scopes().Get(scope_id);
     has_error |= name_scope.has_error();
 
     auto [scope_result_id, access_kind, is_poisoned] =
@@ -612,7 +606,7 @@ auto Context::LookupQualifiedName(SemIR::LocId loc_id, SemIR::NameId name_id,
       });
     }
 
-    if (!is_poisoned && (!scope_result_id.is_valid() || is_access_prohibited)) {
+    if (!scope_result_id.is_valid() || is_access_prohibited) {
       // If nothing is found in this scope or if we encountered an invalid
       // access, look in its extended scopes.
       const auto& extended = name_scope.extended_scopes();
@@ -657,7 +651,7 @@ auto Context::LookupQualifiedName(SemIR::LocId loc_id, SemIR::NameId name_id,
     result.is_poisoned = is_poisoned;
   }
 
-  if (required && (!result.inst_id.is_valid() || result.is_poisoned)) {
+  if (required && !result.inst_id.is_valid()) {
     if (!has_error) {
       if (prohibited_accesses.empty()) {
         DiagnoseMemberNameNotFound(loc_id, name_id, lookup_scopes);

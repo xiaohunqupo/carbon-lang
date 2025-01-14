@@ -33,8 +33,7 @@ auto NameScope::Print(llvm::raw_ostream& out) const -> void {
 }
 
 auto NameScope::AddRequired(Entry name_entry) -> void {
-  CARBON_CHECK(!name_entry.is_poisoned,
-               "Cannot add a poisoned name: {0}. Use AddPoison()",
+  CARBON_CHECK(!name_entry.is_poisoned, "Cannot add a poisoned name: {0}.",
                name_entry.name_id);
   auto add_name = [&] {
     EntryId index(names_.size());
@@ -42,8 +41,13 @@ auto NameScope::AddRequired(Entry name_entry) -> void {
     return index;
   };
   auto result = name_map_.Insert(name_entry.name_id, add_name);
-  CARBON_CHECK(result.is_inserted(), "Failed to add required name: {0}",
-               name_entry.name_id);
+  if (!result.is_inserted()) {
+    // A required name can overwrite poison.
+    auto& name = names_[result.value().index];
+    CARBON_CHECK(name.is_poisoned, "Failed to add required name: {0}",
+                 name_entry.name_id);
+    name = name_entry;
+  }
 }
 
 auto NameScope::LookupOrAdd(SemIR::NameId name_id, InstId inst_id,
@@ -59,14 +63,16 @@ auto NameScope::LookupOrAdd(SemIR::NameId name_id, InstId inst_id,
   return {true, EntryId(names_.size() - 1)};
 }
 
-auto NameScope::AddPoison(NameId name_id) -> void {
+auto NameScope::LookupOrPoison(NameId name_id) -> std::optional<EntryId> {
   auto insert_result = name_map_.Insert(name_id, EntryId(names_.size()));
-  CARBON_CHECK(insert_result.is_inserted(),
-               "Trying to poison an existing name: {0}", name_id);
-  names_.push_back({.name_id = name_id,
-                    .inst_id = InstId::Invalid,
-                    .access_kind = AccessKind::Public,
-                    .is_poisoned = true});
+  if (insert_result.is_inserted()) {
+    names_.push_back({.name_id = name_id,
+                      .inst_id = InstId::Invalid,
+                      .access_kind = AccessKind::Public,
+                      .is_poisoned = true});
+    return std::nullopt;
+  }
+  return insert_result.value();
 }
 
 auto NameScopeStore::GetInstIfValid(NameScopeId scope_id) const
