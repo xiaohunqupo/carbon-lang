@@ -4,12 +4,18 @@
 
 #include "toolchain/check/check_unit.h"
 
+#include <string>
+
+#include "llvm/ADT/IntrusiveRefCntPtr.h"
+#include "llvm/ADT/StringRef.h"
+#include "llvm/Support/VirtualFileSystem.h"
 #include "toolchain/base/kind_switch.h"
 #include "toolchain/base/pretty_stack_trace_function.h"
 #include "toolchain/check/generic.h"
 #include "toolchain/check/handle.h"
 #include "toolchain/check/impl.h"
 #include "toolchain/check/import.h"
+#include "toolchain/check/import_cpp.h"
 #include "toolchain/check/import_ref.h"
 #include "toolchain/check/node_id_traversal.h"
 
@@ -29,9 +35,11 @@ static auto GetImportedIRCount(UnitAndImports* unit_and_imports) -> int {
 }
 
 CheckUnit::CheckUnit(UnitAndImports* unit_and_imports, int total_ir_count,
+                     llvm::IntrusiveRefCntPtr<llvm::vfs::FileSystem> fs,
                      llvm::raw_ostream* vlog_stream)
     : unit_and_imports_(unit_and_imports),
       total_ir_count_(total_ir_count),
+      fs_(std::move(fs)),
       vlog_stream_(vlog_stream),
       emitter_(*unit_and_imports_->unit->sem_ir_converter,
                unit_and_imports_->err_tracker),
@@ -130,6 +138,7 @@ auto CheckUnit::InitPackageScopeAndImports() -> void {
   ImportCurrentPackage(package_inst_id, namespace_type_id);
   CARBON_CHECK(context_.scope_stack().PeekIndex() == ScopeIndex::Package);
   ImportOtherPackages(namespace_type_id);
+  ImportCppPackages();
 }
 
 auto CheckUnit::CollectDirectImports(
@@ -323,6 +332,34 @@ auto CheckUnit::ImportOtherPackages(SemIR::TypeId namespace_type_id) -> void {
         CollectTransitiveImports(import_decl_id, local_imports, api_imports),
         has_load_error);
   }
+}
+
+auto CheckUnit::ImportCppPackages() -> void {
+  const auto& imports = unit_and_imports_->cpp_imports;
+  if (imports.empty()) {
+    return;
+  }
+
+  if (imports.size() >= 2) {
+    context_.TODO(imports[1].node_id,
+                  "multiple Cpp imports are not yet supported");
+    return;
+  }
+
+  const auto& import = imports.front();
+  llvm::StringRef filename =
+      unit_and_imports_->unit->value_stores->string_literal_values().Get(
+          import.library_id);
+
+  // TODO: Pass the import location so that diagnostics would point to it.
+  auto source_buffer = SourceBuffer::MakeFromFile(
+      *fs_, filename, unit_and_imports_->err_tracker);
+  if (!source_buffer) {
+    return;
+  }
+
+  ImportCppFile(context_, import.node_id, source_buffer->filename(),
+                source_buffer->text());
 }
 
 // Loops over all nodes in the tree. On some errors, this may return early,
