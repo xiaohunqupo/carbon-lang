@@ -8,9 +8,10 @@
 // TIP: To dump output, run:
 // TIP:   bazel run //toolchain/testing:file_test -- --dump_output --file_tests=toolchain/check/testdata/array/fail_out_of_bound.carbon
 
-// CHECK:STDERR: fail_out_of_bound.carbon:[[@LINE+3]]:19: error: cannot initialize array of 1 element from 3 initializers [ArrayInitFromLiteralArgCountMismatch]
+// CHECK:STDERR: fail_out_of_bound.carbon:[[@LINE+4]]:19: error: cannot initialize array of 1 element from 3 initializers [ArrayInitFromLiteralArgCountMismatch]
 // CHECK:STDERR: var a: [i32; 1] = (1, 2, 3);
 // CHECK:STDERR:                   ^~~~~~~~~
+// CHECK:STDERR:
 var a: [i32; 1] = (1, 2, 3);
 
 // CHECK:STDOUT: --- fail_out_of_bound.carbon
@@ -48,7 +49,7 @@ var a: [i32; 1] = (1, 2, 3);
 // CHECK:STDOUT:   %int_1: Core.IntLiteral = int_value 1 [template = constants.%int_1]
 // CHECK:STDOUT:   %int_2: Core.IntLiteral = int_value 2 [template = constants.%int_2]
 // CHECK:STDOUT:   %int_3: Core.IntLiteral = int_value 3 [template = constants.%int_3]
-// CHECK:STDOUT:   %.loc14: %tuple.type = tuple_literal (%int_1, %int_2, %int_3)
+// CHECK:STDOUT:   %.loc15: %tuple.type = tuple_literal (%int_1, %int_2, %int_3)
 // CHECK:STDOUT:   assign file.%a.var, <error>
 // CHECK:STDOUT:   return
 // CHECK:STDOUT: }

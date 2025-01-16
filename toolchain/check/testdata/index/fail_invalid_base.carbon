@@ -28,9 +28,10 @@ var b: i32 = F[1];
 // CHECK:STDERR:
 var c: i32 = {.a = 1, .b = 2}[0];
 
-// CHECK:STDERR: fail_invalid_base.carbon:[[@LINE+3]]:14: error: type `type` does not support indexing [TypeNotIndexable]
+// CHECK:STDERR: fail_invalid_base.carbon:[[@LINE+4]]:14: error: type `type` does not support indexing [TypeNotIndexable]
 // CHECK:STDERR: var d: i32 = {.a: i32, .b: i32}[0];
 // CHECK:STDERR:              ^~~~~~~~~~~~~~~~~~~~~
+// CHECK:STDERR:
 var d: i32 = {.a: i32, .b: i32}[0];
 
 // CHECK:STDOUT: --- fail_invalid_base.carbon
@@ -97,12 +98,12 @@ var d: i32 = {.a: i32, .b: i32}[0];
 // CHECK:STDOUT:   %struct: %struct_type.a.b.cfd = struct_value (%int_1.loc29, %int_2) [template = constants.%struct]
 // CHECK:STDOUT:   %.loc29_29.2: %struct_type.a.b.cfd = converted %.loc29_29.1, %struct [template = constants.%struct]
 // CHECK:STDOUT:   assign file.%c.var, <error>
-// CHECK:STDOUT:   %int_32.loc34_19: Core.IntLiteral = int_value 32 [template = constants.%int_32]
-// CHECK:STDOUT:   %i32.loc34_19: type = class_type @Int, @Int(constants.%int_32) [template = constants.%i32]
-// CHECK:STDOUT:   %int_32.loc34_28: Core.IntLiteral = int_value 32 [template = constants.%int_32]
-// CHECK:STDOUT:   %i32.loc34_28: type = class_type @Int, @Int(constants.%int_32) [template = constants.%i32]
+// CHECK:STDOUT:   %int_32.loc35_19: Core.IntLiteral = int_value 32 [template = constants.%int_32]
+// CHECK:STDOUT:   %i32.loc35_19: type = class_type @Int, @Int(constants.%int_32) [template = constants.%i32]
+// CHECK:STDOUT:   %int_32.loc35_28: Core.IntLiteral = int_value 32 [template = constants.%int_32]
+// CHECK:STDOUT:   %i32.loc35_28: type = class_type @Int, @Int(constants.%int_32) [template = constants.%i32]
 // CHECK:STDOUT:   %struct_type.a.b: type = struct_type {.a: %i32, .b: %i32} [template = constants.%struct_type.a.b.501]
-// CHECK:STDOUT:   %int_0.loc34: Core.IntLiteral = int_value 0 [template = constants.%int_0]
+// CHECK:STDOUT:   %int_0.loc35: Core.IntLiteral = int_value 0 [template = constants.%int_0]
 // CHECK:STDOUT:   assign file.%d.var, <error>
 // CHECK:STDOUT:   return
 // CHECK:STDOUT: }

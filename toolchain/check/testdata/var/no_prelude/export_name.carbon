@@ -34,11 +34,12 @@ export v;
 
 library "[[@TEST_NAME]]";
 
-// CHECK:STDERR: fail_todo_use_export.carbon:[[@LINE+5]]:1: in import [InImport]
+// CHECK:STDERR: fail_todo_use_export.carbon:[[@LINE+6]]:1: in import [InImport]
 // CHECK:STDERR: export.carbon:4:1: in import [InImport]
 // CHECK:STDERR: base.carbon:4:5: error: semantics TODO: `Non-constant ImportRefLoaded (comes up with var)` [SemanticsTodo]
 // CHECK:STDERR: var v: ();
 // CHECK:STDERR:     ^
+// CHECK:STDERR:
 import library "export";
 
 var w: () = v;
@@ -99,9 +100,9 @@ var w: () = v;
 // CHECK:STDOUT: fn @__global_init() {
 // CHECK:STDOUT: !entry:
 // CHECK:STDOUT:   %v.ref: ref %empty_tuple.type = name_ref v, imports.%import_ref [template = <error>]
-// CHECK:STDOUT:   %.loc11_13: init %empty_tuple.type = tuple_init () to file.%w.var [template = constants.%empty_tuple]
-// CHECK:STDOUT:   %.loc11_14: init %empty_tuple.type = converted %v.ref, %.loc11_13 [template = constants.%empty_tuple]
-// CHECK:STDOUT:   assign file.%w.var, %.loc11_14
+// CHECK:STDOUT:   %.loc12_13: init %empty_tuple.type = tuple_init () to file.%w.var [template = constants.%empty_tuple]
+// CHECK:STDOUT:   %.loc12_14: init %empty_tuple.type = converted %v.ref, %.loc12_13 [template = constants.%empty_tuple]
+// CHECK:STDOUT:   assign file.%w.var, %.loc12_14
 // CHECK:STDOUT:   return
 // CHECK:STDOUT: }
 // CHECK:STDOUT:

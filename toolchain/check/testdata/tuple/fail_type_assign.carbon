@@ -8,12 +8,13 @@
 // TIP: To dump output, run:
 // TIP:   bazel run //toolchain/testing:file_test -- --dump_output --file_tests=toolchain/check/testdata/tuple/fail_type_assign.carbon
 
-// CHECK:STDERR: fail_type_assign.carbon:[[@LINE+6]]:18: error: cannot implicitly convert from `type` to `i32` [ImplicitAsConversionFailure]
+// CHECK:STDERR: fail_type_assign.carbon:[[@LINE+7]]:18: error: cannot implicitly convert from `type` to `i32` [ImplicitAsConversionFailure]
 // CHECK:STDERR: var x: (i32, ) = (i32, );
 // CHECK:STDERR:                  ^~~~~~~
-// CHECK:STDERR: fail_type_assign.carbon:[[@LINE+3]]:18: note: type `type` does not implement interface `Core.ImplicitAs(i32)` [MissingImplInMemberAccessNote]
+// CHECK:STDERR: fail_type_assign.carbon:[[@LINE+4]]:18: note: type `type` does not implement interface `Core.ImplicitAs(i32)` [MissingImplInMemberAccessNote]
 // CHECK:STDERR: var x: (i32, ) = (i32, );
 // CHECK:STDERR:                  ^~~~~~~
+// CHECK:STDERR:
 var x: (i32, ) = (i32, );
 
 // CHECK:STDOUT: --- fail_type_assign.carbon
@@ -48,8 +49,8 @@ var x: (i32, ) = (i32, );
 // CHECK:STDOUT: !entry:
 // CHECK:STDOUT:   %int_32: Core.IntLiteral = int_value 32 [template = constants.%int_32]
 // CHECK:STDOUT:   %i32: type = class_type @Int, @Int(constants.%int_32) [template = constants.%i32]
-// CHECK:STDOUT:   %.loc17_24.1: %tuple.type.85c = tuple_literal (%i32)
-// CHECK:STDOUT:   %.loc17_24.2: %i32 = converted %i32, <error> [template = <error>]
+// CHECK:STDOUT:   %.loc18_24.1: %tuple.type.85c = tuple_literal (%i32)
+// CHECK:STDOUT:   %.loc18_24.2: %i32 = converted %i32, <error> [template = <error>]
 // CHECK:STDOUT:   assign file.%x.var, <error>
 // CHECK:STDOUT:   return
 // CHECK:STDOUT: }

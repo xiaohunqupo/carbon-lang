@@ -11,12 +11,13 @@
 fn Foo() -> f64 { return 1.0; }
 
 fn Run() {
-  // CHECK:STDERR: fail_return_type_mismatch.carbon:[[@LINE+6]]:3: error: cannot implicitly convert from `f64` to `i32` [ImplicitAsConversionFailure]
+  // CHECK:STDERR: fail_return_type_mismatch.carbon:[[@LINE+7]]:3: error: cannot implicitly convert from `f64` to `i32` [ImplicitAsConversionFailure]
   // CHECK:STDERR:   var x: i32 = Foo();
   // CHECK:STDERR:   ^~~~~~~~~~~~~~~~~~~
-  // CHECK:STDERR: fail_return_type_mismatch.carbon:[[@LINE+3]]:3: note: type `f64` does not implement interface `Core.ImplicitAs(i32)` [MissingImplInMemberAccessNote]
+  // CHECK:STDERR: fail_return_type_mismatch.carbon:[[@LINE+4]]:3: note: type `f64` does not implement interface `Core.ImplicitAs(i32)` [MissingImplInMemberAccessNote]
   // CHECK:STDERR:   var x: i32 = Foo();
   // CHECK:STDERR:   ^~~~~~~~~~~~~~~~~~~
+  // CHECK:STDERR:
   var x: i32 = Foo();
 }
 
@@ -78,7 +79,7 @@ fn Run() {
 // CHECK:STDOUT:   %x: ref %i32 = bind_name x, %x.var
 // CHECK:STDOUT:   %Foo.ref: %Foo.type = name_ref Foo, file.%Foo.decl [template = constants.%Foo]
 // CHECK:STDOUT:   %Foo.call: init f64 = call %Foo.ref()
-// CHECK:STDOUT:   %.loc20: %i32 = converted %Foo.call, <error> [template = <error>]
+// CHECK:STDOUT:   %.loc21: %i32 = converted %Foo.call, <error> [template = <error>]
 // CHECK:STDOUT:   assign %x.var, <error>
 // CHECK:STDOUT:   return
 // CHECK:STDOUT: }

@@ -8,9 +8,10 @@
 // TIP: To dump output, run:
 // TIP:   bazel run //toolchain/testing:file_test -- --dump_output --file_tests=toolchain/check/testdata/struct/fail_assign_empty.carbon
 
-// CHECK:STDERR: fail_assign_empty.carbon:[[@LINE+3]]:20: error: cannot initialize struct with 1 field from struct with 0 fields [StructInitElementCountMismatch]
+// CHECK:STDERR: fail_assign_empty.carbon:[[@LINE+4]]:20: error: cannot initialize struct with 1 field from struct with 0 fields [StructInitElementCountMismatch]
 // CHECK:STDERR: var x: {.a: i32} = {};
 // CHECK:STDERR:                    ^~
+// CHECK:STDERR:
 var x: {.a: i32} = {};
 
 // CHECK:STDOUT: --- fail_assign_empty.carbon
@@ -42,7 +43,7 @@ var x: {.a: i32} = {};
 // CHECK:STDOUT:
 // CHECK:STDOUT: fn @__global_init() {
 // CHECK:STDOUT: !entry:
-// CHECK:STDOUT:   %.loc14: %empty_struct_type = struct_literal ()
+// CHECK:STDOUT:   %.loc15: %empty_struct_type = struct_literal ()
 // CHECK:STDOUT:   assign file.%x.var, <error>
 // CHECK:STDOUT:   return
 // CHECK:STDOUT: }

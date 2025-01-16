@@ -13,9 +13,10 @@
 // CHECK:STDERR:               ^~~~~~~~~~
 // CHECK:STDERR:
 let n: i32 = *undeclared;
-// CHECK:STDERR: fail_deref_error.carbon:[[@LINE+3]]:15: error: name `undeclared` not found [NameNotFound]
+// CHECK:STDERR: fail_deref_error.carbon:[[@LINE+4]]:15: error: name `undeclared` not found [NameNotFound]
 // CHECK:STDERR: let n2: i32 = undeclared->foo;
 // CHECK:STDERR:               ^~~~~~~~~~
+// CHECK:STDERR:
 let n2: i32 = undeclared->foo;
 
 // CHECK:STDOUT: --- fail_deref_error.carbon
@@ -47,8 +48,8 @@ let n2: i32 = undeclared->foo;
 // CHECK:STDOUT:   %undeclared.ref.loc15: <error> = name_ref undeclared, <error> [template = <error>]
 // CHECK:STDOUT:   %.loc15: ref <error> = deref <error>
 // CHECK:STDOUT:   %n: %i32 = bind_name n, <error>
-// CHECK:STDOUT:   %undeclared.ref.loc19: <error> = name_ref undeclared, <error> [template = <error>]
-// CHECK:STDOUT:   %.loc19: ref <error> = deref <error>
+// CHECK:STDOUT:   %undeclared.ref.loc20: <error> = name_ref undeclared, <error> [template = <error>]
+// CHECK:STDOUT:   %.loc20: ref <error> = deref <error>
 // CHECK:STDOUT:   %foo.ref: <error> = name_ref foo, <error> [template = <error>]
 // CHECK:STDOUT:   %n2: %i32 = bind_name n2, <error>
 // CHECK:STDOUT:   return

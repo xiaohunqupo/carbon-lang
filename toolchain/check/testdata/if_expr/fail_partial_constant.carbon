@@ -33,9 +33,10 @@ fn ChosenBranchIsNonConstant(t: type) {
   // CHECK:STDERR:          ^~~~~~~~~~~~~~~~~~~~~~~
   // CHECK:STDERR:
   var v: if true then t else i32 = 1;
-  // CHECK:STDERR: fail_non_constant_result.carbon:[[@LINE+3]]:10: error: cannot evaluate type expression [TypeExprEvaluationFailure]
+  // CHECK:STDERR: fail_non_constant_result.carbon:[[@LINE+4]]:10: error: cannot evaluate type expression [TypeExprEvaluationFailure]
   // CHECK:STDERR:   var w: if false then i32 else t = 1;
   // CHECK:STDERR:          ^~~~~~~~~~~~~~~~~~~~~~~~
+  // CHECK:STDERR:
   var w: if false then i32 else t = 1;
 }
 
@@ -126,7 +127,7 @@ fn ChosenBranchIsNonConstant(t: type) {
 // CHECK:STDOUT:   assign %v.var, <error>
 // CHECK:STDOUT:   %w.var: ref <error> = var w
 // CHECK:STDOUT:   %w: ref <error> = bind_name w, %w.var
-// CHECK:STDOUT:   %int_1.loc13: Core.IntLiteral = int_value 1 [template = constants.%int_1]
+// CHECK:STDOUT:   %int_1.loc14: Core.IntLiteral = int_value 1 [template = constants.%int_1]
 // CHECK:STDOUT:   assign %w.var, <error>
 // CHECK:STDOUT:   return
 // CHECK:STDOUT: }

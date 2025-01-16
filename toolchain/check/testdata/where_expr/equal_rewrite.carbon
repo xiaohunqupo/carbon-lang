@@ -210,12 +210,13 @@ let H: (E where .F = bool and .G = ()) = f64;
 // CHECK:STDERR:
 let J: ((E where .F = {}) where .G = i32) = bool;
 
-// CHECK:STDERR: fail_type_does_not_implement_where.carbon:[[@LINE+6]]:1: error: cannot implicitly convert from `type` to `E where .(E.F) = .(E.G)` [ImplicitAsConversionFailure]
+// CHECK:STDERR: fail_type_does_not_implement_where.carbon:[[@LINE+7]]:1: error: cannot implicitly convert from `type` to `E where .(E.F) = .(E.G)` [ImplicitAsConversionFailure]
 // CHECK:STDERR: let K: (E where .F = .Self.G) = bool;
 // CHECK:STDERR: ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// CHECK:STDERR: fail_type_does_not_implement_where.carbon:[[@LINE+3]]:1: note: type `type` does not implement interface `Core.ImplicitAs(E where .(E.F) = .(E.G))` [MissingImplInMemberAccessNote]
+// CHECK:STDERR: fail_type_does_not_implement_where.carbon:[[@LINE+4]]:1: note: type `type` does not implement interface `Core.ImplicitAs(E where .(E.F) = .(E.G))` [MissingImplInMemberAccessNote]
 // CHECK:STDERR: let K: (E where .F = .Self.G) = bool;
 // CHECK:STDERR: ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// CHECK:STDERR:
 let K: (E where .F = .Self.G) = bool;
 
 // CHECK:STDOUT: --- equal_constraint.carbon
@@ -1381,8 +1382,8 @@ let K: (E where .F = .Self.G) = bool;
 // CHECK:STDOUT:   %bool.make_type.loc27: init type = call constants.%Bool() [template = bool]
 // CHECK:STDOUT:   %.loc27: %E_where.type.bef = converted %bool.make_type.loc27, <error> [template = <error>]
 // CHECK:STDOUT:   %J: %E_where.type.bef = bind_name J, <error>
-// CHECK:STDOUT:   %bool.make_type.loc35: init type = call constants.%Bool() [template = bool]
-// CHECK:STDOUT:   %.loc35: %E_where.type.503 = converted %bool.make_type.loc35, <error> [template = <error>]
+// CHECK:STDOUT:   %bool.make_type.loc36: init type = call constants.%Bool() [template = bool]
+// CHECK:STDOUT:   %.loc36: %E_where.type.503 = converted %bool.make_type.loc36, <error> [template = <error>]
 // CHECK:STDOUT:   %K: %E_where.type.503 = bind_name K, <error>
 // CHECK:STDOUT:   return
 // CHECK:STDOUT: }

@@ -8,12 +8,13 @@
 // TIP: To dump output, run:
 // TIP:   bazel run //toolchain/testing:file_test -- --dump_output --file_tests=toolchain/check/testdata/as/fail_not_type.carbon
 
-// CHECK:STDERR: fail_not_type.carbon:[[@LINE+6]]:19: error: cannot implicitly convert from `Core.IntLiteral` to `type` [ImplicitAsConversionFailure]
+// CHECK:STDERR: fail_not_type.carbon:[[@LINE+7]]:19: error: cannot implicitly convert from `Core.IntLiteral` to `type` [ImplicitAsConversionFailure]
 // CHECK:STDERR: let n: i32 = 1 as 2;
 // CHECK:STDERR:                   ^
-// CHECK:STDERR: fail_not_type.carbon:[[@LINE+3]]:19: note: type `Core.IntLiteral` does not implement interface `Core.ImplicitAs(type)` [MissingImplInMemberAccessNote]
+// CHECK:STDERR: fail_not_type.carbon:[[@LINE+4]]:19: note: type `Core.IntLiteral` does not implement interface `Core.ImplicitAs(type)` [MissingImplInMemberAccessNote]
 // CHECK:STDERR: let n: i32 = 1 as 2;
 // CHECK:STDERR:                   ^
+// CHECK:STDERR:
 let n: i32 = 1 as 2;
 
 // CHECK:STDOUT: --- fail_not_type.carbon
@@ -46,7 +47,7 @@ let n: i32 = 1 as 2;
 // CHECK:STDOUT: !entry:
 // CHECK:STDOUT:   %int_1: Core.IntLiteral = int_value 1 [template = constants.%int_1]
 // CHECK:STDOUT:   %int_2: Core.IntLiteral = int_value 2 [template = constants.%int_2]
-// CHECK:STDOUT:   %.loc17: type = converted %int_2, <error> [template = <error>]
+// CHECK:STDOUT:   %.loc18: type = converted %int_2, <error> [template = <error>]
 // CHECK:STDOUT:   %n: %i32 = bind_name n, <error>
 // CHECK:STDOUT:   return
 // CHECK:STDOUT: }

@@ -8,9 +8,10 @@
 // TIP: To dump output, run:
 // TIP:   bazel run //toolchain/testing:file_test -- --dump_output --file_tests=toolchain/check/testdata/struct/fail_too_few_values.carbon
 
-// CHECK:STDERR: fail_too_few_values.carbon:[[@LINE+3]]:29: error: cannot initialize struct with 2 fields from struct with 1 field [StructInitElementCountMismatch]
+// CHECK:STDERR: fail_too_few_values.carbon:[[@LINE+4]]:29: error: cannot initialize struct with 2 fields from struct with 1 field [StructInitElementCountMismatch]
 // CHECK:STDERR: var x: {.a: i32, .b: i32} = {.a = 1};
 // CHECK:STDERR:                             ^~~~~~~~
+// CHECK:STDERR:
 var x: {.a: i32, .b: i32} = {.a = 1};
 
 // CHECK:STDOUT: --- fail_too_few_values.carbon
@@ -44,7 +45,7 @@ var x: {.a: i32, .b: i32} = {.a = 1};
 // CHECK:STDOUT: fn @__global_init() {
 // CHECK:STDOUT: !entry:
 // CHECK:STDOUT:   %int_1: Core.IntLiteral = int_value 1 [template = constants.%int_1]
-// CHECK:STDOUT:   %.loc14: %struct_type.a = struct_literal (%int_1)
+// CHECK:STDOUT:   %.loc15: %struct_type.a = struct_literal (%int_1)
 // CHECK:STDOUT:   assign file.%x.var, <error>
 // CHECK:STDOUT:   return
 // CHECK:STDOUT: }

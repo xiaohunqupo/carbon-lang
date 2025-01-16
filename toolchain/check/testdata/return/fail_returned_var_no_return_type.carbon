@@ -29,12 +29,13 @@ fn Procedure() {
 library "[[@TEST_NAME]]";
 
 fn ForgotReturnType() {
-  // CHECK:STDERR: fail_forgot_return_type.carbon:[[@LINE+6]]:3: error: cannot declare a `returned var` in this function [ReturnedVarWithNoReturnType]
+  // CHECK:STDERR: fail_forgot_return_type.carbon:[[@LINE+7]]:3: error: cannot declare a `returned var` in this function [ReturnedVarWithNoReturnType]
   // CHECK:STDERR:   returned var v: () = ();
   // CHECK:STDERR:   ^~~~~~~~
   // CHECK:STDERR: fail_forgot_return_type.carbon:[[@LINE-4]]:1: note: there was no return type provided [ReturnTypeOmittedNote]
   // CHECK:STDERR: fn ForgotReturnType() {
   // CHECK:STDERR: ^~~~~~~~~~~~~~~~~~~~~~~
+  // CHECK:STDERR:
   returned var v: () = ();
   return var;
 }
@@ -99,10 +100,10 @@ fn ForgotReturnType() {
 // CHECK:STDOUT: fn @ForgotReturnType() {
 // CHECK:STDOUT: !entry:
 // CHECK:STDOUT:   %v: %empty_tuple.type = bind_name v, <error>
-// CHECK:STDOUT:   %.loc11_25: %empty_tuple.type = tuple_literal ()
+// CHECK:STDOUT:   %.loc12_25: %empty_tuple.type = tuple_literal ()
 // CHECK:STDOUT:   assign <error>, <error>
 // CHECK:STDOUT:   %tuple: %empty_tuple.type = tuple_value () [template = constants.%empty_tuple]
-// CHECK:STDOUT:   %.loc11_16: %empty_tuple.type = converted %v, %tuple [template = constants.%empty_tuple]
-// CHECK:STDOUT:   return %.loc11_16
+// CHECK:STDOUT:   %.loc12_16: %empty_tuple.type = converted %v, %tuple [template = constants.%empty_tuple]
+// CHECK:STDOUT:   return %.loc12_16
 // CHECK:STDOUT: }
 // CHECK:STDOUT:

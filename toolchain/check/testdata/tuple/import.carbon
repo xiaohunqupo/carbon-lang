@@ -45,12 +45,13 @@ var c_bad: C((1, 2, 3)) = F();
 
 impl package Implicit;
 
-// CHECK:STDERR: fail_bad_value.impl.carbon:[[@LINE+6]]:1: error: cannot implicitly convert from `C((1, 2))` to `C((3, 4))` [ImplicitAsConversionFailure]
+// CHECK:STDERR: fail_bad_value.impl.carbon:[[@LINE+7]]:1: error: cannot implicitly convert from `C((1, 2))` to `C((3, 4))` [ImplicitAsConversionFailure]
 // CHECK:STDERR: var c_bad: C((3, 4)) = F();
 // CHECK:STDERR: ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-// CHECK:STDERR: fail_bad_value.impl.carbon:[[@LINE+3]]:1: note: type `C((1, 2))` does not implement interface `Core.ImplicitAs(C((3, 4)))` [MissingImplInMemberAccessNote]
+// CHECK:STDERR: fail_bad_value.impl.carbon:[[@LINE+4]]:1: note: type `C((1, 2))` does not implement interface `Core.ImplicitAs(C((3, 4)))` [MissingImplInMemberAccessNote]
 // CHECK:STDERR: var c_bad: C((3, 4)) = F();
 // CHECK:STDERR: ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+// CHECK:STDERR:
 var c_bad: C((3, 4)) = F();
 
 // CHECK:STDOUT: --- implicit.carbon
@@ -535,9 +536,9 @@ var c_bad: C((3, 4)) = F();
 // CHECK:STDOUT: fn @__global_init() {
 // CHECK:STDOUT: !entry:
 // CHECK:STDOUT:   %F.ref: %F.type = name_ref F, imports.%import_ref.b37 [template = constants.%F]
-// CHECK:STDOUT:   %.loc10_26: ref %C.cf0 = temporary_storage
-// CHECK:STDOUT:   %F.call: init %C.cf0 = call %F.ref() to %.loc10_26
-// CHECK:STDOUT:   %.loc10_27: %C.ed5 = converted %F.call, <error> [template = <error>]
+// CHECK:STDOUT:   %.loc11_26: ref %C.cf0 = temporary_storage
+// CHECK:STDOUT:   %F.call: init %C.cf0 = call %F.ref() to %.loc11_26
+// CHECK:STDOUT:   %.loc11_27: %C.ed5 = converted %F.call, <error> [template = <error>]
 // CHECK:STDOUT:   assign file.%c_bad.var, <error>
 // CHECK:STDOUT:   return
 // CHECK:STDOUT: }

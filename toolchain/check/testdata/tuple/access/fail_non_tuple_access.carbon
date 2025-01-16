@@ -16,9 +16,10 @@ fn Main() {
   0[1];
 
   var non_tuple: [i32; 2] = (5, 5);
-  // CHECK:STDERR: fail_non_tuple_access.carbon:[[@LINE+3]]:20: error: type `[i32; 2]` does not support tuple indexing; only tuples can be indexed that way [TupleIndexOnANonTupleType]
+  // CHECK:STDERR: fail_non_tuple_access.carbon:[[@LINE+4]]:20: error: type `[i32; 2]` does not support tuple indexing; only tuples can be indexed that way [TupleIndexOnANonTupleType]
   // CHECK:STDERR:   var first: i32 = non_tuple.0;
   // CHECK:STDERR:                    ^~~~~~~~~~~
+  // CHECK:STDERR:
   var first: i32 = non_tuple.0;
 }
 
@@ -95,7 +96,7 @@ fn Main() {
 // CHECK:STDOUT:   %first.var: ref %i32 = var first
 // CHECK:STDOUT:   %first: ref %i32 = bind_name first, %first.var
 // CHECK:STDOUT:   %non_tuple.ref: ref %array_type = name_ref non_tuple, %non_tuple
-// CHECK:STDOUT:   %int_0.loc22: Core.IntLiteral = int_value 0 [template = constants.%int_0]
+// CHECK:STDOUT:   %int_0.loc23: Core.IntLiteral = int_value 0 [template = constants.%int_0]
 // CHECK:STDOUT:   assign %first.var, <error>
 // CHECK:STDOUT:   return
 // CHECK:STDOUT: }

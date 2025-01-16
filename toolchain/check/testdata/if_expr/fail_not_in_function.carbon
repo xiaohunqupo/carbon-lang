@@ -43,9 +43,10 @@ var y: if true then i32 else f64;
 fn F(a: if true then i32 else f64);
 
 class C {
-  // CHECK:STDERR: fail_not_in_function.carbon:[[@LINE+3]]:10: error: semantics TODO: `Control flow expressions are currently only supported inside functions.` [SemanticsTodo]
+  // CHECK:STDERR: fail_not_in_function.carbon:[[@LINE+4]]:10: error: semantics TODO: `Control flow expressions are currently only supported inside functions.` [SemanticsTodo]
   // CHECK:STDERR:   var n: if true then i32 else f64;
   // CHECK:STDERR:          ^~~~~~~~~~~~~~~~~~~~~~~~~
+  // CHECK:STDERR:
   var n: if true then i32 else f64;
 }
 
@@ -95,7 +96,7 @@ class C {
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
 // CHECK:STDOUT: class @C {
-// CHECK:STDOUT:   %.loc49: %C.elem = field_decl n, element0 [template]
+// CHECK:STDOUT:   %.loc50: %C.elem = field_decl n, element0 [template]
 // CHECK:STDOUT:   %complete_type: <witness> = complete_type_witness %struct_type.n [template = constants.%complete_type.54b]
 // CHECK:STDOUT:   complete_type_witness = %complete_type
 // CHECK:STDOUT: }

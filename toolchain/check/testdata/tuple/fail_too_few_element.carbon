@@ -8,9 +8,10 @@
 // TIP: To dump output, run:
 // TIP:   bazel run //toolchain/testing:file_test -- --dump_output --file_tests=toolchain/check/testdata/tuple/fail_too_few_element.carbon
 
-// CHECK:STDERR: fail_too_few_element.carbon:[[@LINE+3]]:21: error: cannot initialize tuple of 2 elements from tuple with 1 element [TupleInitElementCountMismatch]
+// CHECK:STDERR: fail_too_few_element.carbon:[[@LINE+4]]:21: error: cannot initialize tuple of 2 elements from tuple with 1 element [TupleInitElementCountMismatch]
 // CHECK:STDERR: var x: (i32, i32) = (2, );
 // CHECK:STDERR:                     ^~~~~
+// CHECK:STDERR:
 var x: (i32, i32) = (2, );
 
 // CHECK:STDOUT: --- fail_too_few_element.carbon
@@ -44,7 +45,7 @@ var x: (i32, i32) = (2, );
 // CHECK:STDOUT: fn @__global_init() {
 // CHECK:STDOUT: !entry:
 // CHECK:STDOUT:   %int_2: Core.IntLiteral = int_value 2 [template = constants.%int_2]
-// CHECK:STDOUT:   %.loc14: %tuple.type.985 = tuple_literal (%int_2)
+// CHECK:STDOUT:   %.loc15: %tuple.type.985 = tuple_literal (%int_2)
 // CHECK:STDOUT:   assign file.%x.var, <error>
 // CHECK:STDOUT:   return
 // CHECK:STDOUT: }

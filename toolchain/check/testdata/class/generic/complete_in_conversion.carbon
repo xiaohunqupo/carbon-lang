@@ -24,9 +24,10 @@ class A(N:! i32) {
 }
 
 fn F(a: A(0)*) {
-  // CHECK:STDERR: fail_derived_to_base.carbon:[[@LINE+3]]:3: note: in `A(0)` used here [ResolvingSpecificHere]
+  // CHECK:STDERR: fail_derived_to_base.carbon:[[@LINE+4]]:3: note: in `A(0)` used here [ResolvingSpecificHere]
   // CHECK:STDERR:   let b: B* = a;
   // CHECK:STDERR:   ^~~~~~~~~~~~~~
+  // CHECK:STDERR:
   let b: B* = a;
 }
 
@@ -182,11 +183,11 @@ fn F(a: A(0)*) {
 // CHECK:STDOUT: fn @F(%a.param_patt: %ptr.b65) {
 // CHECK:STDOUT: !entry:
 // CHECK:STDOUT:   %a.ref: %ptr.b65 = name_ref a, %a
-// CHECK:STDOUT:   %.loc19_16.1: ref %A.6fc = deref %a.ref
-// CHECK:STDOUT:   %.loc19_16.2: ref %B = class_element_access %.loc19_16.1, element0
-// CHECK:STDOUT:   %addr: %ptr.e79 = addr_of %.loc19_16.2
-// CHECK:STDOUT:   %.loc19_16.3: %ptr.e79 = converted %a.ref, %addr
-// CHECK:STDOUT:   %b: %ptr.e79 = bind_name b, %.loc19_16.3
+// CHECK:STDOUT:   %.loc20_16.1: ref %A.6fc = deref %a.ref
+// CHECK:STDOUT:   %.loc20_16.2: ref %B = class_element_access %.loc20_16.1, element0
+// CHECK:STDOUT:   %addr: %ptr.e79 = addr_of %.loc20_16.2
+// CHECK:STDOUT:   %.loc20_16.3: %ptr.e79 = converted %a.ref, %addr
+// CHECK:STDOUT:   %b: %ptr.e79 = bind_name b, %.loc20_16.3
 // CHECK:STDOUT:   return
 // CHECK:STDOUT: }
 // CHECK:STDOUT:

@@ -94,9 +94,10 @@ library "[[@TEST_NAME]]";
 import Other library "other_define";
 import Other library "other_conflict";
 
-// CHECK:STDERR: fail_conflict.carbon:[[@LINE+3]]:8: note: in name lookup for `C` [InNameLookup]
+// CHECK:STDERR: fail_conflict.carbon:[[@LINE+4]]:8: note: in name lookup for `C` [InNameLookup]
 // CHECK:STDERR: var c: Other.C = {};
 // CHECK:STDERR:        ^~~~~~~
+// CHECK:STDERR:
 var c: Other.C = {};
 
 // CHECK:STDOUT: --- other_define.carbon
@@ -351,10 +352,10 @@ var c: Other.C = {};
 // CHECK:STDOUT:
 // CHECK:STDOUT: fn @__global_init() {
 // CHECK:STDOUT: !entry:
-// CHECK:STDOUT:   %.loc18_19.1: %empty_struct_type = struct_literal ()
-// CHECK:STDOUT:   %.loc18_19.2: init %C = class_init (), file.%c.var [template = constants.%C.val]
-// CHECK:STDOUT:   %.loc18_20: init %C = converted %.loc18_19.1, %.loc18_19.2 [template = constants.%C.val]
-// CHECK:STDOUT:   assign file.%c.var, %.loc18_20
+// CHECK:STDOUT:   %.loc19_19.1: %empty_struct_type = struct_literal ()
+// CHECK:STDOUT:   %.loc19_19.2: init %C = class_init (), file.%c.var [template = constants.%C.val]
+// CHECK:STDOUT:   %.loc19_20: init %C = converted %.loc19_19.1, %.loc19_19.2 [template = constants.%C.val]
+// CHECK:STDOUT:   assign file.%c.var, %.loc19_20
 // CHECK:STDOUT:   return
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
