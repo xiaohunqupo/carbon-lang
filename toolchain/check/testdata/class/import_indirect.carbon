@@ -127,9 +127,6 @@ var ptr: E* = &val;
 // CHECK:STDOUT: class @C {
 // CHECK:STDOUT:   %complete_type: <witness> = complete_type_witness %empty_struct_type [template = constants.%complete_type]
 // CHECK:STDOUT:   complete_type_witness = %complete_type
-// CHECK:STDOUT:
-// CHECK:STDOUT: !members:
-// CHECK:STDOUT:   .Self = constants.%C
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
 // CHECK:STDOUT: --- b.carbon
@@ -149,7 +146,6 @@ var ptr: E* = &val;
 // CHECK:STDOUT:     import Core//prelude/...
 // CHECK:STDOUT:   }
 // CHECK:STDOUT:   %import_ref.8f2: <witness> = import_ref Main//a, loc4_10, loaded [template = constants.%complete_type]
-// CHECK:STDOUT:   %import_ref.2c4 = import_ref Main//a, inst16 [no loc], unloaded
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
 // CHECK:STDOUT: file {
@@ -172,9 +168,6 @@ var ptr: E* = &val;
 // CHECK:STDOUT:
 // CHECK:STDOUT: class @C [from "a.carbon"] {
 // CHECK:STDOUT:   complete_type_witness = imports.%import_ref.8f2
-// CHECK:STDOUT:
-// CHECK:STDOUT: !members:
-// CHECK:STDOUT:   .Self = imports.%import_ref.2c4
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
 // CHECK:STDOUT: fn @__global_init() {
@@ -206,7 +199,6 @@ var ptr: E* = &val;
 // CHECK:STDOUT:     import Core//prelude/...
 // CHECK:STDOUT:   }
 // CHECK:STDOUT:   %import_ref.8f2: <witness> = import_ref Main//a, loc4_10, loaded [template = constants.%complete_type]
-// CHECK:STDOUT:   %import_ref.2c4 = import_ref Main//a, inst16 [no loc], unloaded
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
 // CHECK:STDOUT: file {
@@ -229,9 +221,6 @@ var ptr: E* = &val;
 // CHECK:STDOUT:
 // CHECK:STDOUT: class @C [from "a.carbon"] {
 // CHECK:STDOUT:   complete_type_witness = imports.%import_ref.8f2
-// CHECK:STDOUT:
-// CHECK:STDOUT: !members:
-// CHECK:STDOUT:   .Self = imports.%import_ref.2c4
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
 // CHECK:STDOUT: fn @__global_init() {
@@ -266,7 +255,6 @@ var ptr: E* = &val;
 // CHECK:STDOUT:     import Core//prelude/...
 // CHECK:STDOUT:   }
 // CHECK:STDOUT:   %import_ref.8f2: <witness> = import_ref Main//a, loc4_10, loaded [template = constants.%complete_type]
-// CHECK:STDOUT:   %import_ref.2c4 = import_ref Main//a, inst16 [no loc], unloaded
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
 // CHECK:STDOUT: file {
@@ -289,9 +277,6 @@ var ptr: E* = &val;
 // CHECK:STDOUT:
 // CHECK:STDOUT: class @C [from "a.carbon"] {
 // CHECK:STDOUT:   complete_type_witness = imports.%import_ref.8f2
-// CHECK:STDOUT:
-// CHECK:STDOUT: !members:
-// CHECK:STDOUT:   .Self = imports.%import_ref.2c4
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
 // CHECK:STDOUT: fn @__global_init() {
@@ -326,7 +311,6 @@ var ptr: E* = &val;
 // CHECK:STDOUT:     import Core//prelude/...
 // CHECK:STDOUT:   }
 // CHECK:STDOUT:   %import_ref.8f2: <witness> = import_ref Main//a, loc4_10, loaded [template = constants.%complete_type]
-// CHECK:STDOUT:   %import_ref.2c4 = import_ref Main//a, inst16 [no loc], unloaded
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
 // CHECK:STDOUT: file {
@@ -349,9 +333,6 @@ var ptr: E* = &val;
 // CHECK:STDOUT:
 // CHECK:STDOUT: class @C [from "a.carbon"] {
 // CHECK:STDOUT:   complete_type_witness = imports.%import_ref.8f2
-// CHECK:STDOUT:
-// CHECK:STDOUT: !members:
-// CHECK:STDOUT:   .Self = imports.%import_ref.2c4
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
 // CHECK:STDOUT: fn @__global_init() {
@@ -388,7 +369,6 @@ var ptr: E* = &val;
 // CHECK:STDOUT:     import Core//prelude/...
 // CHECK:STDOUT:   }
 // CHECK:STDOUT:   %import_ref.8db: <witness> = import_ref Main//b, inst21 [indirect], loaded [template = constants.%complete_type]
-// CHECK:STDOUT:   %import_ref.6a9 = import_ref Main//b, inst22 [indirect], unloaded
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
 // CHECK:STDOUT: file {
@@ -413,9 +393,6 @@ var ptr: E* = &val;
 // CHECK:STDOUT:
 // CHECK:STDOUT: class @C [from "b.carbon"] {
 // CHECK:STDOUT:   complete_type_witness = imports.%import_ref.8db
-// CHECK:STDOUT:
-// CHECK:STDOUT: !members:
-// CHECK:STDOUT:   .Self = imports.%import_ref.6a9
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
 // CHECK:STDOUT: fn @__global_init() {
@@ -452,7 +429,6 @@ var ptr: E* = &val;
 // CHECK:STDOUT:     import Core//prelude/...
 // CHECK:STDOUT:   }
 // CHECK:STDOUT:   %import_ref.8db: <witness> = import_ref Main//b, inst21 [indirect], loaded [template = constants.%complete_type]
-// CHECK:STDOUT:   %import_ref.6a9 = import_ref Main//b, inst22 [indirect], unloaded
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
 // CHECK:STDOUT: file {
@@ -477,9 +453,6 @@ var ptr: E* = &val;
 // CHECK:STDOUT:
 // CHECK:STDOUT: class @C [from "b.carbon"] {
 // CHECK:STDOUT:   complete_type_witness = imports.%import_ref.8db
-// CHECK:STDOUT:
-// CHECK:STDOUT: !members:
-// CHECK:STDOUT:   .Self = imports.%import_ref.6a9
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
 // CHECK:STDOUT: fn @__global_init() {
