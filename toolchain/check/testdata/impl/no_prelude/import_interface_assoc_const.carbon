@@ -266,7 +266,7 @@ impl CC as NonType where .Y = {.a = {}} { }
 // CHECK:STDOUT:   %import_ref.43d = import_ref Main//interface, I3, unloaded
 // CHECK:STDOUT:   %import_ref.dfc = import_ref Main//interface, NonType, unloaded
 // CHECK:STDOUT:   %import_ref.e5d = import_ref Main//interface, inst15 [no loc], unloaded
-// CHECK:STDOUT:   %import_ref.15c: %assoc_type = import_ref Main//interface, loc3_27, loaded [template = constants.%assoc0]
+// CHECK:STDOUT:   %import_ref.15c: %assoc_type = import_ref Main//interface, loc3_20, loaded [template = constants.%assoc0]
 // CHECK:STDOUT:   %import_ref.3b7: type = import_ref Main//interface, T, loaded [template = %T]
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
@@ -334,7 +334,7 @@ impl CC as NonType where .Y = {.a = {}} { }
 // CHECK:STDOUT:   %import_ref.43d = import_ref Main//interface, I3, unloaded
 // CHECK:STDOUT:   %import_ref.dfc = import_ref Main//interface, NonType, unloaded
 // CHECK:STDOUT:   %import_ref.e5d = import_ref Main//interface, inst15 [no loc], unloaded
-// CHECK:STDOUT:   %import_ref.15c: %assoc_type = import_ref Main//interface, loc3_27, loaded [template = constants.%assoc0]
+// CHECK:STDOUT:   %import_ref.15c: %assoc_type = import_ref Main//interface, loc3_20, loaded [template = constants.%assoc0]
 // CHECK:STDOUT:   %import_ref.3b7: type = import_ref Main//interface, T, loaded [template = %T]
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
@@ -416,7 +416,7 @@ impl CC as NonType where .Y = {.a = {}} { }
 // CHECK:STDOUT:   %import_ref.43d = import_ref Main//interface, I3, unloaded
 // CHECK:STDOUT:   %import_ref.dfc = import_ref Main//interface, NonType, unloaded
 // CHECK:STDOUT:   %import_ref.e5d = import_ref Main//interface, inst15 [no loc], unloaded
-// CHECK:STDOUT:   %import_ref.15c: %assoc_type = import_ref Main//interface, loc3_27, loaded [template = constants.%assoc0]
+// CHECK:STDOUT:   %import_ref.15c: %assoc_type = import_ref Main//interface, loc3_20, loaded [template = constants.%assoc0]
 // CHECK:STDOUT:   %import_ref.3b7: type = import_ref Main//interface, T, loaded [template = %T]
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
@@ -490,7 +490,7 @@ impl CC as NonType where .Y = {.a = {}} { }
 // CHECK:STDOUT:   %import_ref.43d = import_ref Main//interface, I3, unloaded
 // CHECK:STDOUT:   %import_ref.dfc = import_ref Main//interface, NonType, unloaded
 // CHECK:STDOUT:   %import_ref.e5d = import_ref Main//interface, inst15 [no loc], unloaded
-// CHECK:STDOUT:   %import_ref.15c: %assoc_type = import_ref Main//interface, loc3_27, loaded [template = constants.%assoc0]
+// CHECK:STDOUT:   %import_ref.15c: %assoc_type = import_ref Main//interface, loc3_20, loaded [template = constants.%assoc0]
 // CHECK:STDOUT:   %import_ref.3b7: type = import_ref Main//interface, T, loaded [template = %T]
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
@@ -576,9 +576,9 @@ impl CC as NonType where .Y = {.a = {}} { }
 // CHECK:STDOUT:   %import_ref.f40: type = import_ref Main//interface, I3, loaded [template = constants.%I3.type]
 // CHECK:STDOUT:   %import_ref.dfc = import_ref Main//interface, NonType, unloaded
 // CHECK:STDOUT:   %import_ref.148 = import_ref Main//interface, inst23 [no loc], unloaded
-// CHECK:STDOUT:   %import_ref.4d5: %assoc_type = import_ref Main//interface, loc6_16, loaded [template = constants.%assoc0]
-// CHECK:STDOUT:   %import_ref.2f7: %assoc_type = import_ref Main//interface, loc7_16, loaded [template = constants.%assoc1]
-// CHECK:STDOUT:   %import_ref.fc4: %assoc_type = import_ref Main//interface, loc8_16, loaded [template = constants.%assoc2]
+// CHECK:STDOUT:   %import_ref.4d5: %assoc_type = import_ref Main//interface, loc6_9, loaded [template = constants.%assoc0]
+// CHECK:STDOUT:   %import_ref.2f7: %assoc_type = import_ref Main//interface, loc7_9, loaded [template = constants.%assoc1]
+// CHECK:STDOUT:   %import_ref.fc4: %assoc_type = import_ref Main//interface, loc8_9, loaded [template = constants.%assoc2]
 // CHECK:STDOUT:   %import_ref.cdd = import_ref Main//interface, T1, unloaded
 // CHECK:STDOUT:   %import_ref.bad = import_ref Main//interface, T2, unloaded
 // CHECK:STDOUT:   %import_ref.742 = import_ref Main//interface, T3, unloaded
@@ -689,7 +689,7 @@ impl CC as NonType where .Y = {.a = {}} { }
 // CHECK:STDOUT:   %import_ref.43d = import_ref Main//interface, I3, unloaded
 // CHECK:STDOUT:   %import_ref.dfc = import_ref Main//interface, NonType, unloaded
 // CHECK:STDOUT:   %import_ref.e5d = import_ref Main//interface, inst15 [no loc], unloaded
-// CHECK:STDOUT:   %import_ref.15c: %assoc_type = import_ref Main//interface, loc3_27, loaded [template = constants.%assoc0]
+// CHECK:STDOUT:   %import_ref.15c: %assoc_type = import_ref Main//interface, loc3_20, loaded [template = constants.%assoc0]
 // CHECK:STDOUT:   %import_ref.3b7: type = import_ref Main//interface, T, loaded [template = %T]
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
@@ -762,7 +762,7 @@ impl CC as NonType where .Y = {.a = {}} { }
 // CHECK:STDOUT:   %import_ref.43d = import_ref Main//interface, I3, unloaded
 // CHECK:STDOUT:   %import_ref.dfc = import_ref Main//interface, NonType, unloaded
 // CHECK:STDOUT:   %import_ref.e5d = import_ref Main//interface, inst15 [no loc], unloaded
-// CHECK:STDOUT:   %import_ref.15c: %assoc_type = import_ref Main//interface, loc3_27, loaded [template = constants.%assoc0]
+// CHECK:STDOUT:   %import_ref.15c: %assoc_type = import_ref Main//interface, loc3_20, loaded [template = constants.%assoc0]
 // CHECK:STDOUT:   %import_ref.3b7: type = import_ref Main//interface, T, loaded [template = %T]
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
@@ -836,7 +836,7 @@ impl CC as NonType where .Y = {.a = {}} { }
 // CHECK:STDOUT:   %import_ref.43d = import_ref Main//interface, I3, unloaded
 // CHECK:STDOUT:   %import_ref.dfc = import_ref Main//interface, NonType, unloaded
 // CHECK:STDOUT:   %import_ref.e5d = import_ref Main//interface, inst15 [no loc], unloaded
-// CHECK:STDOUT:   %import_ref.15c: %assoc_type = import_ref Main//interface, loc3_27, loaded [template = constants.%assoc0]
+// CHECK:STDOUT:   %import_ref.15c: %assoc_type = import_ref Main//interface, loc3_20, loaded [template = constants.%assoc0]
 // CHECK:STDOUT:   %import_ref.08d = import_ref Main//interface, T, unloaded
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
@@ -907,7 +907,7 @@ impl CC as NonType where .Y = {.a = {}} { }
 // CHECK:STDOUT:   %import_ref.43d = import_ref Main//interface, I3, unloaded
 // CHECK:STDOUT:   %import_ref.dfc = import_ref Main//interface, NonType, unloaded
 // CHECK:STDOUT:   %import_ref.e5d = import_ref Main//interface, inst15 [no loc], unloaded
-// CHECK:STDOUT:   %import_ref.15c: %assoc_type = import_ref Main//interface, loc3_27, loaded [template = constants.%assoc0]
+// CHECK:STDOUT:   %import_ref.15c: %assoc_type = import_ref Main//interface, loc3_20, loaded [template = constants.%assoc0]
 // CHECK:STDOUT:   %import_ref.08d = import_ref Main//interface, T, unloaded
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
@@ -978,7 +978,7 @@ impl CC as NonType where .Y = {.a = {}} { }
 // CHECK:STDOUT:   %import_ref.43d = import_ref Main//interface, I3, unloaded
 // CHECK:STDOUT:   %import_ref.dfc = import_ref Main//interface, NonType, unloaded
 // CHECK:STDOUT:   %import_ref.e5d = import_ref Main//interface, inst15 [no loc], unloaded
-// CHECK:STDOUT:   %import_ref.15c: %assoc_type = import_ref Main//interface, loc3_27, loaded [template = constants.%assoc0]
+// CHECK:STDOUT:   %import_ref.15c: %assoc_type = import_ref Main//interface, loc3_20, loaded [template = constants.%assoc0]
 // CHECK:STDOUT:   %import_ref.08d = import_ref Main//interface, T, unloaded
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
@@ -1050,7 +1050,7 @@ impl CC as NonType where .Y = {.a = {}} { }
 // CHECK:STDOUT:   %import_ref.43d = import_ref Main//interface, I3, unloaded
 // CHECK:STDOUT:   %import_ref.dfc = import_ref Main//interface, NonType, unloaded
 // CHECK:STDOUT:   %import_ref.e5d = import_ref Main//interface, inst15 [no loc], unloaded
-// CHECK:STDOUT:   %import_ref.15c: %assoc_type = import_ref Main//interface, loc3_27, loaded [template = constants.%assoc0]
+// CHECK:STDOUT:   %import_ref.15c: %assoc_type = import_ref Main//interface, loc3_20, loaded [template = constants.%assoc0]
 // CHECK:STDOUT:   %import_ref.3b7: type = import_ref Main//interface, T, loaded [template = %T]
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
@@ -1128,7 +1128,7 @@ impl CC as NonType where .Y = {.a = {}} { }
 // CHECK:STDOUT:   %import_ref.43d = import_ref Main//interface, I3, unloaded
 // CHECK:STDOUT:   %import_ref.22d: type = import_ref Main//interface, NonType, loaded [template = constants.%NonType.type]
 // CHECK:STDOUT:   %import_ref.8b7 = import_ref Main//interface, inst37 [no loc], unloaded
-// CHECK:STDOUT:   %import_ref.abe: %assoc_type = import_ref Main//interface, loc12_19, loaded [template = constants.%assoc0]
+// CHECK:STDOUT:   %import_ref.abe: %assoc_type = import_ref Main//interface, loc12_8, loaded [template = constants.%assoc0]
 // CHECK:STDOUT:   %import_ref.d24: %struct_type.a.225 = import_ref Main//interface, Y, loaded [template = %Y]
 // CHECK:STDOUT: }
 // CHECK:STDOUT:

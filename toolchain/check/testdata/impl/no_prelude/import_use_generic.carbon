@@ -222,7 +222,17 @@ fn F() -> c.(I.F)() {}
 // CHECK:STDOUT:     .F = %F.decl
 // CHECK:STDOUT:   }
 // CHECK:STDOUT:   %default.import = import <invalid>
+// CHECK:STDOUT:   name_binding_decl {
+// CHECK:STDOUT:     %c.patt: %C.7a7 = binding_pattern c
+// CHECK:STDOUT:     %.loc6_1: %C.7a7 = var_pattern %c.patt
+// CHECK:STDOUT:   }
 // CHECK:STDOUT:   %c.var: ref %C.7a7 = var c
+// CHECK:STDOUT:   %.loc6_12.1: type = splice_block %C [template = constants.%C.7a7] {
+// CHECK:STDOUT:     %C.ref: %C.type = name_ref C, imports.%import_ref.bb9 [template = constants.%C.generic]
+// CHECK:STDOUT:     %.loc6_11: %empty_struct_type = struct_literal ()
+// CHECK:STDOUT:     %.loc6_12.2: type = converted %.loc6_11, constants.%empty_struct_type [template = constants.%empty_struct_type]
+// CHECK:STDOUT:     %C: type = class_type @C, @C(constants.%empty_struct_type) [template = constants.%C.7a7]
+// CHECK:STDOUT:   }
 // CHECK:STDOUT:   %c: ref %C.7a7 = bind_name c, %c.var
 // CHECK:STDOUT:   %F.decl: %F.type.b25 = fn_decl @F.3 [template = constants.%F.c41] {
 // CHECK:STDOUT:     %return.patt: <error> = return_slot_pattern
@@ -295,8 +305,8 @@ fn F() -> c.(I.F)() {}
 // CHECK:STDOUT: !entry:
 // CHECK:STDOUT:   %.loc6_17.1: %empty_struct_type = struct_literal ()
 // CHECK:STDOUT:   %.loc6_17.2: init %C.7a7 = class_init (), file.%c.var [template = constants.%C.val]
-// CHECK:STDOUT:   %.loc6_18: init %C.7a7 = converted %.loc6_17.1, %.loc6_17.2 [template = constants.%C.val]
-// CHECK:STDOUT:   assign file.%c.var, %.loc6_18
+// CHECK:STDOUT:   %.loc6_1: init %C.7a7 = converted %.loc6_17.1, %.loc6_17.2 [template = constants.%C.val]
+// CHECK:STDOUT:   assign file.%c.var, %.loc6_1
 // CHECK:STDOUT:   return
 // CHECK:STDOUT: }
 // CHECK:STDOUT:

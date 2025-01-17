@@ -40,9 +40,25 @@ var A: () = ();
 // CHECK:STDOUT:     .A = %A.loc11
 // CHECK:STDOUT:   }
 // CHECK:STDOUT:   %A.loc11: <namespace> = namespace [template] {}
+// CHECK:STDOUT:   name_binding_decl {
+// CHECK:STDOUT:     %A.patt.loc20: %empty_tuple.type = binding_pattern A
+// CHECK:STDOUT:     %.loc20_1: %empty_tuple.type = var_pattern %A.patt.loc20
+// CHECK:STDOUT:   }
 // CHECK:STDOUT:   %A.var.loc20: ref %empty_tuple.type = var A
+// CHECK:STDOUT:   %.loc20_9.1: type = splice_block %.loc20_9.3 [template = constants.%empty_tuple.type] {
+// CHECK:STDOUT:     %.loc20_9.2: %empty_tuple.type = tuple_literal ()
+// CHECK:STDOUT:     %.loc20_9.3: type = converted %.loc20_9.2, constants.%empty_tuple.type [template = constants.%empty_tuple.type]
+// CHECK:STDOUT:   }
 // CHECK:STDOUT:   %A.loc20: ref %empty_tuple.type = bind_name A, %A.var.loc20
+// CHECK:STDOUT:   name_binding_decl {
+// CHECK:STDOUT:     %A.patt.loc29: %empty_tuple.type = binding_pattern A
+// CHECK:STDOUT:     %.loc29_1: %empty_tuple.type = var_pattern %A.patt.loc29
+// CHECK:STDOUT:   }
 // CHECK:STDOUT:   %A.var.loc29: ref %empty_tuple.type = var A
+// CHECK:STDOUT:   %.loc29_9.1: type = splice_block %.loc29_9.3 [template = constants.%empty_tuple.type] {
+// CHECK:STDOUT:     %.loc29_9.2: %empty_tuple.type = tuple_literal ()
+// CHECK:STDOUT:     %.loc29_9.3: type = converted %.loc29_9.2, constants.%empty_tuple.type [template = constants.%empty_tuple.type]
+// CHECK:STDOUT:   }
 // CHECK:STDOUT:   %A.loc29: ref %empty_tuple.type = bind_name A, %A.var.loc29
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
@@ -50,8 +66,8 @@ var A: () = ();
 // CHECK:STDOUT: !entry:
 // CHECK:STDOUT:   %.loc29_14.1: %empty_tuple.type = tuple_literal ()
 // CHECK:STDOUT:   %.loc29_14.2: init %empty_tuple.type = tuple_init () to file.%A.var.loc29 [template = constants.%empty_tuple]
-// CHECK:STDOUT:   %.loc29_15: init %empty_tuple.type = converted %.loc29_14.1, %.loc29_14.2 [template = constants.%empty_tuple]
-// CHECK:STDOUT:   assign file.%A.var.loc29, %.loc29_15
+// CHECK:STDOUT:   %.loc29_1: init %empty_tuple.type = converted %.loc29_14.1, %.loc29_14.2 [template = constants.%empty_tuple]
+// CHECK:STDOUT:   assign file.%A.var.loc29, %.loc29_1
 // CHECK:STDOUT:   return
 // CHECK:STDOUT: }
 // CHECK:STDOUT:

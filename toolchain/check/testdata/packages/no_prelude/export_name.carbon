@@ -228,13 +228,21 @@ private export C;
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
 // CHECK:STDOUT: class @C {
-// CHECK:STDOUT:   %.loc5: %C.elem = field_decl x, element0 [template]
+// CHECK:STDOUT:   %.loc5_8: %C.elem = field_decl x, element0 [template]
+// CHECK:STDOUT:   name_binding_decl {
+// CHECK:STDOUT:     %.loc5_3: %C.elem = var_pattern %.loc5_8
+// CHECK:STDOUT:   }
+// CHECK:STDOUT:   %.var: ref %C.elem = var <invalid>
 // CHECK:STDOUT:   %complete_type: <witness> = complete_type_witness %struct_type.x [template = constants.%complete_type.9be]
 // CHECK:STDOUT:   complete_type_witness = %complete_type
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
 // CHECK:STDOUT: class @NSC {
-// CHECK:STDOUT:   %.loc10: %NSC.elem = field_decl y, element0 [template]
+// CHECK:STDOUT:   %.loc10_8: %NSC.elem = field_decl y, element0 [template]
+// CHECK:STDOUT:   name_binding_decl {
+// CHECK:STDOUT:     %.loc10_3: %NSC.elem = var_pattern %.loc10_8
+// CHECK:STDOUT:   }
+// CHECK:STDOUT:   %.var: ref %NSC.elem = var <invalid>
 // CHECK:STDOUT:   %complete_type: <witness> = complete_type_witness %struct_type.y [template = constants.%complete_type.9f4]
 // CHECK:STDOUT:   complete_type_witness = %complete_type
 // CHECK:STDOUT: }
@@ -366,6 +374,7 @@ private export C;
 // CHECK:STDOUT:   %NS: <namespace> = namespace %import_ref.0f6, [template] {
 // CHECK:STDOUT:     .NSC = %import_ref.231
 // CHECK:STDOUT:   }
+// CHECK:STDOUT:   %import_ref.231: type = import_ref Main//export, NSC, loaded [template = constants.%NSC]
 // CHECK:STDOUT:   %import_ref.ad3: <witness> = import_ref Main//export, inst23 [indirect], loaded [template = constants.%complete_type.9be]
 // CHECK:STDOUT:   %import_ref.63c: <witness> = import_ref Main//export, inst31 [indirect], loaded [template = constants.%complete_type.9f4]
 // CHECK:STDOUT: }
@@ -378,9 +387,22 @@ private export C;
 // CHECK:STDOUT:     .nsc = %nsc
 // CHECK:STDOUT:   }
 // CHECK:STDOUT:   %default.import = import <invalid>
+// CHECK:STDOUT:   name_binding_decl {
+// CHECK:STDOUT:     %c.patt: %C = binding_pattern c
+// CHECK:STDOUT:     %.loc6: %C = var_pattern %c.patt
+// CHECK:STDOUT:   }
 // CHECK:STDOUT:   %c.var: ref %C = var c
+// CHECK:STDOUT:   %C.ref: type = name_ref C, imports.%import_ref.06e [template = constants.%C]
 // CHECK:STDOUT:   %c: ref %C = bind_name c, %c.var
+// CHECK:STDOUT:   name_binding_decl {
+// CHECK:STDOUT:     %nsc.patt: %NSC = binding_pattern nsc
+// CHECK:STDOUT:     %.loc7_1: %NSC = var_pattern %nsc.patt
+// CHECK:STDOUT:   }
 // CHECK:STDOUT:   %nsc.var: ref %NSC = var nsc
+// CHECK:STDOUT:   %.loc7_12: type = splice_block %NSC.ref [template = constants.%NSC] {
+// CHECK:STDOUT:     %NS.ref: <namespace> = name_ref NS, imports.%NS [template = imports.%NS]
+// CHECK:STDOUT:     %NSC.ref: type = name_ref NSC, imports.%import_ref.231 [template = constants.%NSC]
+// CHECK:STDOUT:   }
 // CHECK:STDOUT:   %nsc: ref %NSC = bind_name nsc, %nsc.var
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
@@ -400,16 +422,16 @@ private export C;
 // CHECK:STDOUT:   %.loc6_19.2: init %empty_tuple.type = tuple_init () to %.loc6_20.2 [template = constants.%empty_tuple]
 // CHECK:STDOUT:   %.loc6_20.3: init %empty_tuple.type = converted %.loc6_19.1, %.loc6_19.2 [template = constants.%empty_tuple]
 // CHECK:STDOUT:   %.loc6_20.4: init %C = class_init (%.loc6_20.3), file.%c.var [template = constants.%C.val]
-// CHECK:STDOUT:   %.loc6_21: init %C = converted %.loc6_20.1, %.loc6_20.4 [template = constants.%C.val]
-// CHECK:STDOUT:   assign file.%c.var, %.loc6_21
+// CHECK:STDOUT:   %.loc6_1: init %C = converted %.loc6_20.1, %.loc6_20.4 [template = constants.%C.val]
+// CHECK:STDOUT:   assign file.%c.var, %.loc6_1
 // CHECK:STDOUT:   %.loc7_26.1: %empty_tuple.type = tuple_literal ()
 // CHECK:STDOUT:   %.loc7_27.1: %struct_type.y = struct_literal (%.loc7_26.1)
 // CHECK:STDOUT:   %.loc7_27.2: ref %empty_tuple.type = class_element_access file.%nsc.var, element0
 // CHECK:STDOUT:   %.loc7_26.2: init %empty_tuple.type = tuple_init () to %.loc7_27.2 [template = constants.%empty_tuple]
 // CHECK:STDOUT:   %.loc7_27.3: init %empty_tuple.type = converted %.loc7_26.1, %.loc7_26.2 [template = constants.%empty_tuple]
 // CHECK:STDOUT:   %.loc7_27.4: init %NSC = class_init (%.loc7_27.3), file.%nsc.var [template = constants.%NSC.val]
-// CHECK:STDOUT:   %.loc7_28: init %NSC = converted %.loc7_27.1, %.loc7_27.4 [template = constants.%NSC.val]
-// CHECK:STDOUT:   assign file.%nsc.var, %.loc7_28
+// CHECK:STDOUT:   %.loc7_1: init %NSC = converted %.loc7_27.1, %.loc7_27.4 [template = constants.%NSC.val]
+// CHECK:STDOUT:   assign file.%nsc.var, %.loc7_1
 // CHECK:STDOUT:   return
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
@@ -434,6 +456,7 @@ private export C;
 // CHECK:STDOUT:   %NS: <namespace> = namespace %import_ref.06f, [template] {
 // CHECK:STDOUT:     .NSC = %import_ref.bb8
 // CHECK:STDOUT:   }
+// CHECK:STDOUT:   %import_ref.bb8: type = import_ref Main//export_export, NSC, loaded [template = constants.%NSC]
 // CHECK:STDOUT:   %import_ref.328: <witness> = import_ref Main//export_export, inst23 [indirect], loaded [template = constants.%complete_type.9be]
 // CHECK:STDOUT:   %import_ref.c12: <witness> = import_ref Main//export_export, inst31 [indirect], loaded [template = constants.%complete_type.9f4]
 // CHECK:STDOUT: }
@@ -447,9 +470,22 @@ private export C;
 // CHECK:STDOUT:   }
 // CHECK:STDOUT:   %default.import.loc2_6.1 = import <invalid>
 // CHECK:STDOUT:   %default.import.loc2_6.2 = import <invalid>
+// CHECK:STDOUT:   name_binding_decl {
+// CHECK:STDOUT:     %c.patt: %C = binding_pattern c
+// CHECK:STDOUT:     %.loc4: %C = var_pattern %c.patt
+// CHECK:STDOUT:   }
 // CHECK:STDOUT:   %c.var: ref %C = var c
+// CHECK:STDOUT:   %C.ref: type = name_ref C, imports.%import_ref.f43 [template = constants.%C]
 // CHECK:STDOUT:   %c: ref %C = bind_name c, %c.var
+// CHECK:STDOUT:   name_binding_decl {
+// CHECK:STDOUT:     %nsc.patt: %NSC = binding_pattern nsc
+// CHECK:STDOUT:     %.loc5_1: %NSC = var_pattern %nsc.patt
+// CHECK:STDOUT:   }
 // CHECK:STDOUT:   %nsc.var: ref %NSC = var nsc
+// CHECK:STDOUT:   %.loc5_12: type = splice_block %NSC.ref [template = constants.%NSC] {
+// CHECK:STDOUT:     %NS.ref: <namespace> = name_ref NS, imports.%NS [template = imports.%NS]
+// CHECK:STDOUT:     %NSC.ref: type = name_ref NSC, imports.%import_ref.bb8 [template = constants.%NSC]
+// CHECK:STDOUT:   }
 // CHECK:STDOUT:   %nsc: ref %NSC = bind_name nsc, %nsc.var
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
@@ -469,16 +505,16 @@ private export C;
 // CHECK:STDOUT:   %.loc4_19.2: init %empty_tuple.type = tuple_init () to %.loc4_20.2 [template = constants.%empty_tuple]
 // CHECK:STDOUT:   %.loc4_20.3: init %empty_tuple.type = converted %.loc4_19.1, %.loc4_19.2 [template = constants.%empty_tuple]
 // CHECK:STDOUT:   %.loc4_20.4: init %C = class_init (%.loc4_20.3), file.%c.var [template = constants.%C.val]
-// CHECK:STDOUT:   %.loc4_21: init %C = converted %.loc4_20.1, %.loc4_20.4 [template = constants.%C.val]
-// CHECK:STDOUT:   assign file.%c.var, %.loc4_21
+// CHECK:STDOUT:   %.loc4_1: init %C = converted %.loc4_20.1, %.loc4_20.4 [template = constants.%C.val]
+// CHECK:STDOUT:   assign file.%c.var, %.loc4_1
 // CHECK:STDOUT:   %.loc5_26.1: %empty_tuple.type = tuple_literal ()
 // CHECK:STDOUT:   %.loc5_27.1: %struct_type.y = struct_literal (%.loc5_26.1)
 // CHECK:STDOUT:   %.loc5_27.2: ref %empty_tuple.type = class_element_access file.%nsc.var, element0
 // CHECK:STDOUT:   %.loc5_26.2: init %empty_tuple.type = tuple_init () to %.loc5_27.2 [template = constants.%empty_tuple]
 // CHECK:STDOUT:   %.loc5_27.3: init %empty_tuple.type = converted %.loc5_26.1, %.loc5_26.2 [template = constants.%empty_tuple]
 // CHECK:STDOUT:   %.loc5_27.4: init %NSC = class_init (%.loc5_27.3), file.%nsc.var [template = constants.%NSC.val]
-// CHECK:STDOUT:   %.loc5_28: init %NSC = converted %.loc5_27.1, %.loc5_27.4 [template = constants.%NSC.val]
-// CHECK:STDOUT:   assign file.%nsc.var, %.loc5_28
+// CHECK:STDOUT:   %.loc5_1: init %NSC = converted %.loc5_27.1, %.loc5_27.4 [template = constants.%NSC.val]
+// CHECK:STDOUT:   assign file.%nsc.var, %.loc5_1
 // CHECK:STDOUT:   return
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
@@ -503,6 +539,7 @@ private export C;
 // CHECK:STDOUT:   %NS: <namespace> = namespace %import_ref.06f, [template] {
 // CHECK:STDOUT:     .NSC = %import_ref.bb8
 // CHECK:STDOUT:   }
+// CHECK:STDOUT:   %import_ref.bb8: type = import_ref Main//export_export, NSC, loaded [template = constants.%NSC]
 // CHECK:STDOUT:   %import_ref.328: <witness> = import_ref Main//export_export, inst23 [indirect], loaded [template = constants.%complete_type.9be]
 // CHECK:STDOUT:   %import_ref.c12: <witness> = import_ref Main//export_export, inst31 [indirect], loaded [template = constants.%complete_type.9f4]
 // CHECK:STDOUT: }
@@ -515,9 +552,22 @@ private export C;
 // CHECK:STDOUT:     .nsc = %nsc
 // CHECK:STDOUT:   }
 // CHECK:STDOUT:   %default.import = import <invalid>
+// CHECK:STDOUT:   name_binding_decl {
+// CHECK:STDOUT:     %c.patt: %C = binding_pattern c
+// CHECK:STDOUT:     %.loc6: %C = var_pattern %c.patt
+// CHECK:STDOUT:   }
 // CHECK:STDOUT:   %c.var: ref %C = var c
+// CHECK:STDOUT:   %C.ref: type = name_ref C, imports.%import_ref.f43 [template = constants.%C]
 // CHECK:STDOUT:   %c: ref %C = bind_name c, %c.var
+// CHECK:STDOUT:   name_binding_decl {
+// CHECK:STDOUT:     %nsc.patt: %NSC = binding_pattern nsc
+// CHECK:STDOUT:     %.loc7_1: %NSC = var_pattern %nsc.patt
+// CHECK:STDOUT:   }
 // CHECK:STDOUT:   %nsc.var: ref %NSC = var nsc
+// CHECK:STDOUT:   %.loc7_12: type = splice_block %NSC.ref [template = constants.%NSC] {
+// CHECK:STDOUT:     %NS.ref: <namespace> = name_ref NS, imports.%NS [template = imports.%NS]
+// CHECK:STDOUT:     %NSC.ref: type = name_ref NSC, imports.%import_ref.bb8 [template = constants.%NSC]
+// CHECK:STDOUT:   }
 // CHECK:STDOUT:   %nsc: ref %NSC = bind_name nsc, %nsc.var
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
@@ -537,16 +587,16 @@ private export C;
 // CHECK:STDOUT:   %.loc6_19.2: init %empty_tuple.type = tuple_init () to %.loc6_20.2 [template = constants.%empty_tuple]
 // CHECK:STDOUT:   %.loc6_20.3: init %empty_tuple.type = converted %.loc6_19.1, %.loc6_19.2 [template = constants.%empty_tuple]
 // CHECK:STDOUT:   %.loc6_20.4: init %C = class_init (%.loc6_20.3), file.%c.var [template = constants.%C.val]
-// CHECK:STDOUT:   %.loc6_21: init %C = converted %.loc6_20.1, %.loc6_20.4 [template = constants.%C.val]
-// CHECK:STDOUT:   assign file.%c.var, %.loc6_21
+// CHECK:STDOUT:   %.loc6_1: init %C = converted %.loc6_20.1, %.loc6_20.4 [template = constants.%C.val]
+// CHECK:STDOUT:   assign file.%c.var, %.loc6_1
 // CHECK:STDOUT:   %.loc7_26.1: %empty_tuple.type = tuple_literal ()
 // CHECK:STDOUT:   %.loc7_27.1: %struct_type.y = struct_literal (%.loc7_26.1)
 // CHECK:STDOUT:   %.loc7_27.2: ref %empty_tuple.type = class_element_access file.%nsc.var, element0
 // CHECK:STDOUT:   %.loc7_26.2: init %empty_tuple.type = tuple_init () to %.loc7_27.2 [template = constants.%empty_tuple]
 // CHECK:STDOUT:   %.loc7_27.3: init %empty_tuple.type = converted %.loc7_26.1, %.loc7_26.2 [template = constants.%empty_tuple]
 // CHECK:STDOUT:   %.loc7_27.4: init %NSC = class_init (%.loc7_27.3), file.%nsc.var [template = constants.%NSC.val]
-// CHECK:STDOUT:   %.loc7_28: init %NSC = converted %.loc7_27.1, %.loc7_27.4 [template = constants.%NSC.val]
-// CHECK:STDOUT:   assign file.%nsc.var, %.loc7_28
+// CHECK:STDOUT:   %.loc7_1: init %NSC = converted %.loc7_27.1, %.loc7_27.4 [template = constants.%NSC.val]
+// CHECK:STDOUT:   assign file.%nsc.var, %.loc7_1
 // CHECK:STDOUT:   return
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
@@ -639,6 +689,7 @@ private export C;
 // CHECK:STDOUT:   %NS: <namespace> = namespace %import_ref.d58, [template] {
 // CHECK:STDOUT:     .NSC = %import_ref.1a1
 // CHECK:STDOUT:   }
+// CHECK:STDOUT:   %import_ref.1a1: type = import_ref Main//base, NSC, loaded [template = constants.%NSC]
 // CHECK:STDOUT:   %import_ref.56d: <witness> = import_ref Main//base, loc6_1, loaded [template = constants.%complete_type.9be]
 // CHECK:STDOUT:   %import_ref.5ab: <witness> = import_ref Main//base, loc11_1, loaded [template = constants.%complete_type.9f4]
 // CHECK:STDOUT: }
@@ -651,9 +702,22 @@ private export C;
 // CHECK:STDOUT:     .nsc = %nsc
 // CHECK:STDOUT:   }
 // CHECK:STDOUT:   %default.import = import <invalid>
+// CHECK:STDOUT:   name_binding_decl {
+// CHECK:STDOUT:     %c.patt: %C = binding_pattern c
+// CHECK:STDOUT:     %.loc7: %C = var_pattern %c.patt
+// CHECK:STDOUT:   }
 // CHECK:STDOUT:   %c.var: ref %C = var c
+// CHECK:STDOUT:   %C.ref: type = name_ref C, imports.%import_ref.3b0 [template = constants.%C]
 // CHECK:STDOUT:   %c: ref %C = bind_name c, %c.var
+// CHECK:STDOUT:   name_binding_decl {
+// CHECK:STDOUT:     %nsc.patt: %NSC = binding_pattern nsc
+// CHECK:STDOUT:     %.loc8_1: %NSC = var_pattern %nsc.patt
+// CHECK:STDOUT:   }
 // CHECK:STDOUT:   %nsc.var: ref %NSC = var nsc
+// CHECK:STDOUT:   %.loc8_12: type = splice_block %NSC.ref [template = constants.%NSC] {
+// CHECK:STDOUT:     %NS.ref: <namespace> = name_ref NS, imports.%NS [template = imports.%NS]
+// CHECK:STDOUT:     %NSC.ref: type = name_ref NSC, imports.%import_ref.1a1 [template = constants.%NSC]
+// CHECK:STDOUT:   }
 // CHECK:STDOUT:   %nsc: ref %NSC = bind_name nsc, %nsc.var
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
@@ -673,16 +737,16 @@ private export C;
 // CHECK:STDOUT:   %.loc7_19.2: init %empty_tuple.type = tuple_init () to %.loc7_20.2 [template = constants.%empty_tuple]
 // CHECK:STDOUT:   %.loc7_20.3: init %empty_tuple.type = converted %.loc7_19.1, %.loc7_19.2 [template = constants.%empty_tuple]
 // CHECK:STDOUT:   %.loc7_20.4: init %C = class_init (%.loc7_20.3), file.%c.var [template = constants.%C.val]
-// CHECK:STDOUT:   %.loc7_21: init %C = converted %.loc7_20.1, %.loc7_20.4 [template = constants.%C.val]
-// CHECK:STDOUT:   assign file.%c.var, %.loc7_21
+// CHECK:STDOUT:   %.loc7_1: init %C = converted %.loc7_20.1, %.loc7_20.4 [template = constants.%C.val]
+// CHECK:STDOUT:   assign file.%c.var, %.loc7_1
 // CHECK:STDOUT:   %.loc8_26.1: %empty_tuple.type = tuple_literal ()
 // CHECK:STDOUT:   %.loc8_27.1: %struct_type.y = struct_literal (%.loc8_26.1)
 // CHECK:STDOUT:   %.loc8_27.2: ref %empty_tuple.type = class_element_access file.%nsc.var, element0
 // CHECK:STDOUT:   %.loc8_26.2: init %empty_tuple.type = tuple_init () to %.loc8_27.2 [template = constants.%empty_tuple]
 // CHECK:STDOUT:   %.loc8_27.3: init %empty_tuple.type = converted %.loc8_26.1, %.loc8_26.2 [template = constants.%empty_tuple]
 // CHECK:STDOUT:   %.loc8_27.4: init %NSC = class_init (%.loc8_27.3), file.%nsc.var [template = constants.%NSC.val]
-// CHECK:STDOUT:   %.loc8_28: init %NSC = converted %.loc8_27.1, %.loc8_27.4 [template = constants.%NSC.val]
-// CHECK:STDOUT:   assign file.%nsc.var, %.loc8_28
+// CHECK:STDOUT:   %.loc8_1: init %NSC = converted %.loc8_27.1, %.loc8_27.4 [template = constants.%NSC.val]
+// CHECK:STDOUT:   assign file.%nsc.var, %.loc8_1
 // CHECK:STDOUT:   return
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
@@ -707,6 +771,7 @@ private export C;
 // CHECK:STDOUT:   %NS: <namespace> = namespace %import_ref.0f6, [template] {
 // CHECK:STDOUT:     .NSC = %import_ref.231
 // CHECK:STDOUT:   }
+// CHECK:STDOUT:   %import_ref.231: type = import_ref Main//export, NSC, loaded [template = constants.%NSC]
 // CHECK:STDOUT:   %import_ref.ad3: <witness> = import_ref Main//export, inst23 [indirect], loaded [template = constants.%complete_type.9be]
 // CHECK:STDOUT:   %import_ref.63c: <witness> = import_ref Main//export, inst31 [indirect], loaded [template = constants.%complete_type.9f4]
 // CHECK:STDOUT: }
@@ -719,9 +784,22 @@ private export C;
 // CHECK:STDOUT:     .nsc = %nsc
 // CHECK:STDOUT:   }
 // CHECK:STDOUT:   %default.import = import <invalid>
+// CHECK:STDOUT:   name_binding_decl {
+// CHECK:STDOUT:     %c.patt: %C = binding_pattern c
+// CHECK:STDOUT:     %.loc7: %C = var_pattern %c.patt
+// CHECK:STDOUT:   }
 // CHECK:STDOUT:   %c.var: ref %C = var c
+// CHECK:STDOUT:   %C.ref: type = name_ref C, imports.%import_ref.06e [template = constants.%C]
 // CHECK:STDOUT:   %c: ref %C = bind_name c, %c.var
+// CHECK:STDOUT:   name_binding_decl {
+// CHECK:STDOUT:     %nsc.patt: %NSC = binding_pattern nsc
+// CHECK:STDOUT:     %.loc8_1: %NSC = var_pattern %nsc.patt
+// CHECK:STDOUT:   }
 // CHECK:STDOUT:   %nsc.var: ref %NSC = var nsc
+// CHECK:STDOUT:   %.loc8_12: type = splice_block %NSC.ref [template = constants.%NSC] {
+// CHECK:STDOUT:     %NS.ref: <namespace> = name_ref NS, imports.%NS [template = imports.%NS]
+// CHECK:STDOUT:     %NSC.ref: type = name_ref NSC, imports.%import_ref.231 [template = constants.%NSC]
+// CHECK:STDOUT:   }
 // CHECK:STDOUT:   %nsc: ref %NSC = bind_name nsc, %nsc.var
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
@@ -741,16 +819,16 @@ private export C;
 // CHECK:STDOUT:   %.loc7_19.2: init %empty_tuple.type = tuple_init () to %.loc7_20.2 [template = constants.%empty_tuple]
 // CHECK:STDOUT:   %.loc7_20.3: init %empty_tuple.type = converted %.loc7_19.1, %.loc7_19.2 [template = constants.%empty_tuple]
 // CHECK:STDOUT:   %.loc7_20.4: init %C = class_init (%.loc7_20.3), file.%c.var [template = constants.%C.val]
-// CHECK:STDOUT:   %.loc7_21: init %C = converted %.loc7_20.1, %.loc7_20.4 [template = constants.%C.val]
-// CHECK:STDOUT:   assign file.%c.var, %.loc7_21
+// CHECK:STDOUT:   %.loc7_1: init %C = converted %.loc7_20.1, %.loc7_20.4 [template = constants.%C.val]
+// CHECK:STDOUT:   assign file.%c.var, %.loc7_1
 // CHECK:STDOUT:   %.loc8_26.1: %empty_tuple.type = tuple_literal ()
 // CHECK:STDOUT:   %.loc8_27.1: %struct_type.y = struct_literal (%.loc8_26.1)
 // CHECK:STDOUT:   %.loc8_27.2: ref %empty_tuple.type = class_element_access file.%nsc.var, element0
 // CHECK:STDOUT:   %.loc8_26.2: init %empty_tuple.type = tuple_init () to %.loc8_27.2 [template = constants.%empty_tuple]
 // CHECK:STDOUT:   %.loc8_27.3: init %empty_tuple.type = converted %.loc8_26.1, %.loc8_26.2 [template = constants.%empty_tuple]
 // CHECK:STDOUT:   %.loc8_27.4: init %NSC = class_init (%.loc8_27.3), file.%nsc.var [template = constants.%NSC.val]
-// CHECK:STDOUT:   %.loc8_28: init %NSC = converted %.loc8_27.1, %.loc8_27.4 [template = constants.%NSC.val]
-// CHECK:STDOUT:   assign file.%nsc.var, %.loc8_28
+// CHECK:STDOUT:   %.loc8_1: init %NSC = converted %.loc8_27.1, %.loc8_27.4 [template = constants.%NSC.val]
+// CHECK:STDOUT:   assign file.%nsc.var, %.loc8_1
 // CHECK:STDOUT:   return
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
@@ -822,7 +900,12 @@ private export C;
 // CHECK:STDOUT:     .c = %c
 // CHECK:STDOUT:   }
 // CHECK:STDOUT:   %default.import = import <invalid>
+// CHECK:STDOUT:   name_binding_decl {
+// CHECK:STDOUT:     %c.patt: %C = binding_pattern c
+// CHECK:STDOUT:     %.loc6: %C = var_pattern %c.patt
+// CHECK:STDOUT:   }
 // CHECK:STDOUT:   %c.var: ref %C = var c
+// CHECK:STDOUT:   %C.ref: type = name_ref C, imports.%import_ref.06e [template = constants.%C]
 // CHECK:STDOUT:   %c: ref %C = bind_name c, %c.var
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
@@ -838,8 +921,8 @@ private export C;
 // CHECK:STDOUT:   %.loc6_19.2: init %empty_tuple.type = tuple_init () to %.loc6_20.2 [template = constants.%empty_tuple]
 // CHECK:STDOUT:   %.loc6_20.3: init %empty_tuple.type = converted %.loc6_19.1, %.loc6_19.2 [template = constants.%empty_tuple]
 // CHECK:STDOUT:   %.loc6_20.4: init %C = class_init (%.loc6_20.3), file.%c.var [template = constants.%C.val]
-// CHECK:STDOUT:   %.loc6_21: init %C = converted %.loc6_20.1, %.loc6_20.4 [template = constants.%C.val]
-// CHECK:STDOUT:   assign file.%c.var, %.loc6_21
+// CHECK:STDOUT:   %.loc6_1: init %C = converted %.loc6_20.1, %.loc6_20.4 [template = constants.%C.val]
+// CHECK:STDOUT:   assign file.%c.var, %.loc6_1
 // CHECK:STDOUT:   return
 // CHECK:STDOUT: }
 // CHECK:STDOUT:

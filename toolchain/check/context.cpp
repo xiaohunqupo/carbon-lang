@@ -395,6 +395,14 @@ auto Context::LookupUnqualifiedName(Parse::NodeId node_id,
     }
   }
 
+  if (lexical_result == SemIR::InstId::InitTombstone) {
+    CARBON_DIAGNOSTIC(UsedBeforeInitialization, Error,
+                      "`{0}` used before initialization", SemIR::NameId);
+    emitter_->Emit(node_id, UsedBeforeInitialization, name_id);
+    return {.specific_id = SemIR::SpecificId::Invalid,
+            .inst_id = SemIR::ErrorInst::SingletonInstId};
+  }
+
   if (lexical_result.is_valid()) {
     // A lexical scope never needs an associated specific. If there's a
     // lexically enclosing generic, then it also encloses the point of use of
@@ -776,6 +784,7 @@ auto Context::AddConvergenceBlockAndPush(Parse::NodeId node_id, int num_blocks)
       if (new_block_id == SemIR::InstBlockId::Unreachable) {
         new_block_id = inst_blocks().AddDefaultValue();
       }
+      CARBON_CHECK(node_id.is_valid());
       AddInst<SemIR::Branch>(node_id, {.target_id = new_block_id});
     }
     inst_block_stack().Pop();

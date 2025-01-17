@@ -154,7 +154,11 @@ class AdaptWithBaseAndFields {
 // CHECK:STDOUT:   %int_32: Core.IntLiteral = int_value 32 [template = constants.%int_32]
 // CHECK:STDOUT:   %i32: type = class_type @Int, @Int(constants.%int_32) [template = constants.%i32]
 // CHECK:STDOUT:   adapt_decl %i32 [template]
-// CHECK:STDOUT:   %.loc13: %AdaptWithField.elem = field_decl n, element<invalid> [template]
+// CHECK:STDOUT:   %.loc13_8: %AdaptWithField.elem = field_decl n, element<invalid> [template]
+// CHECK:STDOUT:   name_binding_decl {
+// CHECK:STDOUT:     %.loc13_3: %AdaptWithField.elem = var_pattern %.loc13_8
+// CHECK:STDOUT:   }
+// CHECK:STDOUT:   %.var: ref %AdaptWithField.elem = var <invalid>
 // CHECK:STDOUT:   complete_type_witness = <error>
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
@@ -162,9 +166,21 @@ class AdaptWithBaseAndFields {
 // CHECK:STDOUT:   %int_32: Core.IntLiteral = int_value 32 [template = constants.%int_32]
 // CHECK:STDOUT:   %i32: type = class_type @Int, @Int(constants.%int_32) [template = constants.%i32]
 // CHECK:STDOUT:   adapt_decl %i32 [template]
-// CHECK:STDOUT:   %.loc25: %AdaptWithFields.elem = field_decl a, element<invalid> [template]
-// CHECK:STDOUT:   %.loc26: %AdaptWithFields.elem = field_decl b, element<invalid> [template]
-// CHECK:STDOUT:   %.loc27: %AdaptWithFields.elem = field_decl c, element<invalid> [template]
+// CHECK:STDOUT:   %.loc25_8: %AdaptWithFields.elem = field_decl a, element<invalid> [template]
+// CHECK:STDOUT:   name_binding_decl {
+// CHECK:STDOUT:     %.loc25_3: %AdaptWithFields.elem = var_pattern %.loc25_8
+// CHECK:STDOUT:   }
+// CHECK:STDOUT:   %.var.loc25: ref %AdaptWithFields.elem = var <invalid>
+// CHECK:STDOUT:   %.loc26_8: %AdaptWithFields.elem = field_decl b, element<invalid> [template]
+// CHECK:STDOUT:   name_binding_decl {
+// CHECK:STDOUT:     %.loc26_3: %AdaptWithFields.elem = var_pattern %.loc26_8
+// CHECK:STDOUT:   }
+// CHECK:STDOUT:   %.var.loc26: ref %AdaptWithFields.elem = var <invalid>
+// CHECK:STDOUT:   %.loc27_8: %AdaptWithFields.elem = field_decl c, element<invalid> [template]
+// CHECK:STDOUT:   name_binding_decl {
+// CHECK:STDOUT:     %.loc27_3: %AdaptWithFields.elem = var_pattern %.loc27_8
+// CHECK:STDOUT:   }
+// CHECK:STDOUT:   %.var.loc27: ref %AdaptWithFields.elem = var <invalid>
 // CHECK:STDOUT:   complete_type_witness = <error>
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
@@ -208,7 +224,11 @@ class AdaptWithBaseAndFields {
 // CHECK:STDOUT: class @AdaptWithBaseAndFields {
 // CHECK:STDOUT:   %Base.ref: type = name_ref Base, file.%Base.decl [template = constants.%Base]
 // CHECK:STDOUT:   %.loc7: %AdaptWithBaseAndFields.elem.767 = base_decl %Base.ref, element<invalid> [template]
-// CHECK:STDOUT:   %.loc8: %AdaptWithBaseAndFields.elem.ddf = field_decl n, element<invalid> [template]
+// CHECK:STDOUT:   %.loc8_8: %AdaptWithBaseAndFields.elem.ddf = field_decl n, element<invalid> [template]
+// CHECK:STDOUT:   name_binding_decl {
+// CHECK:STDOUT:     %.loc8_3: %AdaptWithBaseAndFields.elem.ddf = var_pattern %.loc8_8
+// CHECK:STDOUT:   }
+// CHECK:STDOUT:   %.var: ref %AdaptWithBaseAndFields.elem.ddf = var <invalid>
 // CHECK:STDOUT:   %.loc16_10: %empty_struct_type = struct_literal ()
 // CHECK:STDOUT:   %.loc16_11: type = converted %.loc16_10, constants.%empty_struct_type [template = constants.%empty_struct_type]
 // CHECK:STDOUT:   adapt_decl %.loc16_11 [template]

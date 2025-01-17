@@ -133,7 +133,11 @@ fn Run() -> i32 {
 // CHECK:STDOUT:     %return.param.loc16: ref %i32 = out_param runtime_param1
 // CHECK:STDOUT:     %return.loc16: ref %i32 = return_slot %return.param.loc16
 // CHECK:STDOUT:   }
-// CHECK:STDOUT:   %.loc18: %Class.elem = field_decl k, element0 [template]
+// CHECK:STDOUT:   %.loc18_8: %Class.elem = field_decl k, element0 [template]
+// CHECK:STDOUT:   name_binding_decl {
+// CHECK:STDOUT:     %.loc18_3: %Class.elem = var_pattern %.loc18_8
+// CHECK:STDOUT:   }
+// CHECK:STDOUT:   %.var: ref %Class.elem = var <invalid>
 // CHECK:STDOUT:   %complete_type: <witness> = complete_type_witness %struct_type.k [template = constants.%complete_type.954]
 // CHECK:STDOUT:   complete_type_witness = %complete_type
 // CHECK:STDOUT: }

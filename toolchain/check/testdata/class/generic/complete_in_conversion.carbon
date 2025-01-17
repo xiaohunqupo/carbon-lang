@@ -24,9 +24,9 @@ class A(N:! i32) {
 }
 
 fn F(a: A(0)*) {
-  // CHECK:STDERR: fail_derived_to_base.carbon:[[@LINE+4]]:3: note: in `A(0)` used here [ResolvingSpecificHere]
+  // CHECK:STDERR: fail_derived_to_base.carbon:[[@LINE+4]]:15: note: in `A(0)` used here [ResolvingSpecificHere]
   // CHECK:STDERR:   let b: B* = a;
-  // CHECK:STDERR:   ^~~~~~~~~~~~~~
+  // CHECK:STDERR:               ^
   // CHECK:STDERR:
   let b: B* = a;
 }
@@ -132,7 +132,7 @@ fn F(a: A(0)*) {
 // CHECK:STDOUT:     %a.param_patt: %ptr.b65 = value_param_pattern %a.patt, runtime_param0
 // CHECK:STDOUT:   } {
 // CHECK:STDOUT:     %a.param: %ptr.b65 = value_param runtime_param0
-// CHECK:STDOUT:     %.loc15_13: type = splice_block %ptr [template = constants.%ptr.b65] {
+// CHECK:STDOUT:     %.loc15_13: type = splice_block %ptr.loc15 [template = constants.%ptr.b65] {
 // CHECK:STDOUT:       %A.ref: %A.type = name_ref A, file.%A.decl [template = constants.%A.generic]
 // CHECK:STDOUT:       %int_0: Core.IntLiteral = int_value 0 [template = constants.%int_0.5c6]
 // CHECK:STDOUT:       %impl.elem0: %Convert.type.1b6 = impl_witness_access constants.%impl_witness.d39, element0 [template = constants.%Convert.956]
@@ -142,7 +142,7 @@ fn F(a: A(0)*) {
 // CHECK:STDOUT:       %.loc15_12.1: %i32 = value_of_initializer %int.convert_checked [template = constants.%int_0.6a9]
 // CHECK:STDOUT:       %.loc15_12.2: %i32 = converted %int_0, %.loc15_12.1 [template = constants.%int_0.6a9]
 // CHECK:STDOUT:       %A: type = class_type @A, @A(constants.%int_0.6a9) [template = constants.%A.6fc]
-// CHECK:STDOUT:       %ptr: type = ptr_type %A.6fc [template = constants.%ptr.b65]
+// CHECK:STDOUT:       %ptr.loc15: type = ptr_type %A.6fc [template = constants.%ptr.b65]
 // CHECK:STDOUT:     }
 // CHECK:STDOUT:     %a: %ptr.b65 = bind_name a, %a.param
 // CHECK:STDOUT:   }
@@ -172,7 +172,11 @@ fn F(a: A(0)*) {
 // CHECK:STDOUT:   class {
 // CHECK:STDOUT:     %B.ref: type = name_ref B, file.%B.decl [template = constants.%B]
 // CHECK:STDOUT:     %.loc7: @A.%A.elem.loc7 (%A.elem.500) = base_decl %B.ref, element0 [template]
-// CHECK:STDOUT:     %.loc12: @A.%A.elem.loc12 (%A.elem.d60) = field_decl n, element1 [template]
+// CHECK:STDOUT:     %.loc12_8: @A.%A.elem.loc12 (%A.elem.d60) = field_decl n, element1 [template]
+// CHECK:STDOUT:     name_binding_decl {
+// CHECK:STDOUT:       %.loc12_3: @A.%A.elem.loc12 (%A.elem.d60) = var_pattern %.loc12_8
+// CHECK:STDOUT:     }
+// CHECK:STDOUT:     %.var: ref @A.%A.elem.loc12 (%A.elem.d60) = var <invalid>
 // CHECK:STDOUT:     %complete_type.loc13_1.1: <witness> = complete_type_witness %struct_type.base.n [symbolic = %complete_type.loc13_1.2 (constants.%complete_type.547)]
 // CHECK:STDOUT:     complete_type_witness = %complete_type.loc13_1.1
 // CHECK:STDOUT:   }
@@ -182,12 +186,19 @@ fn F(a: A(0)*) {
 // CHECK:STDOUT:
 // CHECK:STDOUT: fn @F(%a.param_patt: %ptr.b65) {
 // CHECK:STDOUT: !entry:
+// CHECK:STDOUT:   name_binding_decl {
+// CHECK:STDOUT:     %b.patt: %ptr.e79 = binding_pattern b
+// CHECK:STDOUT:   }
 // CHECK:STDOUT:   %a.ref: %ptr.b65 = name_ref a, %a
-// CHECK:STDOUT:   %.loc20_16.1: ref %A.6fc = deref %a.ref
-// CHECK:STDOUT:   %.loc20_16.2: ref %B = class_element_access %.loc20_16.1, element0
-// CHECK:STDOUT:   %addr: %ptr.e79 = addr_of %.loc20_16.2
-// CHECK:STDOUT:   %.loc20_16.3: %ptr.e79 = converted %a.ref, %addr
-// CHECK:STDOUT:   %b: %ptr.e79 = bind_name b, %.loc20_16.3
+// CHECK:STDOUT:   %.loc20_11: type = splice_block %ptr.loc20 [template = constants.%ptr.e79] {
+// CHECK:STDOUT:     %B.ref: type = name_ref B, file.%B.decl [template = constants.%B]
+// CHECK:STDOUT:     %ptr.loc20: type = ptr_type %B [template = constants.%ptr.e79]
+// CHECK:STDOUT:   }
+// CHECK:STDOUT:   %.loc20_15.1: ref %A.6fc = deref %a.ref
+// CHECK:STDOUT:   %.loc20_15.2: ref %B = class_element_access %.loc20_15.1, element0
+// CHECK:STDOUT:   %addr: %ptr.e79 = addr_of %.loc20_15.2
+// CHECK:STDOUT:   %.loc20_15.3: %ptr.e79 = converted %a.ref, %addr
+// CHECK:STDOUT:   %b: %ptr.e79 = bind_name b, %.loc20_15.3
 // CHECK:STDOUT:   return
 // CHECK:STDOUT: }
 // CHECK:STDOUT:

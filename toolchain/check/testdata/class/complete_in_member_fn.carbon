@@ -59,7 +59,11 @@ class C {
 // CHECK:STDOUT:     %return.param: ref %i32 = out_param runtime_param1
 // CHECK:STDOUT:     %return: ref %i32 = return_slot %return.param
 // CHECK:STDOUT:   }
-// CHECK:STDOUT:   %.loc14: %C.elem = field_decl a, element0 [template]
+// CHECK:STDOUT:   %.loc14_8: %C.elem = field_decl a, element0 [template]
+// CHECK:STDOUT:   name_binding_decl {
+// CHECK:STDOUT:     %.loc14_3: %C.elem = var_pattern %.loc14_8
+// CHECK:STDOUT:   }
+// CHECK:STDOUT:   %.var: ref %C.elem = var <invalid>
 // CHECK:STDOUT:   %complete_type: <witness> = complete_type_witness %struct_type.a [template = constants.%complete_type.fd7]
 // CHECK:STDOUT:   complete_type_witness = %complete_type
 // CHECK:STDOUT: }
@@ -67,7 +71,7 @@ class C {
 // CHECK:STDOUT: fn @F(%c.param_patt: %C) -> %i32 {
 // CHECK:STDOUT: !entry:
 // CHECK:STDOUT:   %c.ref: %C = name_ref c, %c
-// CHECK:STDOUT:   %a.ref: %C.elem = name_ref a, @C.%.loc14 [template = @C.%.loc14]
+// CHECK:STDOUT:   %a.ref: %C.elem = name_ref a, @C.%.loc14_8 [template = @C.%.loc14_8]
 // CHECK:STDOUT:   %.loc12_31.1: ref %i32 = class_element_access %c.ref, element0
 // CHECK:STDOUT:   %.loc12_31.2: %i32 = bind_value %.loc12_31.1
 // CHECK:STDOUT:   return %.loc12_31.2

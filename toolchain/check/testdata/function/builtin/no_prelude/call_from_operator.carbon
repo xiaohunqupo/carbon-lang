@@ -612,7 +612,11 @@ var arr: [i32; (1 as i32) + (2 as i32)] = (3, 4, (3 as i32) + (4 as i32));
 // CHECK:STDOUT:   %impl_witness.d9b: <witness> = impl_witness (imports.%import_ref.73a) [template]
 // CHECK:STDOUT:   %Convert.type.953: type = fn_type @Convert.3 [template]
 // CHECK:STDOUT:   %Convert.5bc: %Convert.type.953 = struct_value () [template]
+// CHECK:STDOUT:   %Convert.bound.b34: <bound method> = bound_method %int_1.5b8, %Convert.5bc [template]
+// CHECK:STDOUT:   %int_1.f38: %i32.builtin = int_value 1 [template]
 // CHECK:STDOUT:   %int_2.ecc: Core.IntLiteral = int_value 2 [template]
+// CHECK:STDOUT:   %Convert.bound.324: <bound method> = bound_method %int_2.ecc, %Convert.5bc [template]
+// CHECK:STDOUT:   %int_2.5a1: %i32.builtin = int_value 2 [template]
 // CHECK:STDOUT:   %Op.type.545: type = fn_type @Op.1 [template]
 // CHECK:STDOUT:   %Self.as_type.da9: type = facet_access_type %Self.a99 [symbolic]
 // CHECK:STDOUT:   %Op.assoc_type: type = assoc_entity_type %Add.type, %Op.type.545 [template]
@@ -620,9 +624,13 @@ var arr: [i32; (1 as i32) + (2 as i32)] = (3, 4, (3 as i32) + (4 as i32));
 // CHECK:STDOUT:   %impl_witness.bd0: <witness> = impl_witness (imports.%import_ref.db4) [template]
 // CHECK:STDOUT:   %Op.type.240: type = fn_type @Op.2 [template]
 // CHECK:STDOUT:   %Op.0e2: %Op.type.240 = struct_value () [template]
+// CHECK:STDOUT:   %Op.bound.393: <bound method> = bound_method %int_1.f38, %Op.0e2 [template]
 // CHECK:STDOUT:   %int_3.a0f: %i32.builtin = int_value 3 [template]
 // CHECK:STDOUT:   %assoc0.5048c6.2: %Convert.assoc_type.c0e = assoc_entity element0, imports.%import_ref.207961.4 [symbolic]
 // CHECK:STDOUT:   %impl_witness.8f3: <witness> = impl_witness (imports.%import_ref.4f9) [template]
+// CHECK:STDOUT:   %Convert.type.0e4: type = fn_type @Convert.4 [template]
+// CHECK:STDOUT:   %Convert.b32: %Convert.type.0e4 = struct_value () [template]
+// CHECK:STDOUT:   %Convert.bound.65a: <bound method> = bound_method %int_3.a0f, %Convert.b32 [template]
 // CHECK:STDOUT:   %int_3.1ba: Core.IntLiteral = int_value 3 [template]
 // CHECK:STDOUT:   %array_type: type = array_type %int_3.1ba, %i32.builtin [template]
 // CHECK:STDOUT:   %int_4.0c1: Core.IntLiteral = int_value 4 [template]
@@ -680,7 +688,48 @@ var arr: [i32; (1 as i32) + (2 as i32)] = (3, 4, (3 as i32) + (4 as i32));
 // CHECK:STDOUT:     .arr = %arr
 // CHECK:STDOUT:   }
 // CHECK:STDOUT:   %Core.import = import Core
+// CHECK:STDOUT:   name_binding_decl {
+// CHECK:STDOUT:     %arr.patt: %array_type = binding_pattern arr
+// CHECK:STDOUT:     %.loc4_1: %array_type = var_pattern %arr.patt
+// CHECK:STDOUT:   }
 // CHECK:STDOUT:   %arr.var: ref %array_type = var arr
+// CHECK:STDOUT:   %.loc4_39: type = splice_block %array_type [template = constants.%array_type] {
+// CHECK:STDOUT:     %int_32.loc4_11: Core.IntLiteral = int_value 32 [template = constants.%int_32]
+// CHECK:STDOUT:     %int.make_type_signed.loc4_11: init type = call constants.%Int(%int_32.loc4_11) [template = constants.%i32.builtin]
+// CHECK:STDOUT:     %int_1: Core.IntLiteral = int_value 1 [template = constants.%int_1.5b8]
+// CHECK:STDOUT:     %int_32.loc4_22: Core.IntLiteral = int_value 32 [template = constants.%int_32]
+// CHECK:STDOUT:     %int.make_type_signed.loc4_22: init type = call constants.%Int(%int_32.loc4_22) [template = constants.%i32.builtin]
+// CHECK:STDOUT:     %.loc4_22.1: type = value_of_initializer %int.make_type_signed.loc4_22 [template = constants.%i32.builtin]
+// CHECK:STDOUT:     %.loc4_22.2: type = converted %int.make_type_signed.loc4_22, %.loc4_22.1 [template = constants.%i32.builtin]
+// CHECK:STDOUT:     %impl.elem0.loc4_19: %Convert.type.378 = impl_witness_access constants.%impl_witness.d9b, element0 [template = constants.%Convert.5bc]
+// CHECK:STDOUT:     %Convert.bound.loc4_19: <bound method> = bound_method %int_1, %impl.elem0.loc4_19 [template = constants.%Convert.bound.b34]
+// CHECK:STDOUT:     %int.convert_checked.loc4_19: init %i32.builtin = call %Convert.bound.loc4_19(%int_1) [template = constants.%int_1.f38]
+// CHECK:STDOUT:     %.loc4_19.1: %i32.builtin = value_of_initializer %int.convert_checked.loc4_19 [template = constants.%int_1.f38]
+// CHECK:STDOUT:     %.loc4_19.2: %i32.builtin = converted %int_1, %.loc4_19.1 [template = constants.%int_1.f38]
+// CHECK:STDOUT:     %int_2: Core.IntLiteral = int_value 2 [template = constants.%int_2.ecc]
+// CHECK:STDOUT:     %int_32.loc4_35: Core.IntLiteral = int_value 32 [template = constants.%int_32]
+// CHECK:STDOUT:     %int.make_type_signed.loc4_35: init type = call constants.%Int(%int_32.loc4_35) [template = constants.%i32.builtin]
+// CHECK:STDOUT:     %.loc4_35.1: type = value_of_initializer %int.make_type_signed.loc4_35 [template = constants.%i32.builtin]
+// CHECK:STDOUT:     %.loc4_35.2: type = converted %int.make_type_signed.loc4_35, %.loc4_35.1 [template = constants.%i32.builtin]
+// CHECK:STDOUT:     %impl.elem0.loc4_32: %Convert.type.378 = impl_witness_access constants.%impl_witness.d9b, element0 [template = constants.%Convert.5bc]
+// CHECK:STDOUT:     %Convert.bound.loc4_32: <bound method> = bound_method %int_2, %impl.elem0.loc4_32 [template = constants.%Convert.bound.324]
+// CHECK:STDOUT:     %int.convert_checked.loc4_32: init %i32.builtin = call %Convert.bound.loc4_32(%int_2) [template = constants.%int_2.5a1]
+// CHECK:STDOUT:     %.loc4_32.1: %i32.builtin = value_of_initializer %int.convert_checked.loc4_32 [template = constants.%int_2.5a1]
+// CHECK:STDOUT:     %.loc4_32.2: %i32.builtin = converted %int_2, %.loc4_32.1 [template = constants.%int_2.5a1]
+// CHECK:STDOUT:     %impl.elem0.loc4_27.1: %Op.type.545 = impl_witness_access constants.%impl_witness.bd0, element0 [template = constants.%Op.0e2]
+// CHECK:STDOUT:     %Op.bound: <bound method> = bound_method %.loc4_19.2, %impl.elem0.loc4_27.1 [template = constants.%Op.bound.393]
+// CHECK:STDOUT:     %int.sadd: init %i32.builtin = call %Op.bound(%.loc4_19.2, %.loc4_32.2) [template = constants.%int_3.a0f]
+// CHECK:STDOUT:     %.loc4_11.1: type = value_of_initializer %int.make_type_signed.loc4_11 [template = constants.%i32.builtin]
+// CHECK:STDOUT:     %.loc4_11.2: type = converted %int.make_type_signed.loc4_11, %.loc4_11.1 [template = constants.%i32.builtin]
+// CHECK:STDOUT:     %impl.elem0.loc4_27.2: %Convert.type.71e = impl_witness_access constants.%impl_witness.8f3, element0 [template = constants.%Convert.b32]
+// CHECK:STDOUT:     %Convert.bound.loc4_27: <bound method> = bound_method %int.sadd, %impl.elem0.loc4_27.2 [template = constants.%Convert.bound.65a]
+// CHECK:STDOUT:     %.loc4_27.1: %i32.builtin = value_of_initializer %int.sadd [template = constants.%int_3.a0f]
+// CHECK:STDOUT:     %.loc4_27.2: %i32.builtin = converted %int.sadd, %.loc4_27.1 [template = constants.%int_3.a0f]
+// CHECK:STDOUT:     %int.convert_checked.loc4_27: init Core.IntLiteral = call %Convert.bound.loc4_27(%.loc4_27.2) [template = constants.%int_3.1ba]
+// CHECK:STDOUT:     %.loc4_27.3: Core.IntLiteral = value_of_initializer %int.convert_checked.loc4_27 [template = constants.%int_3.1ba]
+// CHECK:STDOUT:     %.loc4_27.4: Core.IntLiteral = converted %int.sadd, %.loc4_27.3 [template = constants.%int_3.1ba]
+// CHECK:STDOUT:     %array_type: type = array_type %.loc4_27.4, %i32.builtin [template = constants.%array_type]
+// CHECK:STDOUT:   }
 // CHECK:STDOUT:   %arr: ref %array_type = bind_name arr, %arr.var
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
@@ -832,8 +881,8 @@ var arr: [i32; (1 as i32) + (2 as i32)] = (3, 4, (3 as i32) + (4 as i32));
 // CHECK:STDOUT:   %.loc4_73.8: ref %i32.builtin = array_index file.%arr.var, %int_2
 // CHECK:STDOUT:   %.loc4_73.9: init %i32.builtin = initialize_from %int.sadd to %.loc4_73.8 [template = constants.%int_7]
 // CHECK:STDOUT:   %.loc4_73.10: init %array_type = array_init (%.loc4_73.4, %.loc4_73.7, %.loc4_73.9) to file.%arr.var [template = constants.%array]
-// CHECK:STDOUT:   %.loc4_74: init %array_type = converted %.loc4_73.1, %.loc4_73.10 [template = constants.%array]
-// CHECK:STDOUT:   assign file.%arr.var, %.loc4_74
+// CHECK:STDOUT:   %.loc4_1: init %array_type = converted %.loc4_73.1, %.loc4_73.10 [template = constants.%array]
+// CHECK:STDOUT:   assign file.%arr.var, %.loc4_1
 // CHECK:STDOUT:   return
 // CHECK:STDOUT: }
 // CHECK:STDOUT:

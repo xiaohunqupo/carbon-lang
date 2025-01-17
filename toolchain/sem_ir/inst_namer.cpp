@@ -309,6 +309,10 @@ auto InstNamer::AddBlockLabel(ScopeId scope_id, InstBlockId block_id,
 // represents some kind of branch.
 auto InstNamer::AddBlockLabel(ScopeId scope_id, SemIR::LocId loc_id,
                               AnyBranch branch) -> void {
+  if (!loc_id.node_id().is_valid()) {
+    AddBlockLabel(scope_id, branch.target_id, "", loc_id);
+    return;
+  }
   llvm::StringRef name;
   switch (sem_ir_->parse_tree().node_kind(loc_id.node_id())) {
     case Parse::NodeKind::IfExprIf:
@@ -726,6 +730,10 @@ auto InstNamer::CollectNamesInBlock(ScopeId top_scope_id,
         add_inst_name(std::move(name));
         continue;
       }
+      case CARBON_KIND(NameBindingDecl inst): {
+        queue_block_id(scope_id, inst.pattern_block_id);
+        continue;
+      }
       case CARBON_KIND(NameRef inst): {
         add_inst_name_id(inst.name_id, ".ref");
         continue;
@@ -867,7 +875,7 @@ auto InstNamer::CollectNamesInBlock(ScopeId top_scope_id,
         continue;
       }
       case CARBON_KIND(VarStorage inst): {
-        add_inst_name_id(inst.name_id, ".var");
+        add_inst_name_id(inst.pretty_name_id, ".var");
         continue;
       }
       default: {

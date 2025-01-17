@@ -1255,14 +1255,24 @@ fn Test(c: HasExtraInterfaces.C(type)) {
 // CHECK:STDOUT:
 // CHECK:STDOUT: fn @L() {
 // CHECK:STDOUT: !entry:
+// CHECK:STDOUT:   name_binding_decl {
+// CHECK:STDOUT:     %obj.patt: %AnyParam.241 = binding_pattern obj
+// CHECK:STDOUT:     %.loc13_3.1: %AnyParam.241 = var_pattern %obj.patt
+// CHECK:STDOUT:   }
 // CHECK:STDOUT:   %obj.var: ref %AnyParam.241 = var obj
-// CHECK:STDOUT:   %obj: ref %AnyParam.241 = bind_name obj, %obj.var
 // CHECK:STDOUT:   %.loc13_58.1: %empty_struct_type = struct_literal ()
 // CHECK:STDOUT:   %.loc13_58.2: init %AnyParam.241 = class_init (), %obj.var [template = constants.%AnyParam.val]
-// CHECK:STDOUT:   %.loc13_59: init %AnyParam.241 = converted %.loc13_58.1, %.loc13_58.2 [template = constants.%AnyParam.val]
-// CHECK:STDOUT:   assign %obj.var, %.loc13_59
+// CHECK:STDOUT:   %.loc13_3.2: init %AnyParam.241 = converted %.loc13_58.1, %.loc13_58.2 [template = constants.%AnyParam.val]
+// CHECK:STDOUT:   assign %obj.var, %.loc13_3.2
+// CHECK:STDOUT:   %.loc13_53: type = splice_block %AnyParam [template = constants.%AnyParam.241] {
+// CHECK:STDOUT:     %PackageHasParam.ref.loc13: <namespace> = name_ref PackageHasParam, imports.%PackageHasParam [template = imports.%PackageHasParam]
+// CHECK:STDOUT:     %AnyParam.ref: %AnyParam.type = name_ref AnyParam, imports.%import_ref.8b7 [template = constants.%AnyParam.generic]
+// CHECK:STDOUT:     %GenericInterface.ref: %GenericInterface.type.c92 = name_ref GenericInterface, file.%GenericInterface.decl [template = constants.%GenericInterface.generic]
+// CHECK:STDOUT:     %AnyParam: type = class_type @AnyParam, @AnyParam(constants.%GenericInterface.type.c92, constants.%GenericInterface.generic) [template = constants.%AnyParam.241]
+// CHECK:STDOUT:   }
+// CHECK:STDOUT:   %obj: ref %AnyParam.241 = bind_name obj, %obj.var
 // CHECK:STDOUT:   %obj.ref: ref %AnyParam.241 = name_ref obj, %obj
-// CHECK:STDOUT:   %PackageHasParam.ref: <namespace> = name_ref PackageHasParam, imports.%PackageHasParam [template = imports.%PackageHasParam]
+// CHECK:STDOUT:   %PackageHasParam.ref.loc14: <namespace> = name_ref PackageHasParam, imports.%PackageHasParam [template = imports.%PackageHasParam]
 // CHECK:STDOUT:   %Y.ref: type = name_ref Y, imports.%import_ref.d7e [template = constants.%Y.type]
 // CHECK:STDOUT:   %K.ref: %K.assoc_type = name_ref K, imports.%import_ref.df6 [template = constants.%assoc0]
 // CHECK:STDOUT:   %impl.elem0: %K.type.311 = impl_witness_access constants.%impl_witness, element0 [template = constants.%K.2e9]
@@ -1303,6 +1313,8 @@ fn Test(c: HasExtraInterfaces.C(type)) {
 // CHECK:STDOUT:   %M.type: type = fn_type @M [template]
 // CHECK:STDOUT:   %empty_tuple.type: type = tuple_type () [template]
 // CHECK:STDOUT:   %M: %M.type = struct_value () [template]
+// CHECK:STDOUT:   %AnyParam.type: type = generic_class_type @AnyParam [template]
+// CHECK:STDOUT:   %AnyParam.generic: %AnyParam.type = struct_value () [template]
 // CHECK:STDOUT:   %empty_struct_type: type = struct_type {} [template]
 // CHECK:STDOUT:   %complete_type: <witness> = complete_type_witness %empty_struct_type [template]
 // CHECK:STDOUT:   %T: type = bind_symbolic_name T, 0 [symbolic]
@@ -1337,7 +1349,9 @@ fn Test(c: HasExtraInterfaces.C(type)) {
 // CHECK:STDOUT:     .GenericInterface = %import_ref.3e7
 // CHECK:STDOUT:     import PackageGenericInterface//default
 // CHECK:STDOUT:   }
+// CHECK:STDOUT:   %import_ref.8b7: %AnyParam.type = import_ref PackageHasParam//default, AnyParam, loaded [template = constants.%AnyParam.generic]
 // CHECK:STDOUT:   %import_ref.8f2: <witness> = import_ref PackageHasParam//default, loc4_34, loaded [template = constants.%complete_type]
+// CHECK:STDOUT:   %import_ref.3e7: %GenericInterface.type.0da = import_ref PackageGenericInterface//default, GenericInterface, loaded [template = constants.%GenericInterface.generic]
 // CHECK:STDOUT:   %import_ref.c3b = import_ref PackageGenericInterface//default, inst28 [no loc], unloaded
 // CHECK:STDOUT:   %import_ref.d7e: type = import_ref PackageHasParam//default, Y, loaded [template = constants.%Y.type]
 // CHECK:STDOUT:   %import_ref.dc1 = import_ref PackageHasParam//default, inst40 [no loc], unloaded
@@ -1401,14 +1415,25 @@ fn Test(c: HasExtraInterfaces.C(type)) {
 // CHECK:STDOUT:
 // CHECK:STDOUT: fn @M() {
 // CHECK:STDOUT: !entry:
+// CHECK:STDOUT:   name_binding_decl {
+// CHECK:STDOUT:     %obj.patt: %AnyParam.861 = binding_pattern obj
+// CHECK:STDOUT:     %.loc8_3.1: %AnyParam.861 = var_pattern %obj.patt
+// CHECK:STDOUT:   }
 // CHECK:STDOUT:   %obj.var: ref %AnyParam.861 = var obj
-// CHECK:STDOUT:   %obj: ref %AnyParam.861 = bind_name obj, %obj.var
 // CHECK:STDOUT:   %.loc9_50.1: %empty_struct_type = struct_literal ()
 // CHECK:STDOUT:   %.loc9_50.2: init %AnyParam.861 = class_init (), %obj.var [template = constants.%AnyParam.val]
-// CHECK:STDOUT:   %.loc9_51: init %AnyParam.861 = converted %.loc9_50.1, %.loc9_50.2 [template = constants.%AnyParam.val]
-// CHECK:STDOUT:   assign %obj.var, %.loc9_51
+// CHECK:STDOUT:   %.loc8_3.2: init %AnyParam.861 = converted %.loc9_50.1, %.loc9_50.2 [template = constants.%AnyParam.val]
+// CHECK:STDOUT:   assign %obj.var, %.loc8_3.2
+// CHECK:STDOUT:   %.loc9_45: type = splice_block %AnyParam [template = constants.%AnyParam.861] {
+// CHECK:STDOUT:     %PackageHasParam.ref.loc8: <namespace> = name_ref PackageHasParam, imports.%PackageHasParam [template = imports.%PackageHasParam]
+// CHECK:STDOUT:     %AnyParam.ref: %AnyParam.type = name_ref AnyParam, imports.%import_ref.8b7 [template = constants.%AnyParam.generic]
+// CHECK:STDOUT:     %PackageGenericInterface.ref: <namespace> = name_ref PackageGenericInterface, imports.%PackageGenericInterface [template = imports.%PackageGenericInterface]
+// CHECK:STDOUT:     %GenericInterface.ref: %GenericInterface.type.0da = name_ref GenericInterface, imports.%import_ref.3e7 [template = constants.%GenericInterface.generic]
+// CHECK:STDOUT:     %AnyParam: type = class_type @AnyParam, @AnyParam(constants.%GenericInterface.type.0da, constants.%GenericInterface.generic) [template = constants.%AnyParam.861]
+// CHECK:STDOUT:   }
+// CHECK:STDOUT:   %obj: ref %AnyParam.861 = bind_name obj, %obj.var
 // CHECK:STDOUT:   %obj.ref: ref %AnyParam.861 = name_ref obj, %obj
-// CHECK:STDOUT:   %PackageHasParam.ref: <namespace> = name_ref PackageHasParam, imports.%PackageHasParam [template = imports.%PackageHasParam]
+// CHECK:STDOUT:   %PackageHasParam.ref.loc10: <namespace> = name_ref PackageHasParam, imports.%PackageHasParam [template = imports.%PackageHasParam]
 // CHECK:STDOUT:   %Y.ref: type = name_ref Y, imports.%import_ref.d7e [template = constants.%Y.type]
 // CHECK:STDOUT:   %K.ref: %K.assoc_type = name_ref K, imports.%import_ref.df6 [template = constants.%assoc0]
 // CHECK:STDOUT:   %impl.elem0: %K.type.311 = impl_witness_access constants.%impl_witness, element0 [template = constants.%K.c3c]

@@ -56,7 +56,11 @@ fn Make() -> C {
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
 // CHECK:STDOUT: class @C {
-// CHECK:STDOUT:   %.loc16: <error> = field_decl a, element0 [template]
+// CHECK:STDOUT:   %.loc16_8: <error> = field_decl a, element0 [template]
+// CHECK:STDOUT:   name_binding_decl {
+// CHECK:STDOUT:     %.loc16_3: <error> = var_pattern %.loc16_8
+// CHECK:STDOUT:   }
+// CHECK:STDOUT:   %.var: ref <error> = var <invalid>
 // CHECK:STDOUT:   %complete_type: <witness> = complete_type_witness <error> [template = <error>]
 // CHECK:STDOUT:   complete_type_witness = %complete_type
 // CHECK:STDOUT: }

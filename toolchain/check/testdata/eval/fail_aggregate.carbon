@@ -70,7 +70,17 @@ var array_index: [i32; 1] = (0,) as [i32; ((5, 7, 1, 9) as [i32; 4])[2]];
 // CHECK:STDOUT:     .array_index = %array_index
 // CHECK:STDOUT:   }
 // CHECK:STDOUT:   %Core.import = import Core
+// CHECK:STDOUT:   name_binding_decl {
+// CHECK:STDOUT:     %array_index.patt: %array_type.0cb = binding_pattern array_index
+// CHECK:STDOUT:     %.loc17_1: %array_type.0cb = var_pattern %array_index.patt
+// CHECK:STDOUT:   }
 // CHECK:STDOUT:   %array_index.var: ref %array_type.0cb = var array_index
+// CHECK:STDOUT:   %.loc17_25: type = splice_block %array_type [template = constants.%array_type.0cb] {
+// CHECK:STDOUT:     %int_32: Core.IntLiteral = int_value 32 [template = constants.%int_32]
+// CHECK:STDOUT:     %i32: type = class_type @Int, @Int(constants.%int_32) [template = constants.%i32]
+// CHECK:STDOUT:     %int_1: Core.IntLiteral = int_value 1 [template = constants.%int_1.5b8]
+// CHECK:STDOUT:     %array_type: type = array_type %int_1, %i32 [template = constants.%array_type.0cb]
+// CHECK:STDOUT:   }
 // CHECK:STDOUT:   %array_index: ref %array_type.0cb = bind_name array_index, %array_index.var
 // CHECK:STDOUT: }
 // CHECK:STDOUT:

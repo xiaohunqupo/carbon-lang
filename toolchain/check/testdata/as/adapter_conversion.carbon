@@ -131,7 +131,7 @@ fn F(a: A) {
 
   // CHECK:STDERR: fail_init_tuple_variable.carbon:[[@LINE+7]]:3: error: cannot copy value of type `Noncopyable` [CopyOfUncopyableType]
   // CHECK:STDERR:   var a_init: A = (a as (i32, Noncopyable)) as A;
-  // CHECK:STDERR:   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  // CHECK:STDERR:   ^~~~~~~~~~~~~
   // CHECK:STDERR: fail_init_tuple_variable.carbon:[[@LINE+4]]:19: note: in copy of `A` [InCopy]
   // CHECK:STDERR:   var a_init: A = (a as (i32, Noncopyable)) as A;
   // CHECK:STDERR:                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -207,23 +207,59 @@ var b: B = {.x = 1} as B;
 // CHECK:STDOUT:     .A = %A.decl
 // CHECK:STDOUT:     .B = %B.decl
 // CHECK:STDOUT:     .a_ref = %a_ref
-// CHECK:STDOUT:     .a_val = @__global_init.%a_val
-// CHECK:STDOUT:     .b_val = @__global_init.%b_val
-// CHECK:STDOUT:     .b_ptr = @__global_init.%b_ptr
+// CHECK:STDOUT:     .a_val = %a_val
+// CHECK:STDOUT:     .b_val = %b_val
+// CHECK:STDOUT:     .b_ptr = %b_ptr
 // CHECK:STDOUT:     .b_factory = %b_factory
 // CHECK:STDOUT:   }
 // CHECK:STDOUT:   %Core.import = import Core
 // CHECK:STDOUT:   %A.decl: type = class_decl @A [template = constants.%A] {} {}
 // CHECK:STDOUT:   %B.decl: type = class_decl @B [template = constants.%B] {} {}
+// CHECK:STDOUT:   name_binding_decl {
+// CHECK:STDOUT:     %a_ref.patt: %A = binding_pattern a_ref
+// CHECK:STDOUT:     %.loc17: %A = var_pattern %a_ref.patt
+// CHECK:STDOUT:   }
 // CHECK:STDOUT:   %a_ref.var: ref %A = var a_ref
+// CHECK:STDOUT:   %A.ref.loc17: type = name_ref A, %A.decl [template = constants.%A]
 // CHECK:STDOUT:   %a_ref: ref %A = bind_name a_ref, %a_ref.var
+// CHECK:STDOUT:   name_binding_decl {
+// CHECK:STDOUT:     %a_val.patt: %A = binding_pattern a_val
+// CHECK:STDOUT:   }
+// CHECK:STDOUT:   %A.ref.loc18: type = name_ref A, %A.decl [template = constants.%A]
+// CHECK:STDOUT:   %a_val: ref %A = bind_name a_val, @__global_init.%a_ref.ref.loc18
+// CHECK:STDOUT:   name_binding_decl {
+// CHECK:STDOUT:     %b_val.patt: %B = binding_pattern b_val
+// CHECK:STDOUT:   }
+// CHECK:STDOUT:   %B.ref.loc21: type = name_ref B, %B.decl [template = constants.%B]
+// CHECK:STDOUT:   %b_val: ref %B = bind_name b_val, @__global_init.%.loc21_22.2
+// CHECK:STDOUT:   name_binding_decl {
+// CHECK:STDOUT:     %b_ptr.patt: %ptr.e79 = binding_pattern b_ptr
+// CHECK:STDOUT:   }
+// CHECK:STDOUT:   %.loc22: type = splice_block %ptr [template = constants.%ptr.e79] {
+// CHECK:STDOUT:     %B.ref.loc22: type = name_ref B, %B.decl [template = constants.%B]
+// CHECK:STDOUT:     %ptr: type = ptr_type %B [template = constants.%ptr.e79]
+// CHECK:STDOUT:   }
+// CHECK:STDOUT:   %b_ptr: %ptr.e79 = bind_name b_ptr, @__global_init.%addr
+// CHECK:STDOUT:   name_binding_decl {
+// CHECK:STDOUT:     %b_factory.patt: %B = binding_pattern b_factory
+// CHECK:STDOUT:     %.loc24: %B = var_pattern %b_factory.patt
+// CHECK:STDOUT:   }
 // CHECK:STDOUT:   %b_factory.var: ref %B = var b_factory
+// CHECK:STDOUT:   %B.ref.loc24: type = name_ref B, %B.decl [template = constants.%B]
 // CHECK:STDOUT:   %b_factory: ref %B = bind_name b_factory, %b_factory.var
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
 // CHECK:STDOUT: class @A {
-// CHECK:STDOUT:   %.loc5: %A.elem = field_decl x, element0 [template]
-// CHECK:STDOUT:   %.loc6: %A.elem = field_decl y, element1 [template]
+// CHECK:STDOUT:   %.loc5_8: %A.elem = field_decl x, element0 [template]
+// CHECK:STDOUT:   name_binding_decl {
+// CHECK:STDOUT:     %.loc5_3: %A.elem = var_pattern %.loc5_8
+// CHECK:STDOUT:   }
+// CHECK:STDOUT:   %.var.loc5: ref %A.elem = var <invalid>
+// CHECK:STDOUT:   %.loc6_8: %A.elem = field_decl y, element1 [template]
+// CHECK:STDOUT:   name_binding_decl {
+// CHECK:STDOUT:     %.loc6_3: %A.elem = var_pattern %.loc6_8
+// CHECK:STDOUT:   }
+// CHECK:STDOUT:   %.var.loc6: ref %A.elem = var <invalid>
 // CHECK:STDOUT:   %Make.decl: %Make.type = fn_decl @Make [template = constants.%Make] {
 // CHECK:STDOUT:     %return.patt: %A = return_slot_pattern
 // CHECK:STDOUT:     %return.param_patt: %A = out_param_pattern %return.patt, runtime_param0
@@ -287,26 +323,22 @@ var b: B = {.x = 1} as B;
 // CHECK:STDOUT:   %.loc17_31.6: ref %i32 = class_element_access file.%a_ref.var, element1
 // CHECK:STDOUT:   %.loc17_31.7: init %i32 = initialize_from %.loc17_31.5 to %.loc17_31.6 [template = constants.%int_2.ef8]
 // CHECK:STDOUT:   %.loc17_31.8: init %A = class_init (%.loc17_31.4, %.loc17_31.7), file.%a_ref.var [template = constants.%A.val]
-// CHECK:STDOUT:   %.loc17_32: init %A = converted %.loc17_31.1, %.loc17_31.8 [template = constants.%A.val]
-// CHECK:STDOUT:   assign file.%a_ref.var, %.loc17_32
+// CHECK:STDOUT:   %.loc17_1: init %A = converted %.loc17_31.1, %.loc17_31.8 [template = constants.%A.val]
+// CHECK:STDOUT:   assign file.%a_ref.var, %.loc17_1
 // CHECK:STDOUT:   %a_ref.ref.loc18: ref %A = name_ref a_ref, file.%a_ref
-// CHECK:STDOUT:   %.loc18: %A = bind_value %a_ref.ref.loc18
-// CHECK:STDOUT:   %a_val: %A = bind_name a_val, %.loc18
-// CHECK:STDOUT:   %a_val.ref: %A = name_ref a_val, %a_val
+// CHECK:STDOUT:   %a_val.ref: ref %A = name_ref a_val, file.%a_val
 // CHECK:STDOUT:   %B.ref.loc21: type = name_ref B, file.%B.decl [template = constants.%B]
-// CHECK:STDOUT:   %.loc21_22.1: %B = as_compatible %a_val.ref
-// CHECK:STDOUT:   %.loc21_22.2: %B = converted %a_val.ref, %.loc21_22.1
-// CHECK:STDOUT:   %b_val: %B = bind_name b_val, %.loc21_22.2
+// CHECK:STDOUT:   %.loc21_22.1: ref %B = as_compatible %a_val.ref
+// CHECK:STDOUT:   %.loc21_22.2: ref %B = converted %a_val.ref, %.loc21_22.1
 // CHECK:STDOUT:   %a_ref.ref.loc22: ref %A = name_ref a_ref, file.%a_ref
 // CHECK:STDOUT:   %B.ref.loc22: type = name_ref B, file.%B.decl [template = constants.%B]
 // CHECK:STDOUT:   %.loc22_25.1: ref %B = as_compatible %a_ref.ref.loc22
 // CHECK:STDOUT:   %.loc22_25.2: ref %B = converted %a_ref.ref.loc22, %.loc22_25.1
 // CHECK:STDOUT:   %addr: %ptr.e79 = addr_of %.loc22_25.2
-// CHECK:STDOUT:   %b_ptr: %ptr.e79 = bind_name b_ptr, %addr
 // CHECK:STDOUT:   %A.ref: type = name_ref A, file.%A.decl [template = constants.%A]
 // CHECK:STDOUT:   %Make.ref: %Make.type = name_ref Make, @A.%Make.decl [template = constants.%Make]
-// CHECK:STDOUT:   %.loc24_5: ref %B = splice_block file.%b_factory.var {}
-// CHECK:STDOUT:   %Make.call: init %A = call %Make.ref() to %.loc24_5
+// CHECK:STDOUT:   %.loc24_1: ref %B = splice_block file.%b_factory.var {}
+// CHECK:STDOUT:   %Make.call: init %A = call %Make.ref() to %.loc24_1
 // CHECK:STDOUT:   %B.ref.loc24: type = name_ref B, file.%B.decl [template = constants.%B]
 // CHECK:STDOUT:   %.loc24_29.1: init %B = as_compatible %Make.call
 // CHECK:STDOUT:   %.loc24_29.2: init %B = converted %Make.call, %.loc24_29.1
@@ -345,11 +377,24 @@ var b: B = {.x = 1} as B;
 // CHECK:STDOUT:   package: <namespace> = namespace [template] {
 // CHECK:STDOUT:     .Core = imports.%Core
 // CHECK:STDOUT:     .A = %A.decl
-// CHECK:STDOUT:     .a = @__global_init.%a
-// CHECK:STDOUT:     .n = @__global_init.%n
+// CHECK:STDOUT:     .a = %a
+// CHECK:STDOUT:     .n = %n
 // CHECK:STDOUT:   }
 // CHECK:STDOUT:   %Core.import = import Core
 // CHECK:STDOUT:   %A.decl: type = class_decl @A [template = constants.%A] {} {}
+// CHECK:STDOUT:   name_binding_decl {
+// CHECK:STDOUT:     %a.patt: %A = binding_pattern a
+// CHECK:STDOUT:   }
+// CHECK:STDOUT:   %A.ref: type = name_ref A, %A.decl [template = constants.%A]
+// CHECK:STDOUT:   %a: %A = bind_name a, @__global_init.%.loc8_23.2
+// CHECK:STDOUT:   name_binding_decl {
+// CHECK:STDOUT:     %n.patt: %i32 = binding_pattern n
+// CHECK:STDOUT:   }
+// CHECK:STDOUT:   %.loc9: type = splice_block %i32 [template = constants.%i32] {
+// CHECK:STDOUT:     %int_32: Core.IntLiteral = int_value 32 [template = constants.%int_32]
+// CHECK:STDOUT:     %i32: type = class_type @Int, @Int(constants.%int_32) [template = constants.%i32]
+// CHECK:STDOUT:   }
+// CHECK:STDOUT:   %n: %i32 = bind_name n, @__global_init.%.loc9_16.2
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
 // CHECK:STDOUT: class @A {
@@ -374,13 +419,11 @@ var b: B = {.x = 1} as B;
 // CHECK:STDOUT:   %A.ref: type = name_ref A, file.%A.decl [template = constants.%A]
 // CHECK:STDOUT:   %.loc8_23.1: %A = as_compatible %.loc8_15.2 [template = constants.%int_1.5d2]
 // CHECK:STDOUT:   %.loc8_23.2: %A = converted %.loc8_15.2, %.loc8_23.1 [template = constants.%int_1.5d2]
-// CHECK:STDOUT:   %a: %A = bind_name a, %.loc8_23.2
-// CHECK:STDOUT:   %a.ref: %A = name_ref a, %a
+// CHECK:STDOUT:   %a.ref: %A = name_ref a, file.%a
 // CHECK:STDOUT:   %int_32.loc9: Core.IntLiteral = int_value 32 [template = constants.%int_32]
 // CHECK:STDOUT:   %i32.loc9: type = class_type @Int, @Int(constants.%int_32) [template = constants.%i32]
 // CHECK:STDOUT:   %.loc9_16.1: %i32 = as_compatible %a.ref
 // CHECK:STDOUT:   %.loc9_16.2: %i32 = converted %a.ref, %.loc9_16.1
-// CHECK:STDOUT:   %n: %i32 = bind_name n, %.loc9_16.2
 // CHECK:STDOUT:   return
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
@@ -410,13 +453,18 @@ var b: B = {.x = 1} as B;
 // CHECK:STDOUT:     .B = %B.decl
 // CHECK:STDOUT:     .C = %C.decl
 // CHECK:STDOUT:     .D = %D.decl
-// CHECK:STDOUT:     .d = @__global_init.%d
+// CHECK:STDOUT:     .d = %d
 // CHECK:STDOUT:   }
 // CHECK:STDOUT:   %Core.import = import Core
 // CHECK:STDOUT:   %A.decl: type = class_decl @A [template = constants.%A] {} {}
 // CHECK:STDOUT:   %B.decl: type = class_decl @B [template = constants.%B] {} {}
 // CHECK:STDOUT:   %C.decl: type = class_decl @C [template = constants.%C] {} {}
 // CHECK:STDOUT:   %D.decl: type = class_decl @D [template = constants.%D] {} {}
+// CHECK:STDOUT:   name_binding_decl {
+// CHECK:STDOUT:     %d.patt: %D = binding_pattern d
+// CHECK:STDOUT:   }
+// CHECK:STDOUT:   %D.ref: type = name_ref D, %D.decl [template = constants.%D]
+// CHECK:STDOUT:   %d: %D = bind_name d, @__global_init.%.loc9_15.2
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
 // CHECK:STDOUT: class @A {
@@ -455,7 +503,6 @@ var b: B = {.x = 1} as B;
 // CHECK:STDOUT:   %empty_struct: %empty_struct_type = struct_value () [template = constants.%empty_struct]
 // CHECK:STDOUT:   %.loc9_15.1: %D = as_compatible %empty_struct [template = constants.%empty_struct]
 // CHECK:STDOUT:   %.loc9_15.2: %D = converted %.loc9_13, %.loc9_15.1 [template = constants.%empty_struct]
-// CHECK:STDOUT:   %d: %D = bind_name d, %.loc9_15.2
 // CHECK:STDOUT:   return
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
@@ -499,16 +546,29 @@ var b: B = {.x = 1} as B;
 // CHECK:STDOUT:     .Core = imports.%Core
 // CHECK:STDOUT:     .A = %A.decl
 // CHECK:STDOUT:     .B = %B.decl
-// CHECK:STDOUT:     .b_value = @__global_init.%b_value
+// CHECK:STDOUT:     .b_value = %b_value
 // CHECK:STDOUT:   }
 // CHECK:STDOUT:   %Core.import = import Core
 // CHECK:STDOUT:   %A.decl: type = class_decl @A [template = constants.%A] {} {}
 // CHECK:STDOUT:   %B.decl: type = class_decl @B [template = constants.%B] {} {}
+// CHECK:STDOUT:   name_binding_decl {
+// CHECK:STDOUT:     %b_value.patt: %B = binding_pattern b_value
+// CHECK:STDOUT:   }
+// CHECK:STDOUT:   %B.ref: type = name_ref B, %B.decl [template = constants.%B]
+// CHECK:STDOUT:   %b_value: ref %B = bind_name b_value, @__global_init.%.loc13_42.2
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
 // CHECK:STDOUT: class @A {
-// CHECK:STDOUT:   %.loc5: %A.elem = field_decl x, element0 [template]
-// CHECK:STDOUT:   %.loc6: %A.elem = field_decl y, element1 [template]
+// CHECK:STDOUT:   %.loc5_8: %A.elem = field_decl x, element0 [template]
+// CHECK:STDOUT:   name_binding_decl {
+// CHECK:STDOUT:     %.loc5_3: %A.elem = var_pattern %.loc5_8
+// CHECK:STDOUT:   }
+// CHECK:STDOUT:   %.var.loc5: ref %A.elem = var <invalid>
+// CHECK:STDOUT:   %.loc6_8: %A.elem = field_decl y, element1 [template]
+// CHECK:STDOUT:   name_binding_decl {
+// CHECK:STDOUT:     %.loc6_3: %A.elem = var_pattern %.loc6_8
+// CHECK:STDOUT:   }
+// CHECK:STDOUT:   %.var.loc6: ref %A.elem = var <invalid>
 // CHECK:STDOUT:   %complete_type: <witness> = complete_type_witness %struct_type.x.y.871 [template = constants.%complete_type.70a]
 // CHECK:STDOUT:   complete_type_witness = %complete_type
 // CHECK:STDOUT: }
@@ -547,8 +607,6 @@ var b: B = {.x = 1} as B;
 // CHECK:STDOUT:   %B.ref: type = name_ref B, file.%B.decl [template = constants.%B]
 // CHECK:STDOUT:   %.loc13_42.1: ref %B = as_compatible %.loc13_36
 // CHECK:STDOUT:   %.loc13_42.2: ref %B = converted %.loc13_36, %.loc13_42.1
-// CHECK:STDOUT:   %.loc13_42.3: %B = bind_value %.loc13_42.2
-// CHECK:STDOUT:   %b_value: %B = bind_name b_value, %.loc13_42.3
 // CHECK:STDOUT:   return
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
@@ -597,13 +655,26 @@ var b: B = {.x = 1} as B;
 // CHECK:STDOUT:   %Core.import = import Core
 // CHECK:STDOUT:   %A.decl: type = class_decl @A [template = constants.%A] {} {}
 // CHECK:STDOUT:   %B.decl: type = class_decl @B [template = constants.%B] {} {}
+// CHECK:STDOUT:   name_binding_decl {
+// CHECK:STDOUT:     %b_init.patt: %B = binding_pattern b_init
+// CHECK:STDOUT:     %.loc22: %B = var_pattern %b_init.patt
+// CHECK:STDOUT:   }
 // CHECK:STDOUT:   %b_init.var: ref %B = var b_init
+// CHECK:STDOUT:   %B.ref: type = name_ref B, %B.decl [template = constants.%B]
 // CHECK:STDOUT:   %b_init: ref %B = bind_name b_init, %b_init.var
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
 // CHECK:STDOUT: class @A {
-// CHECK:STDOUT:   %.loc5: %A.elem = field_decl x, element0 [template]
-// CHECK:STDOUT:   %.loc6: %A.elem = field_decl y, element1 [template]
+// CHECK:STDOUT:   %.loc5_8: %A.elem = field_decl x, element0 [template]
+// CHECK:STDOUT:   name_binding_decl {
+// CHECK:STDOUT:     %.loc5_3: %A.elem = var_pattern %.loc5_8
+// CHECK:STDOUT:   }
+// CHECK:STDOUT:   %.var.loc5: ref %A.elem = var <invalid>
+// CHECK:STDOUT:   %.loc6_8: %A.elem = field_decl y, element1 [template]
+// CHECK:STDOUT:   name_binding_decl {
+// CHECK:STDOUT:     %.loc6_3: %A.elem = var_pattern %.loc6_8
+// CHECK:STDOUT:   }
+// CHECK:STDOUT:   %.var.loc6: ref %A.elem = var <invalid>
 // CHECK:STDOUT:   %complete_type: <witness> = complete_type_witness %struct_type.x.y.871 [template = constants.%complete_type.70a]
 // CHECK:STDOUT:   complete_type_witness = %complete_type
 // CHECK:STDOUT: }
@@ -709,6 +780,9 @@ var b: B = {.x = 1} as B;
 // CHECK:STDOUT:
 // CHECK:STDOUT: fn @F(%a.param_patt: %A) {
 // CHECK:STDOUT: !entry:
+// CHECK:STDOUT:   name_binding_decl {
+// CHECK:STDOUT:     %a_value.patt: %A = binding_pattern a_value
+// CHECK:STDOUT:   }
 // CHECK:STDOUT:   %a.ref: %A = name_ref a, %a
 // CHECK:STDOUT:   %int_32: Core.IntLiteral = int_value 32 [template = constants.%int_32]
 // CHECK:STDOUT:   %i32: type = class_type @Int, @Int(constants.%int_32) [template = constants.%i32]
@@ -717,9 +791,10 @@ var b: B = {.x = 1} as B;
 // CHECK:STDOUT:   %.loc13_43.2: type = converted %.loc13_43.1, constants.%tuple.type.560 [template = constants.%tuple.type.560]
 // CHECK:STDOUT:   %.loc13_23.1: %tuple.type.560 = as_compatible %a.ref
 // CHECK:STDOUT:   %.loc13_23.2: %tuple.type.560 = converted %a.ref, %.loc13_23.1
-// CHECK:STDOUT:   %A.ref.loc13: type = name_ref A, file.%A.decl [template = constants.%A]
+// CHECK:STDOUT:   %A.ref.loc13_49: type = name_ref A, file.%A.decl [template = constants.%A]
 // CHECK:STDOUT:   %.loc13_46.1: %A = as_compatible %.loc13_23.2
 // CHECK:STDOUT:   %.loc13_46.2: %A = converted %.loc13_23.2, %.loc13_46.1
+// CHECK:STDOUT:   %A.ref.loc13_16: type = name_ref A, file.%A.decl [template = constants.%A]
 // CHECK:STDOUT:   %a_value: %A = bind_name a_value, %.loc13_46.2
 // CHECK:STDOUT:   return
 // CHECK:STDOUT: }
@@ -786,8 +861,11 @@ var b: B = {.x = 1} as B;
 // CHECK:STDOUT:
 // CHECK:STDOUT: fn @F(%a.param_patt: %A) {
 // CHECK:STDOUT: !entry:
+// CHECK:STDOUT:   name_binding_decl {
+// CHECK:STDOUT:     %a_init.patt: %A = binding_pattern a_init
+// CHECK:STDOUT:     %.loc25_3.1: %A = var_pattern %a_init.patt
+// CHECK:STDOUT:   }
 // CHECK:STDOUT:   %a_init.var: ref %A = var a_init
-// CHECK:STDOUT:   %a_init: ref %A = bind_name a_init, %a_init.var
 // CHECK:STDOUT:   %a.ref: %A = name_ref a, %a
 // CHECK:STDOUT:   %int_32: Core.IntLiteral = int_value 32 [template = constants.%int_32]
 // CHECK:STDOUT:   %i32: type = class_type @Int, @Int(constants.%int_32) [template = constants.%i32]
@@ -796,16 +874,18 @@ var b: B = {.x = 1} as B;
 // CHECK:STDOUT:   %.loc25_42.2: type = converted %.loc25_42.1, constants.%tuple.type.560 [template = constants.%tuple.type.560]
 // CHECK:STDOUT:   %.loc25_22.1: %tuple.type.560 = as_compatible %a.ref
 // CHECK:STDOUT:   %.loc25_22.2: %tuple.type.560 = converted %a.ref, %.loc25_22.1
-// CHECK:STDOUT:   %A.ref.loc25: type = name_ref A, file.%A.decl [template = constants.%A]
+// CHECK:STDOUT:   %A.ref.loc25_48: type = name_ref A, file.%A.decl [template = constants.%A]
 // CHECK:STDOUT:   %.loc25_45.1: %A = as_compatible %.loc25_22.2
 // CHECK:STDOUT:   %.loc25_45.2: %A = converted %.loc25_22.2, %.loc25_45.1
-// CHECK:STDOUT:   %.loc25_49.1: %tuple.type.560 = as_compatible %.loc25_45.2
-// CHECK:STDOUT:   %tuple.elem0.loc25_49.1: %i32 = tuple_access %.loc25_49.1, element0
-// CHECK:STDOUT:   %.loc25_49.2: ref %tuple.type.560 = as_compatible %a_init.var
-// CHECK:STDOUT:   %tuple.elem0.loc25_49.2: ref %i32 = tuple_access %.loc25_49.2, element0
-// CHECK:STDOUT:   %.loc25_49.3: init %i32 = initialize_from %tuple.elem0.loc25_49.1 to %tuple.elem0.loc25_49.2
-// CHECK:STDOUT:   %tuple.elem1: %Noncopyable = tuple_access %.loc25_49.1, element1
+// CHECK:STDOUT:   %.loc25_3.2: %tuple.type.560 = as_compatible %.loc25_45.2
+// CHECK:STDOUT:   %tuple.elem0.loc25_3.1: %i32 = tuple_access %.loc25_3.2, element0
+// CHECK:STDOUT:   %.loc25_3.3: ref %tuple.type.560 = as_compatible %a_init.var
+// CHECK:STDOUT:   %tuple.elem0.loc25_3.2: ref %i32 = tuple_access %.loc25_3.3, element0
+// CHECK:STDOUT:   %.loc25_3.4: init %i32 = initialize_from %tuple.elem0.loc25_3.1 to %tuple.elem0.loc25_3.2
+// CHECK:STDOUT:   %tuple.elem1: %Noncopyable = tuple_access %.loc25_3.2, element1
 // CHECK:STDOUT:   assign %a_init.var, <error>
+// CHECK:STDOUT:   %A.ref.loc25_15: type = name_ref A, file.%A.decl [template = constants.%A]
+// CHECK:STDOUT:   %a_init: ref %A = bind_name a_init, %a_init.var
 // CHECK:STDOUT:   return
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
@@ -842,12 +922,21 @@ var b: B = {.x = 1} as B;
 // CHECK:STDOUT:   %Core.import = import Core
 // CHECK:STDOUT:   %A.decl: type = class_decl @A [template = constants.%A] {} {}
 // CHECK:STDOUT:   %B.decl: type = class_decl @B [template = constants.%B] {} {}
+// CHECK:STDOUT:   name_binding_decl {
+// CHECK:STDOUT:     %b.patt: %B = binding_pattern b
+// CHECK:STDOUT:     %.loc22: %B = var_pattern %b.patt
+// CHECK:STDOUT:   }
 // CHECK:STDOUT:   %b.var: ref %B = var b
+// CHECK:STDOUT:   %B.ref: type = name_ref B, %B.decl [template = constants.%B]
 // CHECK:STDOUT:   %b: ref %B = bind_name b, %b.var
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
 // CHECK:STDOUT: class @A {
-// CHECK:STDOUT:   %.loc5: %A.elem = field_decl x, element0 [template]
+// CHECK:STDOUT:   %.loc5_8: %A.elem = field_decl x, element0 [template]
+// CHECK:STDOUT:   name_binding_decl {
+// CHECK:STDOUT:     %.loc5_3: %A.elem = var_pattern %.loc5_8
+// CHECK:STDOUT:   }
+// CHECK:STDOUT:   %.var: ref %A.elem = var <invalid>
 // CHECK:STDOUT:   %complete_type: <witness> = complete_type_witness %struct_type.x.ed6 [template = constants.%complete_type.1ec]
 // CHECK:STDOUT:   complete_type_witness = %complete_type
 // CHECK:STDOUT: }

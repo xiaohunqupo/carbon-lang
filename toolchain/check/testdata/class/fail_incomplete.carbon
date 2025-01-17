@@ -164,7 +164,7 @@ fn CallIncompleteAddrSelf(p: Class*) {
 library "[[@TEST_NAME]]";
 
 class C {
-  // CHECK:STDERR: fail_in_definition.carbon:[[@LINE+7]]:10: error: field has incomplete type `C` [IncompleteTypeInVarDecl]
+  // CHECK:STDERR: fail_in_definition.carbon:[[@LINE+7]]:10: error: field has incomplete type `C` [IncompleteTypeInFieldDecl]
   // CHECK:STDERR:   var c: C;
   // CHECK:STDERR:          ^
   // CHECK:STDERR: fail_in_definition.carbon:[[@LINE-4]]:1: note: class is incomplete within its definition [ClassIncompleteWithinDefinition]
@@ -243,8 +243,13 @@ class C {
 // CHECK:STDOUT:   %Class.decl: type = class_decl @Class [template = constants.%Class] {} {}
 // CHECK:STDOUT:   %.decl: %.type = fn_decl @.1 [template = constants.%.d85] {} {}
 // CHECK:STDOUT:   %CallClassFunction.decl: %CallClassFunction.type = fn_decl @CallClassFunction [template = constants.%CallClassFunction] {} {}
+// CHECK:STDOUT:   name_binding_decl {
+// CHECK:STDOUT:     %global_var.patt: <error> = binding_pattern global_var
+// CHECK:STDOUT:     %.loc33: <error> = var_pattern %global_var.patt
+// CHECK:STDOUT:   }
 // CHECK:STDOUT:   %global_var.var: ref <error> = var global_var
-// CHECK:STDOUT:   %global_var: ref <error> = bind_name global_var, %global_var.var
+// CHECK:STDOUT:   %Class.ref: type = name_ref Class, %Class.decl [template = constants.%Class]
+// CHECK:STDOUT:   %global_var: <error> = bind_name global_var, <error>
 // CHECK:STDOUT:   %ConvertFromStruct.decl: %ConvertFromStruct.type = fn_decl @ConvertFromStruct [template = constants.%ConvertFromStruct] {
 // CHECK:STDOUT:     %return.patt: %Class = return_slot_pattern
 // CHECK:STDOUT:     %return.param_patt: %Class = out_param_pattern %return.patt, runtime_param0
@@ -309,7 +314,7 @@ class C {
 // CHECK:STDOUT:   } {
 // CHECK:STDOUT:     %p.param: %ptr.e71 = value_param runtime_param0
 // CHECK:STDOUT:     %.loc77: type = splice_block %ptr [template = constants.%ptr.e71] {
-// CHECK:STDOUT:       %Class.ref: type = name_ref Class, file.%Class.decl [template = constants.%Class]
+// CHECK:STDOUT:       %Class.ref.loc77: type = name_ref Class, file.%Class.decl [template = constants.%Class]
 // CHECK:STDOUT:       %ptr: type = ptr_type %Class [template = constants.%ptr.e71]
 // CHECK:STDOUT:     }
 // CHECK:STDOUT:     %p: %ptr.e71 = bind_name p, %p.param
@@ -416,8 +421,12 @@ class C {
 // CHECK:STDOUT:
 // CHECK:STDOUT: fn @Let(%p.param_patt: %ptr.e71) {
 // CHECK:STDOUT: !entry:
+// CHECK:STDOUT:   name_binding_decl {
+// CHECK:STDOUT:     %c.patt: <error> = binding_pattern c
+// CHECK:STDOUT:   }
 // CHECK:STDOUT:   %p.ref: %ptr.e71 = name_ref p, %p
 // CHECK:STDOUT:   %.loc85: ref %Class = deref %p.ref
+// CHECK:STDOUT:   %Class.ref.loc85: type = name_ref Class, file.%Class.decl [template = constants.%Class]
 // CHECK:STDOUT:   %c: <error> = bind_name c, <error>
 // CHECK:STDOUT:   return
 // CHECK:STDOUT: }
@@ -482,7 +491,11 @@ class C {
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
 // CHECK:STDOUT: class @C {
-// CHECK:STDOUT:   %.loc12: <error> = field_decl c, element0 [template]
+// CHECK:STDOUT:   %.loc12_8: <error> = field_decl c, element0 [template]
+// CHECK:STDOUT:   name_binding_decl {
+// CHECK:STDOUT:     %.loc12_3: <error> = var_pattern %.loc12_8
+// CHECK:STDOUT:   }
+// CHECK:STDOUT:   %.var: ref <error> = var <invalid>
 // CHECK:STDOUT:   %complete_type: <witness> = complete_type_witness <error> [template = <error>]
 // CHECK:STDOUT:   complete_type_witness = %complete_type
 // CHECK:STDOUT: }

@@ -107,7 +107,11 @@ class C(C:! type) {
 // CHECK:STDOUT:   %complete_type.loc7_3.2: <witness> = complete_type_witness @C.%struct_type.x (%struct_type.x.2ac) [symbolic = %complete_type.loc7_3.2 (constants.%complete_type.4339)]
 // CHECK:STDOUT:
 // CHECK:STDOUT:   class {
-// CHECK:STDOUT:     %.loc6: @C.%C.elem (%C.elem.cca) = field_decl x, element0 [template]
+// CHECK:STDOUT:     %.loc6_10: @C.%C.elem (%C.elem.cca) = field_decl x, element0 [template]
+// CHECK:STDOUT:     name_binding_decl {
+// CHECK:STDOUT:       %.loc6_5: @C.%C.elem (%C.elem.cca) = var_pattern %.loc6_10
+// CHECK:STDOUT:     }
+// CHECK:STDOUT:     %.var: ref @C.%C.elem (%C.elem.cca) = var <invalid>
 // CHECK:STDOUT:     %complete_type.loc7_3.1: <witness> = complete_type_witness %struct_type.x.2ac [symbolic = %complete_type.loc7_3.2 (constants.%complete_type.4339)]
 // CHECK:STDOUT:     complete_type_witness = %complete_type.loc7_3.1
 // CHECK:STDOUT:   }
@@ -122,8 +126,11 @@ class C(C:! type) {
 // CHECK:STDOUT:     %T.param: type = value_param runtime_param<invalid>
 // CHECK:STDOUT:     %T.loc5_11.1: type = bind_symbolic_name T, 0, %T.param [symbolic = %T.loc5_11.2 (constants.%T)]
 // CHECK:STDOUT:   }
+// CHECK:STDOUT:   name_binding_decl {
+// CHECK:STDOUT:     %v.patt: %C.d45 = binding_pattern v
+// CHECK:STDOUT:     %.loc8_3.1: %C.d45 = var_pattern %v.patt
+// CHECK:STDOUT:   }
 // CHECK:STDOUT:   %v.var: ref %C.d45 = var v
-// CHECK:STDOUT:   %v: ref %C.d45 = bind_name v, %v.var
 // CHECK:STDOUT:   %int_1: Core.IntLiteral = int_value 1 [template = constants.%int_1.5b8]
 // CHECK:STDOUT:   %.loc8_26.1: %struct_type.x.c96 = struct_literal (%int_1)
 // CHECK:STDOUT:   %impl.elem0: %Convert.type.1b6 = impl_witness_access constants.%impl_witness.d39, element0 [template = constants.%Convert.956]
@@ -134,8 +141,15 @@ class C(C:! type) {
 // CHECK:STDOUT:   %.loc8_26.3: ref %i32 = class_element_access %v.var, element0
 // CHECK:STDOUT:   %.loc8_26.4: init %i32 = initialize_from %.loc8_26.2 to %.loc8_26.3 [template = constants.%int_1.5d2]
 // CHECK:STDOUT:   %.loc8_26.5: init %C.d45 = class_init (%.loc8_26.4), %v.var [template = constants.%C.val]
-// CHECK:STDOUT:   %.loc8_27: init %C.d45 = converted %.loc8_26.1, %.loc8_26.5 [template = constants.%C.val]
-// CHECK:STDOUT:   assign %v.var, %.loc8_27
+// CHECK:STDOUT:   %.loc8_3.2: init %C.d45 = converted %.loc8_26.1, %.loc8_26.5 [template = constants.%C.val]
+// CHECK:STDOUT:   assign %v.var, %.loc8_3.2
+// CHECK:STDOUT:   %.loc8_15: type = splice_block %C [template = constants.%C.d45] {
+// CHECK:STDOUT:     %C.ref: %C.type = name_ref C, %C.decl [template = constants.%C.generic]
+// CHECK:STDOUT:     %int_32: Core.IntLiteral = int_value 32 [template = constants.%int_32]
+// CHECK:STDOUT:     %i32: type = class_type @Int, @Int(constants.%int_32) [template = constants.%i32]
+// CHECK:STDOUT:     %C: type = class_type @C, @C(constants.%i32) [template = constants.%C.d45]
+// CHECK:STDOUT:   }
+// CHECK:STDOUT:   %v: ref %C.d45 = bind_name v, %v.var
 // CHECK:STDOUT:   return
 // CHECK:STDOUT: }
 // CHECK:STDOUT:

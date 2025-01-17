@@ -82,7 +82,15 @@ var f: ForwardDeclared* = &f_ref.f;
 // CHECK:STDOUT:   %Empty.decl: type = interface_decl @Empty [template = constants.%Empty.type] {} {}
 // CHECK:STDOUT:   %Basic.decl: type = interface_decl @Basic [template = constants.%Basic.type] {} {}
 // CHECK:STDOUT:   %ForwardDeclared.decl: type = interface_decl @ForwardDeclared [template = constants.%ForwardDeclared.type] {} {}
+// CHECK:STDOUT:   name_binding_decl {
+// CHECK:STDOUT:     %f_ref.patt: %struct_type.f.2f5 = binding_pattern f_ref
+// CHECK:STDOUT:     %.loc20_1: %struct_type.f.2f5 = var_pattern %f_ref.patt
+// CHECK:STDOUT:   }
 // CHECK:STDOUT:   %f_ref.var: ref %struct_type.f.2f5 = var f_ref
+// CHECK:STDOUT:   %.loc20_32: type = splice_block %struct_type.f [template = constants.%struct_type.f.2f5] {
+// CHECK:STDOUT:     %ForwardDeclared.ref: type = name_ref ForwardDeclared, %ForwardDeclared.decl [template = constants.%ForwardDeclared.type]
+// CHECK:STDOUT:     %struct_type.f: type = struct_type {.f: %ForwardDeclared.type} [template = constants.%struct_type.f.2f5]
+// CHECK:STDOUT:   }
 // CHECK:STDOUT:   %f_ref: ref %struct_type.f.2f5 = bind_name f_ref, %f_ref.var
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
@@ -171,12 +179,12 @@ var f: ForwardDeclared* = &f_ref.f;
 // CHECK:STDOUT:   %import_ref.2ac: ref %struct_type.f.2f5 = import_ref Main//a, f_ref, loaded
 // CHECK:STDOUT:   %import_ref.cc0 = import_ref Main//a, inst15 [no loc], unloaded
 // CHECK:STDOUT:   %import_ref.37f = import_ref Main//a, inst19 [no loc], unloaded
-// CHECK:STDOUT:   %import_ref.42e: %assoc_type.6af = import_ref Main//a, loc8_15, loaded [template = constants.%assoc0.1d6]
+// CHECK:STDOUT:   %import_ref.42e: %assoc_type.6af = import_ref Main//a, loc8_8, loaded [template = constants.%assoc0.1d6]
 // CHECK:STDOUT:   %import_ref.b06: %F.assoc_type.94b = import_ref Main//a, loc9_9, loaded [template = constants.%assoc1.d7b]
 // CHECK:STDOUT:   %import_ref.08d600.1 = import_ref Main//a, T, unloaded
 // CHECK:STDOUT:   %import_ref.eea = import_ref Main//a, F, unloaded
 // CHECK:STDOUT:   %import_ref.52b = import_ref Main//a, inst34 [no loc], unloaded
-// CHECK:STDOUT:   %import_ref.95f: %assoc_type.3e8 = import_ref Main//a, loc16_15, loaded [template = constants.%assoc0.910]
+// CHECK:STDOUT:   %import_ref.95f: %assoc_type.3e8 = import_ref Main//a, loc16_8, loaded [template = constants.%assoc0.910]
 // CHECK:STDOUT:   %import_ref.7f1: %F.assoc_type.1e3 = import_ref Main//a, loc17_9, loaded [template = constants.%assoc1.68e]
 // CHECK:STDOUT:   %import_ref.08d600.2 = import_ref Main//a, T, unloaded
 // CHECK:STDOUT:   %import_ref.5d0 = import_ref Main//a, F, unloaded
@@ -234,7 +242,15 @@ var f: ForwardDeclared* = &f_ref.f;
 // CHECK:STDOUT:   %ForwardDeclared.ref.loc14: type = name_ref ForwardDeclared, imports.%import_ref.e33 [template = constants.%ForwardDeclared.type]
 // CHECK:STDOUT:   %F.ref.loc14: %F.assoc_type.1e3 = name_ref F, imports.%import_ref.7f1 [template = constants.%assoc1.68e]
 // CHECK:STDOUT:   %UseForwardDeclaredF: %F.assoc_type.1e3 = bind_alias UseForwardDeclaredF, imports.%import_ref.7f1 [template = constants.%assoc1.68e]
+// CHECK:STDOUT:   name_binding_decl {
+// CHECK:STDOUT:     %f.patt: %ptr = binding_pattern f
+// CHECK:STDOUT:     %.loc16_1: %ptr = var_pattern %f.patt
+// CHECK:STDOUT:   }
 // CHECK:STDOUT:   %f.var: ref %ptr = var f
+// CHECK:STDOUT:   %.loc16_23: type = splice_block %ptr [template = constants.%ptr] {
+// CHECK:STDOUT:     %ForwardDeclared.ref.loc16: type = name_ref ForwardDeclared, imports.%import_ref.e33 [template = constants.%ForwardDeclared.type]
+// CHECK:STDOUT:     %ptr: type = ptr_type %ForwardDeclared.type [template = constants.%ptr]
+// CHECK:STDOUT:   }
 // CHECK:STDOUT:   %f: ref %ptr = bind_name f, %f.var
 // CHECK:STDOUT: }
 // CHECK:STDOUT:

@@ -100,7 +100,11 @@ fn Run() {
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
 // CHECK:STDOUT: class @Field {
-// CHECK:STDOUT:   %.loc8: %Field.elem = field_decl x, element0 [template]
+// CHECK:STDOUT:   %.loc8_8: %Field.elem = field_decl x, element0 [template]
+// CHECK:STDOUT:   name_binding_decl {
+// CHECK:STDOUT:     %.loc8_3: %Field.elem = var_pattern %.loc8_8
+// CHECK:STDOUT:   }
+// CHECK:STDOUT:   %.var: ref %Field.elem = var <invalid>
 // CHECK:STDOUT:   %complete_type: <witness> = complete_type_witness %struct_type.x [template = constants.%complete_type.1ec]
 // CHECK:STDOUT:   complete_type_witness = %complete_type
 // CHECK:STDOUT: }
@@ -230,14 +234,22 @@ fn Run() {
 // CHECK:STDOUT:
 // CHECK:STDOUT: fn @Run() {
 // CHECK:STDOUT: !entry:
+// CHECK:STDOUT:   name_binding_decl {
+// CHECK:STDOUT:     %a.patt: %Empty = binding_pattern a
+// CHECK:STDOUT:     %.loc7_3.1: %Empty = var_pattern %a.patt
+// CHECK:STDOUT:   }
 // CHECK:STDOUT:   %a.var: ref %Empty = var a
-// CHECK:STDOUT:   %a: ref %Empty = bind_name a, %a.var
 // CHECK:STDOUT:   %.loc7_19.1: %empty_struct_type = struct_literal ()
 // CHECK:STDOUT:   %.loc7_19.2: init %Empty = class_init (), %a.var [template = constants.%Empty.val]
-// CHECK:STDOUT:   %.loc7_20: init %Empty = converted %.loc7_19.1, %.loc7_19.2 [template = constants.%Empty.val]
-// CHECK:STDOUT:   assign %a.var, %.loc7_20
+// CHECK:STDOUT:   %.loc7_3.2: init %Empty = converted %.loc7_19.1, %.loc7_19.2 [template = constants.%Empty.val]
+// CHECK:STDOUT:   assign %a.var, %.loc7_3.2
+// CHECK:STDOUT:   %Empty.ref: type = name_ref Empty, imports.%import_ref.e6e [template = constants.%Empty]
+// CHECK:STDOUT:   %a: ref %Empty = bind_name a, %a.var
+// CHECK:STDOUT:   name_binding_decl {
+// CHECK:STDOUT:     %b.patt: %Field = binding_pattern b
+// CHECK:STDOUT:     %.loc9_3.1: %Field = var_pattern %b.patt
+// CHECK:STDOUT:   }
 // CHECK:STDOUT:   %b.var: ref %Field = var b
-// CHECK:STDOUT:   %b: ref %Field = bind_name b, %b.var
 // CHECK:STDOUT:   %int_1: Core.IntLiteral = int_value 1 [template = constants.%int_1.5b8]
 // CHECK:STDOUT:   %.loc9_25.1: %struct_type.x.c96 = struct_literal (%int_1)
 // CHECK:STDOUT:   %impl.elem0.loc9: %Convert.type.6da = impl_witness_access constants.%impl_witness.b97, element0 [template = constants.%Convert.16d]
@@ -248,8 +260,10 @@ fn Run() {
 // CHECK:STDOUT:   %.loc9_25.3: ref %i32 = class_element_access %b.var, element0
 // CHECK:STDOUT:   %.loc9_25.4: init %i32 = initialize_from %.loc9_25.2 to %.loc9_25.3 [template = constants.%int_1.47b]
 // CHECK:STDOUT:   %.loc9_25.5: init %Field = class_init (%.loc9_25.4), %b.var [template = constants.%Field.val]
-// CHECK:STDOUT:   %.loc9_26: init %Field = converted %.loc9_25.1, %.loc9_25.5 [template = constants.%Field.val]
-// CHECK:STDOUT:   assign %b.var, %.loc9_26
+// CHECK:STDOUT:   %.loc9_3.2: init %Field = converted %.loc9_25.1, %.loc9_25.5 [template = constants.%Field.val]
+// CHECK:STDOUT:   assign %b.var, %.loc9_3.2
+// CHECK:STDOUT:   %Field.ref: type = name_ref Field, imports.%import_ref.53b [template = constants.%Field]
+// CHECK:STDOUT:   %b: ref %Field = bind_name b, %b.var
 // CHECK:STDOUT:   %b.ref: ref %Field = name_ref b, %b
 // CHECK:STDOUT:   %x.ref: %Field.elem = name_ref x, imports.%import_ref.4d2 [template = imports.%.d33]
 // CHECK:STDOUT:   %.loc10_4: ref %i32 = class_element_access %b.ref, element0
@@ -260,12 +274,17 @@ fn Run() {
 // CHECK:STDOUT:   %int.convert_checked.loc10: init %i32 = call %Convert.specific_fn.loc10(%int_2) [template = constants.%int_2.d0d]
 // CHECK:STDOUT:   %.loc10_7: init %i32 = converted %int_2, %int.convert_checked.loc10 [template = constants.%int_2.d0d]
 // CHECK:STDOUT:   assign %.loc10_4, %.loc10_7
+// CHECK:STDOUT:   name_binding_decl {
+// CHECK:STDOUT:     %c.patt: %ForwardDeclared.7b34f2.1 = binding_pattern c
+// CHECK:STDOUT:     %.loc12_3.1: %ForwardDeclared.7b34f2.1 = var_pattern %c.patt
+// CHECK:STDOUT:   }
 // CHECK:STDOUT:   %c.var: ref %ForwardDeclared.7b34f2.1 = var c
-// CHECK:STDOUT:   %c: ref %ForwardDeclared.7b34f2.1 = bind_name c, %c.var
 // CHECK:STDOUT:   %.loc12_29.1: %empty_struct_type = struct_literal ()
 // CHECK:STDOUT:   %.loc12_29.2: init %ForwardDeclared.7b34f2.1 = class_init (), %c.var [template = constants.%ForwardDeclared.val]
-// CHECK:STDOUT:   %.loc12_30: init %ForwardDeclared.7b34f2.1 = converted %.loc12_29.1, %.loc12_29.2 [template = constants.%ForwardDeclared.val]
-// CHECK:STDOUT:   assign %c.var, %.loc12_30
+// CHECK:STDOUT:   %.loc12_3.2: init %ForwardDeclared.7b34f2.1 = converted %.loc12_29.1, %.loc12_29.2 [template = constants.%ForwardDeclared.val]
+// CHECK:STDOUT:   assign %c.var, %.loc12_3.2
+// CHECK:STDOUT:   %ForwardDeclared.ref.loc12: type = name_ref ForwardDeclared, imports.%import_ref.046 [template = constants.%ForwardDeclared.7b34f2.1]
+// CHECK:STDOUT:   %c: ref %ForwardDeclared.7b34f2.1 = bind_name c, %c.var
 // CHECK:STDOUT:   %c.ref.loc13: ref %ForwardDeclared.7b34f2.1 = name_ref c, %c
 // CHECK:STDOUT:   %F.ref: %F.type = name_ref F, imports.%import_ref.760 [template = constants.%F]
 // CHECK:STDOUT:   %F.bound: <bound method> = bound_method %c.ref.loc13, %F.ref
@@ -276,17 +295,33 @@ fn Run() {
 // CHECK:STDOUT:   %G.bound: <bound method> = bound_method %c.ref.loc14, %G.ref
 // CHECK:STDOUT:   %addr.loc14: %ptr.6cf = addr_of %c.ref.loc14
 // CHECK:STDOUT:   %G.call: init %empty_tuple.type = call %G.bound(%addr.loc14)
+// CHECK:STDOUT:   name_binding_decl {
+// CHECK:STDOUT:     %d.patt: %ptr.6cf = binding_pattern d
+// CHECK:STDOUT:     %.loc16_3: %ptr.6cf = var_pattern %d.patt
+// CHECK:STDOUT:   }
 // CHECK:STDOUT:   %d.var: ref %ptr.6cf = var d
-// CHECK:STDOUT:   %d: ref %ptr.6cf = bind_name d, %d.var
 // CHECK:STDOUT:   %c.ref.loc16: ref %ForwardDeclared.7b34f2.1 = name_ref c, %c
 // CHECK:STDOUT:   %addr.loc16: %ptr.6cf = addr_of %c.ref.loc16
 // CHECK:STDOUT:   assign %d.var, %addr.loc16
+// CHECK:STDOUT:   %.loc16_25: type = splice_block %ptr.loc16 [template = constants.%ptr.6cf] {
+// CHECK:STDOUT:     %ForwardDeclared.ref.loc16: type = name_ref ForwardDeclared, imports.%import_ref.046 [template = constants.%ForwardDeclared.7b34f2.1]
+// CHECK:STDOUT:     %ptr.loc16: type = ptr_type %ForwardDeclared.7b34f2.1 [template = constants.%ptr.6cf]
+// CHECK:STDOUT:   }
+// CHECK:STDOUT:   %d: ref %ptr.6cf = bind_name d, %d.var
+// CHECK:STDOUT:   name_binding_decl {
+// CHECK:STDOUT:     %e.patt: %ptr.c62 = binding_pattern e
+// CHECK:STDOUT:     %.loc18_3: %ptr.c62 = var_pattern %e.patt
+// CHECK:STDOUT:   }
 // CHECK:STDOUT:   %e.var: ref %ptr.c62 = var e
+// CHECK:STDOUT:   %.loc18_20: type = splice_block %ptr.loc18 [template = constants.%ptr.c62] {
+// CHECK:STDOUT:     %Incomplete.ref: type = name_ref Incomplete, imports.%import_ref.9b0 [template = constants.%Incomplete]
+// CHECK:STDOUT:     %ptr.loc18: type = ptr_type %Incomplete [template = constants.%ptr.c62]
+// CHECK:STDOUT:   }
 // CHECK:STDOUT:   %e: ref %ptr.c62 = bind_name e, %e.var
 // CHECK:STDOUT:   return
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
 // CHECK:STDOUT: fn @F[%self.param_patt: %ForwardDeclared.7b34f2.1]() [from "a.carbon"];
 // CHECK:STDOUT:
-// CHECK:STDOUT: fn @G[addr <unexpected>.inst1067: %ptr.6cf]() [from "a.carbon"];
+// CHECK:STDOUT: fn @G[addr <unexpected>.inst1076: %ptr.6cf]() [from "a.carbon"];
 // CHECK:STDOUT:

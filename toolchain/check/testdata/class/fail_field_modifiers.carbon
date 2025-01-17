@@ -77,24 +77,46 @@ class Class {
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
 // CHECK:STDOUT: class @Class {
-// CHECK:STDOUT:   %.loc17: %Class.elem = field_decl j, element0 [template]
-// CHECK:STDOUT:   %.loc23: %Class.elem = field_decl k, element1 [template]
+// CHECK:STDOUT:   %.loc17_16: %Class.elem = field_decl j, element0 [template]
+// CHECK:STDOUT:   name_binding_decl {
+// CHECK:STDOUT:     %.loc17_11: %Class.elem = var_pattern %.loc17_16
+// CHECK:STDOUT:   }
+// CHECK:STDOUT:   %.var.loc17: ref %Class.elem = var <invalid>
+// CHECK:STDOUT:   %.loc23_14: %Class.elem = field_decl k, element1 [template]
+// CHECK:STDOUT:   name_binding_decl {
+// CHECK:STDOUT:     %.loc23_9: %Class.elem = var_pattern %.loc23_14
+// CHECK:STDOUT:   }
+// CHECK:STDOUT:   %.var.loc23: ref %Class.elem = var <invalid>
+// CHECK:STDOUT:   name_binding_decl {
+// CHECK:STDOUT:     %l.patt: %i32 = binding_pattern l
+// CHECK:STDOUT:   }
 // CHECK:STDOUT:   %int_0: Core.IntLiteral = int_value 0 [template = constants.%int_0.5c6]
+// CHECK:STDOUT:   %.loc29_18: type = splice_block %i32.loc29 [template = constants.%i32] {
+// CHECK:STDOUT:     %int_32.loc29: Core.IntLiteral = int_value 32 [template = constants.%int_32]
+// CHECK:STDOUT:     %i32.loc29: type = class_type @Int, @Int(constants.%int_32) [template = constants.%i32]
+// CHECK:STDOUT:   }
 // CHECK:STDOUT:   %impl.elem0.loc29: %Convert.type.1b6 = impl_witness_access constants.%impl_witness.d39, element0 [template = constants.%Convert.956]
 // CHECK:STDOUT:   %Convert.bound.loc29: <bound method> = bound_method %int_0, %impl.elem0.loc29 [template = constants.%Convert.bound.d04]
 // CHECK:STDOUT:   %Convert.specific_fn.loc29: <specific function> = specific_function %Convert.bound.loc29, @Convert.2(constants.%int_32) [template = constants.%Convert.specific_fn.d62]
 // CHECK:STDOUT:   %int.convert_checked.loc29: init %i32 = call %Convert.specific_fn.loc29(%int_0) [template = constants.%int_0.6a9]
-// CHECK:STDOUT:   %.loc29_25.1: %i32 = value_of_initializer %int.convert_checked.loc29 [template = constants.%int_0.6a9]
-// CHECK:STDOUT:   %.loc29_25.2: %i32 = converted %int_0, %.loc29_25.1 [template = constants.%int_0.6a9]
-// CHECK:STDOUT:   %l: %i32 = bind_name l, %.loc29_25.2
+// CHECK:STDOUT:   %.loc29_24.1: %i32 = value_of_initializer %int.convert_checked.loc29 [template = constants.%int_0.6a9]
+// CHECK:STDOUT:   %.loc29_24.2: %i32 = converted %int_0, %.loc29_24.1 [template = constants.%int_0.6a9]
+// CHECK:STDOUT:   %l: %i32 = bind_name l, %.loc29_24.2
+// CHECK:STDOUT:   name_binding_decl {
+// CHECK:STDOUT:     %m.patt: %i32 = binding_pattern m
+// CHECK:STDOUT:   }
 // CHECK:STDOUT:   %int_1: Core.IntLiteral = int_value 1 [template = constants.%int_1.5b8]
+// CHECK:STDOUT:   %.loc35_16: type = splice_block %i32.loc35 [template = constants.%i32] {
+// CHECK:STDOUT:     %int_32.loc35: Core.IntLiteral = int_value 32 [template = constants.%int_32]
+// CHECK:STDOUT:     %i32.loc35: type = class_type @Int, @Int(constants.%int_32) [template = constants.%i32]
+// CHECK:STDOUT:   }
 // CHECK:STDOUT:   %impl.elem0.loc35: %Convert.type.1b6 = impl_witness_access constants.%impl_witness.d39, element0 [template = constants.%Convert.956]
 // CHECK:STDOUT:   %Convert.bound.loc35: <bound method> = bound_method %int_1, %impl.elem0.loc35 [template = constants.%Convert.bound.ab5]
 // CHECK:STDOUT:   %Convert.specific_fn.loc35: <specific function> = specific_function %Convert.bound.loc35, @Convert.2(constants.%int_32) [template = constants.%Convert.specific_fn.70c]
 // CHECK:STDOUT:   %int.convert_checked.loc35: init %i32 = call %Convert.specific_fn.loc35(%int_1) [template = constants.%int_1.5d2]
-// CHECK:STDOUT:   %.loc35_23.1: %i32 = value_of_initializer %int.convert_checked.loc35 [template = constants.%int_1.5d2]
-// CHECK:STDOUT:   %.loc35_23.2: %i32 = converted %int_1, %.loc35_23.1 [template = constants.%int_1.5d2]
-// CHECK:STDOUT:   %m: %i32 = bind_name m, %.loc35_23.2
+// CHECK:STDOUT:   %.loc35_22.1: %i32 = value_of_initializer %int.convert_checked.loc35 [template = constants.%int_1.5d2]
+// CHECK:STDOUT:   %.loc35_22.2: %i32 = converted %int_1, %.loc35_22.1 [template = constants.%int_1.5d2]
+// CHECK:STDOUT:   %m: %i32 = bind_name m, %.loc35_22.2
 // CHECK:STDOUT:   %complete_type: <witness> = complete_type_witness %struct_type.j.k [template = constants.%complete_type.cf7]
 // CHECK:STDOUT:   complete_type_witness = %complete_type
 // CHECK:STDOUT: }

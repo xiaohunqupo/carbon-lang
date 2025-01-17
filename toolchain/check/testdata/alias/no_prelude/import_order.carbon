@@ -60,7 +60,11 @@ var a_val: a = {.v = b_val.v};
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
 // CHECK:STDOUT: class @C {
-// CHECK:STDOUT:   %.loc4: %C.elem = field_decl v, element0 [template]
+// CHECK:STDOUT:   %.loc4_16: %C.elem = field_decl v, element0 [template]
+// CHECK:STDOUT:   name_binding_decl {
+// CHECK:STDOUT:     %.loc4_11: %C.elem = var_pattern %.loc4_16
+// CHECK:STDOUT:   }
+// CHECK:STDOUT:   %.var: ref %C.elem = var <invalid>
 // CHECK:STDOUT:   %complete_type: <witness> = complete_type_witness %struct_type.v [template = constants.%complete_type]
 // CHECK:STDOUT:   complete_type_witness = %complete_type
 // CHECK:STDOUT: }
@@ -100,13 +104,33 @@ var a_val: a = {.v = b_val.v};
 // CHECK:STDOUT:     .a_val = %a_val
 // CHECK:STDOUT:   }
 // CHECK:STDOUT:   %default.import = import <invalid>
+// CHECK:STDOUT:   name_binding_decl {
+// CHECK:STDOUT:     %d_val.patt: %C = binding_pattern d_val
+// CHECK:STDOUT:     %.loc7: %C = var_pattern %d_val.patt
+// CHECK:STDOUT:   }
 // CHECK:STDOUT:   %d_val.var: ref %C = var d_val
+// CHECK:STDOUT:   %d.ref: type = name_ref d, imports.%import_ref.14f [template = constants.%C]
 // CHECK:STDOUT:   %d_val: ref %C = bind_name d_val, %d_val.var
+// CHECK:STDOUT:   name_binding_decl {
+// CHECK:STDOUT:     %c_val.patt: %C = binding_pattern c_val
+// CHECK:STDOUT:     %.loc8: %C = var_pattern %c_val.patt
+// CHECK:STDOUT:   }
 // CHECK:STDOUT:   %c_val.var: ref %C = var c_val
+// CHECK:STDOUT:   %c.ref: type = name_ref c, imports.%import_ref.610 [template = constants.%C]
 // CHECK:STDOUT:   %c_val: ref %C = bind_name c_val, %c_val.var
+// CHECK:STDOUT:   name_binding_decl {
+// CHECK:STDOUT:     %b_val.patt: %C = binding_pattern b_val
+// CHECK:STDOUT:     %.loc9: %C = var_pattern %b_val.patt
+// CHECK:STDOUT:   }
 // CHECK:STDOUT:   %b_val.var: ref %C = var b_val
+// CHECK:STDOUT:   %b.ref: type = name_ref b, imports.%import_ref.fb0 [template = constants.%C]
 // CHECK:STDOUT:   %b_val: ref %C = bind_name b_val, %b_val.var
+// CHECK:STDOUT:   name_binding_decl {
+// CHECK:STDOUT:     %a_val.patt: %C = binding_pattern a_val
+// CHECK:STDOUT:     %.loc10: %C = var_pattern %a_val.patt
+// CHECK:STDOUT:   }
 // CHECK:STDOUT:   %a_val.var: ref %C = var a_val
+// CHECK:STDOUT:   %a.ref: type = name_ref a, imports.%import_ref.e38 [template = constants.%C]
 // CHECK:STDOUT:   %a_val: ref %C = bind_name a_val, %a_val.var
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
@@ -122,8 +146,8 @@ var a_val: a = {.v = b_val.v};
 // CHECK:STDOUT:   %.loc7_23.2: init %empty_tuple.type = tuple_init () to %.loc7_24.2 [template = constants.%empty_tuple]
 // CHECK:STDOUT:   %.loc7_24.3: init %empty_tuple.type = converted %.loc7_23.1, %.loc7_23.2 [template = constants.%empty_tuple]
 // CHECK:STDOUT:   %.loc7_24.4: init %C = class_init (%.loc7_24.3), file.%d_val.var [template = constants.%C.val]
-// CHECK:STDOUT:   %.loc7_25: init %C = converted %.loc7_24.1, %.loc7_24.4 [template = constants.%C.val]
-// CHECK:STDOUT:   assign file.%d_val.var, %.loc7_25
+// CHECK:STDOUT:   %.loc7_1: init %C = converted %.loc7_24.1, %.loc7_24.4 [template = constants.%C.val]
+// CHECK:STDOUT:   assign file.%d_val.var, %.loc7_1
 // CHECK:STDOUT:   %d_val.ref: ref %C = name_ref d_val, file.%d_val
 // CHECK:STDOUT:   %v.ref.loc8: %C.elem = name_ref v, imports.%import_ref.f99 [template = imports.%.2fc]
 // CHECK:STDOUT:   %.loc8_27.1: ref %empty_tuple.type = class_element_access %d_val.ref, element0
@@ -132,8 +156,8 @@ var a_val: a = {.v = b_val.v};
 // CHECK:STDOUT:   %.loc8_27.2: init %empty_tuple.type = tuple_init () to %.loc8_29.2 [template = constants.%empty_tuple]
 // CHECK:STDOUT:   %.loc8_29.3: init %empty_tuple.type = converted %.loc8_27.1, %.loc8_27.2 [template = constants.%empty_tuple]
 // CHECK:STDOUT:   %.loc8_29.4: init %C = class_init (%.loc8_29.3), file.%c_val.var [template = constants.%C.val]
-// CHECK:STDOUT:   %.loc8_30: init %C = converted %.loc8_29.1, %.loc8_29.4 [template = constants.%C.val]
-// CHECK:STDOUT:   assign file.%c_val.var, %.loc8_30
+// CHECK:STDOUT:   %.loc8_1: init %C = converted %.loc8_29.1, %.loc8_29.4 [template = constants.%C.val]
+// CHECK:STDOUT:   assign file.%c_val.var, %.loc8_1
 // CHECK:STDOUT:   %c_val.ref: ref %C = name_ref c_val, file.%c_val
 // CHECK:STDOUT:   %v.ref.loc9: %C.elem = name_ref v, imports.%import_ref.f99 [template = imports.%.2fc]
 // CHECK:STDOUT:   %.loc9_27.1: ref %empty_tuple.type = class_element_access %c_val.ref, element0
@@ -142,8 +166,8 @@ var a_val: a = {.v = b_val.v};
 // CHECK:STDOUT:   %.loc9_27.2: init %empty_tuple.type = tuple_init () to %.loc9_29.2 [template = constants.%empty_tuple]
 // CHECK:STDOUT:   %.loc9_29.3: init %empty_tuple.type = converted %.loc9_27.1, %.loc9_27.2 [template = constants.%empty_tuple]
 // CHECK:STDOUT:   %.loc9_29.4: init %C = class_init (%.loc9_29.3), file.%b_val.var [template = constants.%C.val]
-// CHECK:STDOUT:   %.loc9_30: init %C = converted %.loc9_29.1, %.loc9_29.4 [template = constants.%C.val]
-// CHECK:STDOUT:   assign file.%b_val.var, %.loc9_30
+// CHECK:STDOUT:   %.loc9_1: init %C = converted %.loc9_29.1, %.loc9_29.4 [template = constants.%C.val]
+// CHECK:STDOUT:   assign file.%b_val.var, %.loc9_1
 // CHECK:STDOUT:   %b_val.ref: ref %C = name_ref b_val, file.%b_val
 // CHECK:STDOUT:   %v.ref.loc10: %C.elem = name_ref v, imports.%import_ref.f99 [template = imports.%.2fc]
 // CHECK:STDOUT:   %.loc10_27.1: ref %empty_tuple.type = class_element_access %b_val.ref, element0
@@ -152,8 +176,8 @@ var a_val: a = {.v = b_val.v};
 // CHECK:STDOUT:   %.loc10_27.2: init %empty_tuple.type = tuple_init () to %.loc10_29.2 [template = constants.%empty_tuple]
 // CHECK:STDOUT:   %.loc10_29.3: init %empty_tuple.type = converted %.loc10_27.1, %.loc10_27.2 [template = constants.%empty_tuple]
 // CHECK:STDOUT:   %.loc10_29.4: init %C = class_init (%.loc10_29.3), file.%a_val.var [template = constants.%C.val]
-// CHECK:STDOUT:   %.loc10_30: init %C = converted %.loc10_29.1, %.loc10_29.4 [template = constants.%C.val]
-// CHECK:STDOUT:   assign file.%a_val.var, %.loc10_30
+// CHECK:STDOUT:   %.loc10_1: init %C = converted %.loc10_29.1, %.loc10_29.4 [template = constants.%C.val]
+// CHECK:STDOUT:   assign file.%a_val.var, %.loc10_1
 // CHECK:STDOUT:   return
 // CHECK:STDOUT: }
 // CHECK:STDOUT:

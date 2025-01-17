@@ -606,7 +606,11 @@ fn F() {
 // CHECK:STDOUT:     %x: %C1 = bind_name x, %x.param
 // CHECK:STDOUT:   }
 // CHECK:STDOUT:   %C2.decl: type = class_decl @C2 [template = constants.%C2] {} {}
-// CHECK:STDOUT:   %.loc18: %D.elem = field_decl C1, element0 [template]
+// CHECK:STDOUT:   %.loc18_9: %D.elem = field_decl C1, element0 [template]
+// CHECK:STDOUT:   name_binding_decl {
+// CHECK:STDOUT:     %.loc18_3: %D.elem = var_pattern %.loc18_9
+// CHECK:STDOUT:   }
+// CHECK:STDOUT:   %.var: ref %D.elem = var <invalid>
 // CHECK:STDOUT:   %complete_type: <witness> = complete_type_witness %struct_type.C1 [template = constants.%complete_type.ec1]
 // CHECK:STDOUT:   complete_type_witness = %complete_type
 // CHECK:STDOUT: }
@@ -1170,7 +1174,11 @@ fn F() {
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
 // CHECK:STDOUT: class @B {
-// CHECK:STDOUT:   %.loc9: %B.elem = field_decl v, element0 [template]
+// CHECK:STDOUT:   %.loc9_10: %B.elem = field_decl v, element0 [template]
+// CHECK:STDOUT:   name_binding_decl {
+// CHECK:STDOUT:     %.loc9_5: %B.elem = var_pattern %.loc9_10
+// CHECK:STDOUT:   }
+// CHECK:STDOUT:   %.var: ref %B.elem = var <invalid>
 // CHECK:STDOUT:   %.decl: type = class_decl @.1 [template = constants.%.96d] {} {}
 // CHECK:STDOUT:   %complete_type: <witness> = complete_type_witness %struct_type.v [template = constants.%complete_type.57e]
 // CHECK:STDOUT:   complete_type_witness = %complete_type

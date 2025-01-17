@@ -11,6 +11,7 @@
 #include "toolchain/check/decl_introducer_state.h"
 #include "toolchain/check/decl_name_stack.h"
 #include "toolchain/check/diagnostic_helpers.h"
+#include "toolchain/check/full_pattern_stack.h"
 #include "toolchain/check/generic_region_stack.h"
 #include "toolchain/check/global_init.h"
 #include "toolchain/check/inst_block_stack.h"
@@ -714,6 +715,14 @@ class Context {
     return bind_name_map_;
   }
 
+  auto var_storage_map() -> Map<SemIR::InstId, SemIR::InstId>& {
+    return var_storage_map_;
+  }
+
+  auto full_pattern_stack() -> FullPatternStack& {
+    return scope_stack_.full_pattern_stack();
+  }
+
  private:
   // A FoldingSet node for a type.
   class TypeNode : public llvm::FastFoldingSetNode {
@@ -830,6 +839,11 @@ class Context {
   llvm::SmallVector<SemIR::InstId> import_ref_ids_;
 
   Map<SemIR::InstId, BindingPatternInfo> bind_name_map_;
+
+  // Map from VarPattern insts to the corresponding VarStorage insts. The
+  // VarStorage insts are allocated, emitted, and stored in the map after
+  // processing the enclosing full-pattern.
+  Map<SemIR::InstId, SemIR::InstId> var_storage_map_;
 
   // Stack of single-entry regions being built.
   ArrayStack<SemIR::InstBlockId> region_stack_;

@@ -99,7 +99,7 @@ fn RuntimeCallIsValidBadReturnType(a: f64, b: f64) -> bool {
 // CHECK:STDOUT:     .Core = imports.%Core
 // CHECK:STDOUT:     .Negate = %Negate.decl
 // CHECK:STDOUT:     .RuntimeCallIsValid = %RuntimeCallIsValid.decl
-// CHECK:STDOUT:     .a = @__global_init.%a
+// CHECK:STDOUT:     .a = %a
 // CHECK:STDOUT:   }
 // CHECK:STDOUT:   %Core.import = import Core
 // CHECK:STDOUT:   %Negate.decl: %Negate.type = fn_decl @Negate [template = constants.%Negate] {
@@ -154,6 +154,18 @@ fn RuntimeCallIsValidBadReturnType(a: f64, b: f64) -> bool {
 // CHECK:STDOUT:     %return.param: ref f64 = out_param runtime_param2
 // CHECK:STDOUT:     %return: ref f64 = return_slot %return.param
 // CHECK:STDOUT:   }
+// CHECK:STDOUT:   name_binding_decl {
+// CHECK:STDOUT:     %a.patt: f64 = binding_pattern a
+// CHECK:STDOUT:   }
+// CHECK:STDOUT:   %.loc8_8.1: type = splice_block %.loc8_8.3 [template = f64] {
+// CHECK:STDOUT:     %int_64: Core.IntLiteral = int_value 64 [template = constants.%int_64]
+// CHECK:STDOUT:     %float.make_type: init type = call constants.%Float(%int_64) [template = f64]
+// CHECK:STDOUT:     %.loc8_8.2: type = value_of_initializer %float.make_type [template = f64]
+// CHECK:STDOUT:     %.loc8_8.3: type = converted %float.make_type, %.loc8_8.2 [template = f64]
+// CHECK:STDOUT:   }
+// CHECK:STDOUT:   %.loc8_24.1: ref f64 = temporary_storage
+// CHECK:STDOUT:   %.loc8_24.2: ref f64 = temporary %.loc8_24.1, @__global_init.%float.negate
+// CHECK:STDOUT:   %a: ref f64 = bind_name a, %.loc8_24.2
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
 // CHECK:STDOUT: fn @Negate(%a.param_patt: f64) -> f64 = "float.negate";
@@ -173,9 +185,6 @@ fn RuntimeCallIsValidBadReturnType(a: f64, b: f64) -> bool {
 // CHECK:STDOUT:   %Negate.ref: %Negate.type = name_ref Negate, file.%Negate.decl [template = constants.%Negate]
 // CHECK:STDOUT:   %float: f64 = float_literal 1.5 [template = constants.%float.e93]
 // CHECK:STDOUT:   %float.negate: init f64 = call %Negate.ref(%float) [template = constants.%float.928]
-// CHECK:STDOUT:   %.loc8_25.1: f64 = value_of_initializer %float.negate [template = constants.%float.928]
-// CHECK:STDOUT:   %.loc8_25.2: f64 = converted %float.negate, %.loc8_25.1 [template = constants.%float.928]
-// CHECK:STDOUT:   %a: f64 = bind_name a, %.loc8_25.2
 // CHECK:STDOUT:   return
 // CHECK:STDOUT: }
 // CHECK:STDOUT:

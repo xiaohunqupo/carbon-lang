@@ -568,6 +568,7 @@ auto StringifyTypeExpr(const SemIR::File& sem_ir, InstId outer_inst_id)
       case ImportRefLoaded::Kind:
       case InitializeFrom::Kind:
       case InterfaceDecl::Kind:
+      case NameBindingDecl::Kind:
       case OutParam::Kind:
       case OutParamPattern::Kind:
       case RequireCompleteType::Kind:
@@ -595,6 +596,7 @@ auto StringifyTypeExpr(const SemIR::File& sem_ir, InstId outer_inst_id)
       case ValueOfInitializer::Kind:
       case ValueParam::Kind:
       case ValueParamPattern::Kind:
+      case VarPattern::Kind:
       case VarStorage::Kind:
       case WhereExpr::Kind:
         // We don't know how to print this instruction, but it might have a

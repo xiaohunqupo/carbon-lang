@@ -46,10 +46,18 @@ fn Main() {
 // CHECK:STDOUT:
 // CHECK:STDOUT: fn @Main() {
 // CHECK:STDOUT: !entry:
+// CHECK:STDOUT:   name_binding_decl {
+// CHECK:STDOUT:     %x.patt: <error> = binding_pattern x
+// CHECK:STDOUT:     %.loc19_3: <error> = var_pattern %x.patt
+// CHECK:STDOUT:   }
 // CHECK:STDOUT:   %x.var: ref <error> = var x
-// CHECK:STDOUT:   %x: ref <error> = bind_name x, %x.var
-// CHECK:STDOUT:   %int_1: Core.IntLiteral = int_value 1 [template = constants.%int_1]
+// CHECK:STDOUT:   %int_1.loc19_14: Core.IntLiteral = int_value 1 [template = constants.%int_1]
 // CHECK:STDOUT:   assign %x.var, <error>
+// CHECK:STDOUT:   %.1: <error> = splice_block <error> [template = <error>] {
+// CHECK:STDOUT:     %int_1.loc19_10: Core.IntLiteral = int_value 1 [template = constants.%int_1]
+// CHECK:STDOUT:     %.loc19_10: type = converted %int_1.loc19_10, <error> [template = <error>]
+// CHECK:STDOUT:   }
+// CHECK:STDOUT:   %x: <error> = bind_name x, <error>
 // CHECK:STDOUT:   return
 // CHECK:STDOUT: }
 // CHECK:STDOUT:
