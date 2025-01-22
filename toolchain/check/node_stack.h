@@ -20,7 +20,7 @@ namespace Carbon::Check {
 class IdUnion {
  public:
   // The default constructor forms an invalid ID.
-  explicit constexpr IdUnion() : index(AnyIdBase::InvalidIndex) {}
+  explicit constexpr IdUnion() : index(AnyIdBase::NoneIndex) {}
 
   template <typename IdT>
     requires SemIR::IdKind::Contains<IdT>
@@ -41,7 +41,7 @@ class IdUnion {
     return As<SemIR::IdKind::TypeFor<K>>();
   }
 
-  // Translates an ID type to the enum ID kind. Returns Invalid if `IdT` isn't
+  // Translates an ID type to the enum ID kind. Returns `None` if `IdT` isn't
   // a type that can be stored in this union.
   template <typename IdT>
   static constexpr auto KindFor() -> Kind {
@@ -92,7 +92,7 @@ class NodeStack {
     auto kind = parse_tree_->node_kind(node_id);
     CARBON_CHECK(NodeKindToIdKind(kind) == Id::KindFor<IdT>(),
                  "Parse kind expected a different IdT: {0} -> {1}\n", kind, id);
-    CARBON_CHECK(id.is_valid(), "Push called with invalid id: {0}",
+    CARBON_CHECK(id.has_value(), "Push called with `None` id: {0}",
                  parse_tree_->node_kind(node_id));
     CARBON_VLOG("Node Push {0}: {1} -> {2}\n", stack_.size(), kind, id);
     CARBON_CHECK(stack_.size() < (1 << 20),
@@ -271,7 +271,7 @@ class NodeStack {
   auto PopWithNodeIdIf() -> std::pair<Parse::NodeIdForKind<RequiredParseKind>,
                                       decltype(PopIf<RequiredParseKind>())> {
     if (!PeekIs(RequiredParseKind)) {
-      return {Parse::NodeId::Invalid, std::nullopt};
+      return {Parse::NodeId::None, std::nullopt};
     }
     return PopWithNodeId<RequiredParseKind>();
   }
@@ -283,7 +283,7 @@ class NodeStack {
       -> std::pair<Parse::NodeIdInCategory<RequiredParseCategory>,
                    decltype(PopIf<RequiredParseCategory>())> {
     if (!PeekIs(RequiredParseCategory)) {
-      return {Parse::NodeId::Invalid, std::nullopt};
+      return {Parse::NodeId::None, std::nullopt};
     }
     return PopWithNodeId<RequiredParseCategory>();
   }
