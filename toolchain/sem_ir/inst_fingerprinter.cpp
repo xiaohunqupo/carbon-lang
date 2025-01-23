@@ -35,7 +35,7 @@ struct Worklist {
   auto Finish() -> uint64_t { return llvm::stable_hash_combine(contents); }
 
   // Add an invalid marker to the contents. This is used when the entity
-  // contains an invalid ID. This uses an arbitrary fixed value that is assumed
+  // contains a `None` ID. This uses an arbitrary fixed value that is assumed
   // to be unlikely to collide with a valid value.
   auto AddInvalid() -> void { contents.push_back(-1); }
 
