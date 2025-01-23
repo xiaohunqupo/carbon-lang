@@ -24,7 +24,8 @@ static auto HandleIntroducer(Context& context, Parse::NodeId node_id) -> bool {
   // Push a bracketing node and pattern block to establish the pattern context.
   context.node_stack().Push(node_id);
   context.pattern_block_stack().Push();
-  context.full_pattern_stack().PushFullPattern();
+  context.full_pattern_stack().PushFullPattern(
+      FullPatternStack::Kind::NameBindingDecl);
   context.BeginSubpattern();
   return true;
 }
@@ -63,7 +64,7 @@ static auto GetOrAddStorage(Context& context, SemIR::InstId pattern_id)
         context.entity_names().Get(binding_pattern->entity_name_id).name_id;
   }
   return context.AddInst(SemIR::LocIdAndInst::UncheckedLoc(
-      pattern.loc_id, SemIR::VarStorage{.type_id = subpattern.type_id(),
+      pattern.loc_id, SemIR::VarStorage{.type_id = pattern.inst.type_id(),
                                         .pretty_name_id = name_id}));
 }
 
