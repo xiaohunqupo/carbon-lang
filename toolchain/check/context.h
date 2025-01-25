@@ -467,9 +467,14 @@ class Context {
 
   // TODO: Consider moving these `Get*Type` functions to a separate class.
 
-  // Gets the type for the name of an associated entity.
-  auto GetAssociatedEntityType(SemIR::TypeId interface_type_id,
-                               SemIR::TypeId entity_type_id) -> SemIR::TypeId;
+  // Gets the type to use for an unbound associated entity declared in this
+  // interface. For example, this is the type of `I.T` after
+  // `interface I { let T:! type; }`.
+  // The name of the interface is used for diagnostics.
+  // TODO: Should we use a different type for each such entity, or the same type
+  // for all associated entities?
+  auto GetAssociatedEntityType(SemIR::TypeId interface_type_id)
+      -> SemIR::TypeId;
 
   // Gets a singleton type. The returned type will be complete. Requires that
   // `singleton_id` is already validated to be a singleton.
@@ -627,6 +632,9 @@ class Context {
   auto classes() -> ValueStore<SemIR::ClassId>& { return sem_ir().classes(); }
   auto interfaces() -> ValueStore<SemIR::InterfaceId>& {
     return sem_ir().interfaces();
+  }
+  auto associated_constants() -> ValueStore<SemIR::AssociatedConstantId>& {
+    return sem_ir().associated_constants();
   }
   auto facet_types() -> CanonicalValueStore<SemIR::FacetTypeId>& {
     return sem_ir().facet_types();

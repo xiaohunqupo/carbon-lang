@@ -1454,6 +1454,19 @@ auto Context::RequireDefinedType(SemIR::TypeId type_id, SemIR::LocId loc_id,
       }
     }
     // TODO: Finish facet type resolution.
+    //
+    // Note that we will need Self to be passed into facet type resolution.
+    // The `.Self` of a facet type created by `where` will then be bound to the
+    // provided self type.
+    //
+    // For example, in `T:! X where ...`, we will bind the `.Self` of the
+    // `where` facet type to `T`, and in `(X where ...) where ...`, we will bind
+    // the inner `.Self` to the outer `.Self`.
+    //
+    // If the facet type contains a rewrite, we may have deferred converting the
+    // rewritten value to the type of the associated constant. That conversion
+    // should also be performed as part of resolution, and may depend on the
+    // Self type.
   }
 
   return true;
@@ -1516,11 +1529,9 @@ auto Context::GetTupleType(llvm::ArrayRef<SemIR::TypeId> type_ids)
                                        type_blocks().AddCanonical(type_ids));
 }
 
-auto Context::GetAssociatedEntityType(SemIR::TypeId interface_type_id,
-                                      SemIR::TypeId entity_type_id)
+auto Context::GetAssociatedEntityType(SemIR::TypeId interface_type_id)
     -> SemIR::TypeId {
-  return GetTypeImpl<SemIR::AssociatedEntityType>(*this, interface_type_id,
-                                                  entity_type_id);
+  return GetTypeImpl<SemIR::AssociatedEntityType>(*this, interface_type_id);
 }
 
 auto Context::GetSingletonType(SemIR::InstId singleton_id) -> SemIR::TypeId {

@@ -159,23 +159,23 @@ static auto HandleAnyBindingPattern(Context& context, Parse::NodeId node_id,
       return context.emitter().Build(type_node, IncompleteTypeInAssociatedDecl,
                                      cast_type_id);
     });
-    context.entity_names().Add(
+
+    SemIR::AssociatedConstantDecl assoc_const_decl = {
+        .type_id = cast_type_id,
+        .assoc_const_id = SemIR::AssociatedConstantId::None,
+        .decl_block_id = SemIR::InstBlockId::None};
+    auto decl_id = context.AddPlaceholderInstInNoBlock(SemIR::LocIdAndInst(
+        context.parse_tree().As<Parse::CompileTimeBindingPatternId>(node_id),
+        assoc_const_decl));
+    assoc_const_decl.assoc_const_id = context.associated_constants().Add(
         {.name_id = name_id,
          .parent_scope_id = context.scope_stack().PeekNameScopeId(),
-         .bind_index = SemIR::CompileTimeBindIndex::None});
+         .decl_id = decl_id,
+         .generic_id = SemIR::GenericId::None,
+         .default_value_id = SemIR::InstId::None});
+    context.ReplaceInstBeforeConstantUse(decl_id, assoc_const_decl);
 
-    SemIR::InstId decl_id = context.AddInst<SemIR::AssociatedConstantDecl>(
-        context.parse_tree().As<Parse::CompileTimeBindingPatternId>(node_id),
-        {cast_type_id, name_id});
     context.node_stack().Push(node_id, decl_id);
-
-    // Add an associated entity name to the interface scope.
-    auto assoc_id = BuildAssociatedEntity(
-        context, parent_interface_decl->interface_id, decl_id);
-    auto name_context =
-        context.decl_name_stack().MakeUnqualifiedName(node_id, name_id);
-    context.decl_name_stack().AddNameOrDiagnose(
-        name_context, assoc_id, introducer.modifier_set.GetAccessKind());
     return true;
   }
 
