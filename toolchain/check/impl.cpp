@@ -32,16 +32,6 @@ static auto NoteAssociatedFunction(Context& context,
                function.name_id);
 }
 
-// Adds the location of the previous declaration to a diagnostic.
-static auto NotePreviousDecl(Context& context,
-                             Context::DiagnosticBuilder& builder,
-                             SemIR::ImplId impl_id) -> void {
-  CARBON_DIAGNOSTIC(ImplPreviousDeclHere, Note,
-                    "impl previously declared here");
-  const auto& impl = context.impls().Get(impl_id);
-  builder.Note(impl.latest_decl_id(), ImplPreviousDeclHere);
-}
-
 // Checks that `impl_function_id` is a valid implementation of the function
 // described in the interface as `interface_function_id`. Returns the value to
 // put into the corresponding slot in the witness table, which can be
@@ -88,6 +78,7 @@ static auto CheckAssociatedFunctionImplementation(
 }
 
 // Builds an initial empty witness.
+// TODO: Fill the witness with the rewrites from the declaration.
 auto ImplWitnessForDeclaration(Context& context, const SemIR::Impl& impl)
     -> SemIR::InstId {
   CARBON_CHECK(!impl.has_definition_started());
@@ -159,11 +150,10 @@ static auto WitnessAccessMatchesInterface(
   return false;
 }
 
+// TODO: Merge this function into `ImplWitnessForDeclaration`.
 auto AddConstantsToImplWitnessFromConstraint(Context& context,
                                              const SemIR::Impl& impl,
-                                             SemIR::InstId witness_id,
-                                             SemIR::ImplId prev_decl_id)
-    -> void {
+                                             SemIR::InstId witness_id) -> void {
   CARBON_CHECK(!impl.has_definition_started());
   CARBON_CHECK(witness_id.has_value());
   if (witness_id == SemIR::ErrorInst::SingletonInstId) {
@@ -229,16 +219,13 @@ auto AddConstantsToImplWitnessFromConstraint(Context& context,
     }
   }
 
-  // For each non-function associated constant, update witness entry.
+  // For each non-function associated constant, set the witness entry.
   for (auto index : llvm::seq(assoc_entities.size())) {
     auto decl_id =
         context.constant_values().GetConstantInstId(assoc_entities[index]);
     CARBON_CHECK(decl_id.has_value(), "Non-constant associated entity");
     if (auto decl =
             context.insts().TryGetAs<SemIR::AssociatedConstantDecl>(decl_id)) {
-      const auto& assoc_const =
-          context.associated_constants().Get(decl->assoc_const_id);
-      auto& witness_value = witness_block[index];
       auto rewrite_value = rewrite_values[index];
 
       // If the associated constant has a symbolic type, convert the rewrite
@@ -264,6 +251,8 @@ auto AddConstantsToImplWitnessFromConstraint(Context& context,
         // value was constant.
         if (!rewrite_value.is_constant() &&
             rewrite_value != SemIR::ErrorInst::SingletonConstantId) {
+          const auto& assoc_const =
+              context.associated_constants().Get(decl->assoc_const_id);
           CARBON_DIAGNOSTIC(
               AssociatedConstantNotConstantAfterConversion, Error,
               "associated constant {0} given value that is not constant "
@@ -276,39 +265,9 @@ auto AddConstantsToImplWitnessFromConstraint(Context& context,
         }
       }
 
-      if (witness_value.has_value() &&
-          witness_value != SemIR::ErrorInst::SingletonInstId) {
-        // TODO: Support just using the witness values if the redeclaration uses
-        // `where _`, per proposal #1084.
-        if (!rewrite_value.has_value()) {
-          CARBON_DIAGNOSTIC(AssociatedConstantMissingInRedecl, Error,
-                            "associated constant {0} given value in "
-                            "declaration but not redeclaration",
-                            SemIR::NameId);
-          auto builder = context.emitter().Build(
-              impl.latest_decl_id(), AssociatedConstantMissingInRedecl,
-              assoc_const.name_id);
-          NotePreviousDecl(context, builder, prev_decl_id);
-          builder.Emit();
-          continue;
-        }
-        auto witness_const_id = context.constant_values().Get(witness_value);
-        if (witness_const_id != rewrite_value &&
-            rewrite_value != SemIR::ErrorInst::SingletonConstantId) {
-          // TODO: Figure out how to print the two different values
-          CARBON_DIAGNOSTIC(
-              AssociatedConstantDifferentInRedecl, Error,
-              "redeclaration with different value for associated constant {0}",
-              SemIR::NameId);
-          auto builder = context.emitter().Build(
-              impl.latest_decl_id(), AssociatedConstantDifferentInRedecl,
-              assoc_const.name_id);
-          NotePreviousDecl(context, builder, prev_decl_id);
-          builder.Emit();
-          continue;
-        }
-      } else if (rewrite_value.has_value()) {
-        witness_value = context.constant_values().GetInstId(rewrite_value);
+      if (rewrite_value.has_value()) {
+        witness_block[index] =
+            context.constant_values().GetInstId(rewrite_value);
       }
     }
   }
