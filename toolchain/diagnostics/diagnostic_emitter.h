@@ -173,9 +173,12 @@ class DiagnosticEmitter {
 
   // The `converter` and `consumer` are required to outlive the diagnostic
   // emitter.
+  // TODO: Adjust construction to take stored arguments as pointers, and
+  // consider taking `converter` by value (move/copy) instead of reference.
   explicit DiagnosticEmitter(DiagnosticConverter<LocT>& converter,
                              DiagnosticConsumer& consumer)
       : converter_(&converter), consumer_(&consumer) {}
+
   ~DiagnosticEmitter() = default;
 
   // Emits an error.
@@ -227,6 +230,37 @@ class DiagnosticEmitter {
   DiagnosticConsumer* consumer_;
   llvm::SmallVector<llvm::function_ref<auto(DiagnosticBuilder& builder)->void>>
       annotate_fns_;
+};
+
+// This relies on `void*` location handling on `DiagnosticEmitter`.
+//
+// TODO: Based on how this ends up used or if we get more distinct emitters, it
+// might be worth considering having diagnostics specify that they don't apply
+// to source-location carrying emitters. For example, this might look like a
+// `CARBON_NO_LOC_DIAGNOSTIC` macro, or some other factoring. But it might end
+// up being more noise than it is worth.
+class NoLocDiagnosticEmitter : public DiagnosticEmitter<void*> {
+ public:
+  // This constructor only applies to NoLocDiagnosticEmitter.
+  explicit NoLocDiagnosticEmitter(DiagnosticConsumer* consumer)
+      : DiagnosticEmitter(converter_, *consumer) {}
+
+  // Emits an error. This specialization only applies to
+  // `NoLocDiagnosticEmitter`.
+  template <typename... Args>
+  auto Emit(const DiagnosticBase<Args...>& diagnostic_base,
+            Internal::NoTypeDeduction<Args>... args) -> void {
+    DiagnosticEmitter::Emit(nullptr, diagnostic_base, args...);
+  }
+
+ private:
+  struct Converter : DiagnosticConverter<void*> {
+    auto ConvertLoc(void* /*loc*/, ContextFnT /*context_fn*/) const
+        -> ConvertedDiagnosticLoc override {
+      return {.loc = {.filename = ""}, .last_byte_offset = -1};
+    }
+  };
+  Converter converter_;
 };
 
 // An RAII object that denotes a scope in which any diagnostic produced should

@@ -8,6 +8,7 @@
 #include "clang-tools-extra/clangd/Transport.h"
 #include "clang-tools-extra/clangd/support/Logger.h"
 #include "common/raw_string_ostream.h"
+#include "toolchain/diagnostics/diagnostic_emitter.h"
 #include "toolchain/language_server/context.h"
 #include "toolchain/language_server/incoming_messages.h"
 #include "toolchain/language_server/outgoing_messages.h"
@@ -15,7 +16,8 @@
 namespace Carbon::LanguageServer {
 
 auto Run(FILE* input_stream, llvm::raw_ostream& output_stream,
-         llvm::raw_ostream& error_stream) -> ErrorOr<Success> {
+         llvm::raw_ostream& error_stream, DiagnosticConsumer& consumer)
+    -> bool {
   // TODO: Consider implementing a custom logger that splits vlog to
   // vlog_stream when provided. For now, this disables verbose logging.
   clang::clangd::StreamLogger logger(error_stream, clang::clangd::Logger::Info);
@@ -36,10 +38,12 @@ auto Run(FILE* input_stream, llvm::raw_ostream& output_stream,
   if (err) {
     RawStringOstream out;
     out << err;
-    return Error(out.TakeStr());
-  } else {
-    return Success();
+    CARBON_DIAGNOSTIC(LanguageServerTransportError, Error, "{0}", std::string);
+    NoLocDiagnosticEmitter emitter(&consumer);
+    emitter.Emit(LanguageServerTransportError, out.TakeStr());
+    return false;
   }
+  return true;
 }
 
 }  // namespace Carbon::LanguageServer
