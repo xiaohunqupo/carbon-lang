@@ -287,13 +287,6 @@ class Context {
   auto NoteUndefinedInterface(SemIR::InterfaceId interface_id,
                               DiagnosticBuilder& builder) -> void;
 
-  // Returns the current scope, if it is of the specified kind. Otherwise,
-  // returns nullopt.
-  template <typename InstT>
-  auto GetCurrentScopeAs() -> std::optional<InstT> {
-    return scope_stack().GetCurrentScopeAs<InstT>(sem_ir());
-  }
-
   // Returns the type ID for a constant that is a type value, i.e. it is a value
   // of type `TypeType`.
   //
@@ -389,12 +382,6 @@ class Context {
   auto AddExport(SemIR::InstId inst_id) -> void { exports_.push_back(inst_id); }
 
   auto Finalize() -> void;
-
-  // True if the current file is an impl file.
-  auto IsImplFile() -> bool {
-    return sem_ir_->import_irs().Get(SemIR::ImportIRId::ApiForImpl).sem_ir !=
-           nullptr;
-  }
 
   // Prints information for a stack dump.
   auto PrintForStackDump(llvm::raw_ostream& output) const -> void;
