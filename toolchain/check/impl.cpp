@@ -86,6 +86,11 @@ auto ImplWitnessForDeclaration(Context& context, const SemIR::Impl& impl)
     -> SemIR::InstId {
   CARBON_CHECK(!impl.has_definition_started());
 
+  auto self_type_id = context.types().GetTypeIdForTypeInstId(impl.self_id);
+  if (self_type_id == SemIR::ErrorInst::SingletonTypeId) {
+    // When 'impl as' is invalid, the self type is an error.
+    return SemIR::ErrorInst::SingletonInstId;
+  }
   auto facet_type_id =
       context.types().GetTypeIdForTypeInstId(impl.constraint_id);
   if (facet_type_id == SemIR::ErrorInst::SingletonTypeId) {
