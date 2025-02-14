@@ -43,6 +43,12 @@ class Context {
   // add contextual notes as appropriate.
   using BuildDiagnosticFn = llvm::function_ref<auto()->DiagnosticBuilder>;
 
+  // An ongoing impl lookup, used to ensure termination.
+  struct ImplLookupStackEntry {
+    SemIR::ConstantId type_const_id;
+    SemIR::ConstantId interface_const_id;
+  };
+
   // Stores references for work.
   explicit Context(DiagnosticEmitter* emitter,
                    Parse::GetTreeAndSubtreesFn tree_and_subtrees_getter,
@@ -236,6 +242,10 @@ class Context {
     return scope_stack_.full_pattern_stack();
   }
 
+  auto impl_lookup_stack() -> llvm::SmallVector<ImplLookupStackEntry>& {
+    return impl_lookup_stack_;
+  }
+
  private:
   // A FoldingSet node for a type.
   class TypeNode : public llvm::FastFoldingSetNode {
@@ -350,6 +360,10 @@ class Context {
 
   // Stack of single-entry regions being built.
   RegionStack region_stack_;
+
+  // Tracks all ongoing impl lookups in order to ensure that lookup terminates
+  // via the acyclic rule and the termination rule.
+  llvm::SmallVector<ImplLookupStackEntry> impl_lookup_stack_;
 };
 
 }  // namespace Carbon::Check
