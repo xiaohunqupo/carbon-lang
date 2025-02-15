@@ -33,6 +33,8 @@ class Context {
     auto SetText(Context& context, std::optional<int64_t> version,
                  llvm::StringRef text) -> void;
 
+    auto text() const -> llvm::StringRef { return source_->text(); }
+
     auto tree_and_subtrees() const -> const Parse::TreeAndSubtrees& {
       return *tree_and_subtrees_;
     }
