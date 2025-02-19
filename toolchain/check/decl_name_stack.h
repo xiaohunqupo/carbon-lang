@@ -125,7 +125,7 @@ class DeclNameStack {
       switch (state) {
         case State::Unresolved:
         case State::Poisoned:
-          return unresolved_name_id;
+          return name_id;
         default:
           return SemIR::NameId::None;
       }
@@ -153,13 +153,13 @@ class DeclNameStack {
       // expressions. `None` indicates resolution failed.
       SemIR::InstId resolved_inst_id;
 
-      // The ID of an unresolved identifier.
-      SemIR::NameId unresolved_name_id = SemIR::NameId::None;
+      // When `state` is `Poisoned` (name is unresolved due to name poisoning),
+      // the poisoning location.
+      SemIR::LocId poisoning_loc_id = SemIR::LocId::None;
     };
 
-    // When `state` is `Poisoned` (name is unresolved due to name poisoning),
-    // the poisoning location.
-    SemIR::LocId poisoning_loc_id = SemIR::LocId::None;
+    // The ID of an identifier.
+    SemIR::NameId name_id = SemIR::NameId::None;
   };
 
   // Information about a declaration name that has been temporarily removed from
