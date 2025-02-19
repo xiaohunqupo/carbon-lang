@@ -262,6 +262,18 @@ class Context {
   // End of SemIR::File members.
   // --------------------------------------------------------------------------
 
+  // During Choice typechecking, each alternative turns into a name binding on
+  // the Choice type, but this can't be done until the full Choice type is
+  // known. This represents each binding to be done at the end of checking the
+  // Choice type.
+  struct ChoiceDeferredBinding {
+    Parse::NodeId node_id;
+    NameComponent name_component;
+  };
+  auto choice_deferred_bindings() -> llvm::SmallVector<ChoiceDeferredBinding>& {
+    return choice_deferred_bindings_;
+  }
+
  private:
   // Handles diagnostics.
   DiagnosticEmitter* emitter_;
@@ -352,6 +364,14 @@ class Context {
   // VarStorage insts are allocated, emitted, and stored in the map after
   // processing the enclosing full-pattern.
   Map<SemIR::InstId, SemIR::InstId> var_storage_map_;
+
+  // Each alternative in a Choice gets an entry here, they are stored in
+  // declaration order. The vector is consumed and emptied at the end of the
+  // Choice definition.
+  //
+  // TODO: This may need to be a stack of vectors if it becomes possible to
+  // define a Choice type inside an alternative's parameter set.
+  llvm::SmallVector<ChoiceDeferredBinding> choice_deferred_bindings_;
 
   // Stack of single-entry regions being built.
   RegionStack region_stack_;
