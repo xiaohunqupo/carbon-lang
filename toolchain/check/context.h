@@ -197,6 +197,8 @@ class Context {
   struct ImplLookupStackEntry {
     SemIR::ConstantId type_const_id;
     SemIR::ConstantId interface_const_id;
+    // The location of the impl being looked at for the stack entry.
+    SemIR::InstId impl_loc = SemIR::InstId::None;
   };
   auto impl_lookup_stack() -> llvm::SmallVector<ImplLookupStackEntry>& {
     return impl_lookup_stack_;
