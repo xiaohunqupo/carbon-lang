@@ -331,6 +331,18 @@ static auto MakeFloatResult(Context& context, SemIR::TypeId type_id,
       Phase::Concrete);
 }
 
+// Creates a FacetType constant.
+static auto MakeFacetTypeResult(Context& context,
+                                const SemIR::FacetTypeInfo& info, Phase phase)
+    -> SemIR::ConstantId {
+  SemIR::FacetTypeId facet_type_id = context.facet_types().Add(info);
+  return MakeConstantResult(
+      context,
+      SemIR::FacetType{.type_id = SemIR::TypeType::SingletonTypeId,
+                       .facet_type_id = facet_type_id},
+      phase);
+}
+
 // `GetConstantValue` checks to see whether the provided ID describes a value
 // with constant phase, and if so, returns the corresponding constant value.
 // Overloads are provided for different kinds of ID.
@@ -1289,11 +1301,12 @@ static auto PerformBuiltinBoolComparison(
 }
 
 // Returns a constant for a call to a builtin function.
-static auto MakeConstantForBuiltinCall(Context& context, SemIRLoc loc,
+static auto MakeConstantForBuiltinCall(EvalContext& eval_context, SemIRLoc loc,
                                        SemIR::Call call,
                                        SemIR::BuiltinFunctionKind builtin_kind,
                                        llvm::ArrayRef<SemIR::InstId> arg_ids,
                                        Phase phase) -> SemIR::ConstantId {
+  auto& context = eval_context.context();
   switch (builtin_kind) {
     case SemIR::BuiltinFunctionKind::None:
       CARBON_FATAL("Not a builtin function.");
@@ -1304,6 +1317,46 @@ static auto MakeConstantForBuiltinCall(Context& context, SemIRLoc loc,
       // These are runtime-only builtins.
       // TODO: Consider tracking this on the `BuiltinFunctionKind`.
       return SemIR::ConstantId::NotConstant;
+    }
+
+    case SemIR::BuiltinFunctionKind::TypeAnd: {
+      CARBON_CHECK(arg_ids.size() == 2);
+      auto lhs_facet_type_id = SemIR::FacetTypeId::None;
+      auto rhs_facet_type_id = SemIR::FacetTypeId::None;
+      for (auto [facet_type_id, arg_id] :
+           llvm::zip(std::to_array({&lhs_facet_type_id, &rhs_facet_type_id}),
+                     arg_ids)) {
+        if (auto facet_type =
+                context.insts().TryGetAs<SemIR::FacetType>(arg_id)) {
+          *facet_type_id = facet_type->facet_type_id;
+        } else {
+          CARBON_DIAGNOSTIC(FacetTypeRequiredForTypeAndOperator, Error,
+                            "non-facet type {0} combined with `&` operator",
+                            SemIR::TypeId);
+          // TODO: Find a location for the lhs or rhs specifically, instead of
+          // the whole thing. If that's not possible we can change the text to
+          // say if it's referring to the left or the right side for the error.
+          // The `arg_id` instruction has no location in it for some reason.
+          context.emitter().Emit(
+              loc, FacetTypeRequiredForTypeAndOperator,
+              context.types().GetTypeIdForTypeInstId(arg_id));
+        }
+      }
+      // Allow errors to be diagnosed for both sides of the operator before
+      // returning here if any error occurred on either side.
+      if (!lhs_facet_type_id.has_value() || !rhs_facet_type_id.has_value()) {
+        return SemIR::ErrorInst::SingletonConstantId;
+      }
+      // Reuse one of the argument instructions if nothing has changed.
+      if (lhs_facet_type_id == rhs_facet_type_id) {
+        return context.types().GetConstantId(
+            context.types().GetTypeIdForTypeInstId(arg_ids[0]));
+      }
+      auto info = SemIR::FacetTypeInfo::Combine(
+          context.facet_types().Get(lhs_facet_type_id),
+          context.facet_types().Get(rhs_facet_type_id));
+      info.Canonicalize();
+      return MakeFacetTypeResult(eval_context.context(), info, phase);
     }
 
     case SemIR::BuiltinFunctionKind::IntLiteralMakeType: {
@@ -1525,23 +1578,11 @@ static auto MakeConstantForCall(EvalContext& eval_context, SemIRLoc loc,
   // Handle calls to builtins.
   if (builtin_kind != SemIR::BuiltinFunctionKind::None) {
     return MakeConstantForBuiltinCall(
-        eval_context.context(), loc, call, builtin_kind,
+        eval_context, loc, call, builtin_kind,
         eval_context.inst_blocks().Get(call.args_id), phase);
   }
 
   return SemIR::ConstantId::NotConstant;
-}
-
-// Creates a FacetType constant.
-static auto MakeFacetTypeResult(Context& context,
-                                const SemIR::FacetTypeInfo& info, Phase phase)
-    -> SemIR::ConstantId {
-  SemIR::FacetTypeId facet_type_id = context.facet_types().Add(info);
-  return MakeConstantResult(
-      context,
-      SemIR::FacetType{.type_id = SemIR::TypeType::SingletonTypeId,
-                       .facet_type_id = facet_type_id},
-      phase);
 }
 
 // The result of constant evaluation of an instruction.
