@@ -259,18 +259,17 @@ auto FileContext::BuildFunctionDecl(SemIR::FunctionId function_id,
   }
   for (auto param_pattern_id : llvm::concat<const SemIR::InstId>(
            implicit_param_patterns, param_patterns)) {
-    auto param_pattern = SemIR::Function::GetParamPatternInfoFromPatternId(
-                             sem_ir(), param_pattern_id)
-                             .inst;
-    if (!param_pattern.runtime_index.has_value()) {
+    auto param_pattern_info = SemIR::Function::GetParamPatternInfoFromPatternId(
+        sem_ir(), param_pattern_id);
+    if (!param_pattern_info) {
       continue;
     }
-    auto param_type_id =
-        SemIR::GetTypeInSpecific(sem_ir(), specific_id, param_pattern.type_id);
+    auto param_type_id = SemIR::GetTypeInSpecific(
+        sem_ir(), specific_id, param_pattern_info->inst.type_id);
     CARBON_CHECK(
         !param_type_id.AsConstantId().is_symbolic(),
         "Found symbolic type id after resolution when lowering type {0}.",
-        param_pattern.type_id);
+        param_pattern_info->inst.type_id);
     switch (auto value_rep = SemIR::ValueRepr::ForType(sem_ir(), param_type_id);
             value_rep.kind) {
       case SemIR::ValueRepr::Unknown:
